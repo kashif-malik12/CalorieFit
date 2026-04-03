@@ -23,6 +23,7 @@ const String kBrandLogoAsset = 'assets/branding/caloriefit_logo.png';
 const Color kBrandPrimary = Color(0xFF0B3C49);
 const Color kBrandAccent = Color(0xFF3AC47D);
 const Color kBrandSurface = Color(0xFFF4FBF7);
+const String kPrivacyPolicyLastUpdated = '2026-04-02';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -258,6 +259,19 @@ class _HomeShellState extends State<HomeShell> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => const _UpcomingFeaturePage(title: 'Find Personal Coach'),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: const Text('Privacy Policy'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const _PrivacyPolicyPage(),
                     ),
                   );
                 },
@@ -3325,6 +3339,105 @@ class _UpcomingFeaturePage extends StatelessWidget {
               'Stay tuned — this is coming soon!',
               style: TextStyle(color: Colors.grey[600]),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PrivacyPolicyPage extends StatelessWidget {
+  const _PrivacyPolicyPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const BrandedAppBarTitle(
+          title: 'Privacy Policy',
+          subtitle: 'How CalorieFit handles data',
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            'Last updated: $kPrivacyPolicyLastUpdated',
+            style: textTheme.labelLarge?.copyWith(
+              color: Colors.black54,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _PolicySection(
+            title: 'Overview',
+            body:
+                'CalorieFit is a local-first calorie and nutrition tracker. The app works without an account and stores its main data on your device.',
+          ),
+          const SizedBox(height: 12),
+          _PolicySection(
+            title: 'Data Stored On Device',
+            body:
+                'The app stores foods, meal templates, nutrition targets, history, and retention settings locally using on-device storage and SQLite.',
+          ),
+          const SizedBox(height: 12),
+          _PolicySection(
+            title: 'Internet Access',
+            body:
+                'Internet access is only used when you choose the optional USDA food search. Search terms are sent to the USDA FoodData Central API over the network to return food matches.',
+          ),
+          const SizedBox(height: 12),
+          _PolicySection(
+            title: 'Accounts And Sharing',
+            body:
+                'CalorieFit does not currently require an account. At this stage, the app does not upload your food logs or settings to a CalorieFit backend.',
+          ),
+          const SizedBox(height: 12),
+          _PolicySection(
+            title: 'Retention And Deletion',
+            body:
+                'You can delete local foods, templates, and log entries in the app. You can also change history retention settings or uninstall the app to remove locally stored data from the device.',
+          ),
+          const SizedBox(height: 12),
+          _PolicySection(
+            title: 'Contact',
+            body:
+                'Developer name and contact details will be published before the Play Store release is submitted.',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PolicySection extends StatelessWidget {
+  final String title;
+  final String body;
+
+  const _PolicySection({
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(body),
           ],
         ),
       ),
