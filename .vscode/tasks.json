@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flutter Build AAB",
+      "type": "shell",
+      "command": "C:\\flutter\\bin\\flutter.bat",
+      "args": [
+        "build",
+        "appbundle",
+        "--dart-define-from-file=env/dart_defines.local.json"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

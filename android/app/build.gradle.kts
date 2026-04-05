@@ -13,6 +13,16 @@ val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
+val isReleaseBuild = gradle.startParameter.taskNames.any {
+    it.contains("Release", ignoreCase = true) ||
+        it.contains("bundle", ignoreCase = true)
+}
+
+if (isReleaseBuild && !keystorePropertiesFile.exists()) {
+    throw GradleException(
+        "Missing android/key.properties for release signing. Create it before building a release bundle.",
+    )
+}
 
 android {
     namespace = "com.caloriefit.app"
@@ -52,13 +62,7 @@ android {
 
     buildTypes {
         release {
-            // Use the real upload key when android/key.properties is present.
-            // Fallback keeps local release builds working until Play signing is configured.
-            signingConfig = if (keystorePropertiesFile.exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

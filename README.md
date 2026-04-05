@@ -29,12 +29,14 @@ CalorieFit is a local-first Flutter calorie and nutrition tracking app.
 
 ```bash
 flutter pub get
-flutter run
+flutter run --dart-define-from-file=env/dart_defines.local.json
 ```
+
+In VS Code, use the `CalorieFit` launch configuration so the USDA key is included automatically.
 
 Targets: Android, iOS, macOS, Linux, Windows, Web.
 
 ## Version
 
 Current version: **1.1.0+2**
-Database version: **14**
+Database version: **16**

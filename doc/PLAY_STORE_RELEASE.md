@@ -20,7 +20,7 @@ Blocked / still required:
 - Replace placeholder contact details in `doc/PRIVACY_POLICY_DRAFT.md`.
 - Keep an in-app privacy policy screen or link in the shipped app build.
 - Prepare Play Console store listing assets and declarations.
-- Build and upload a signed `.aab` instead of relying on debug signing.
+- Build and upload a signed `.aab` using the real upload key.
 
 ## Code / Repo Tasks
 
@@ -62,18 +62,23 @@ storeFile=../upload-keystore.jks
 
 Already prepared:
 - `android/app/build.gradle.kts` now reads `android/key.properties` for release signing.
-- If the file is missing, local release builds still fall back to debug signing.
+- If the file is missing, release builds now fail fast instead of falling back to debug signing.
 
 ### 4. Build the Play artifact
 
 Use Android App Bundle for Play:
 
 ```powershell
-C:\flutter\bin\flutter.bat build appbundle
+C:\flutter\bin\flutter.bat build appbundle --dart-define-from-file=env/dart_defines.local.json
 ```
 
 Expected output:
 - `build/app/outputs/bundle/release/app-release.aab`
+
+Important:
+- USDA search in the released app will only work if the AAB is built with the USDA key included.
+- In VS Code, use the `Flutter Build AAB` task so `env/dart_defines.local.json` is applied automatically.
+- If you build with plain `flutter build appbundle` and omit the Dart define file, the release app will show USDA search as not configured.
 
 ## Play Console Tasks
 

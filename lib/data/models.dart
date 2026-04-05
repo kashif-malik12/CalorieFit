@@ -96,6 +96,9 @@ class LogEntry {
   final double? protein100;
   final double? carbs100;
   final double? fat100;
+  final double? fiber100;
+  final double? sugar100;
+  final double? sodium100;
 
   // Manual one-time entry support
   final String entryType; // 'food' or 'manual'
@@ -104,6 +107,9 @@ class LogEntry {
   final double? manualProtein;
   final double? manualCarbs;
   final double? manualFat;
+  final double? manualFiber;
+  final double? manualSugar;
+  final double? manualSodium;
 
   const LogEntry({
     this.id,
@@ -120,6 +126,9 @@ class LogEntry {
     this.protein100,
     this.carbs100,
     this.fat100,
+    this.fiber100,
+    this.sugar100,
+    this.sodium100,
 
     this.entryType = 'food',
     this.manualName,
@@ -127,6 +136,9 @@ class LogEntry {
     this.manualProtein,
     this.manualCarbs,
     this.manualFat,
+    this.manualFiber,
+    this.manualSugar,
+    this.manualSodium,
   });
 
   Map<String, Object?> toMap() {
@@ -145,6 +157,9 @@ class LogEntry {
       'protein_100': protein100,
       'carbs_100': carbs100,
       'fat_100': fat100,
+      'fiber_100': fiber100,
+      'sugar_100': sugar100,
+      'sodium_100': sodium100,
 
       'entry_type': entryType,
       'manual_name': manualName,
@@ -152,6 +167,9 @@ class LogEntry {
       'manual_protein': manualProtein,
       'manual_carbs': manualCarbs,
       'manual_fat': manualFat,
+      'manual_fiber': manualFiber,
+      'manual_sugar': manualSugar,
+      'manual_sodium': manualSodium,
     };
   }
 
@@ -171,6 +189,9 @@ class LogEntry {
       protein100: (m['protein_100'] as num?)?.toDouble(),
       carbs100: (m['carbs_100'] as num?)?.toDouble(),
       fat100: (m['fat_100'] as num?)?.toDouble(),
+      fiber100: (m['fiber_100'] as num?)?.toDouble(),
+      sugar100: (m['sugar_100'] as num?)?.toDouble(),
+      sodium100: (m['sodium_100'] as num?)?.toDouble(),
 
       entryType: (m['entry_type'] as String?) ?? 'food',
       manualName: m['manual_name'] as String?,
@@ -178,6 +199,9 @@ class LogEntry {
       manualProtein: (m['manual_protein'] as num?)?.toDouble(),
       manualCarbs: (m['manual_carbs'] as num?)?.toDouble(),
       manualFat: (m['manual_fat'] as num?)?.toDouble(),
+      manualFiber: (m['manual_fiber'] as num?)?.toDouble(),
+      manualSugar: (m['manual_sugar'] as num?)?.toDouble(),
+      manualSodium: (m['manual_sodium'] as num?)?.toDouble(),
     );
   }
 }
@@ -334,15 +358,18 @@ class DayTotals {
     required double proteinAdd,
     required double carbsAdd,
     required double fatAdd,
+    double fiberAdd = 0,
+    double sugarAdd = 0,
+    double sodiumAdd = 0,
   }) {
     return DayTotals(
       calories: calories + caloriesAdd,
       protein: protein + proteinAdd,
       carbs: carbs + carbsAdd,
       fat: fat + fatAdd,
-      fiber: fiber,
-      sugar: sugar,
-      sodium: sodium,
+      fiber: fiber + fiberAdd,
+      sugar: sugar + sugarAdd,
+      sodium: sodium + sodiumAdd,
     );
   }
 }

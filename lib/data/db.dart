@@ -15,12 +15,18 @@ class MacroTargets {
   final int protein;
   final int carbs;
   final int fat;
+  final int fiber;
+  final int sugar;
+  final int sodium;
 
   const MacroTargets({
     required this.calories,
     required this.protein,
     required this.carbs,
     required this.fat,
+    this.fiber = 30,
+    this.sugar = 50,
+    this.sodium = 2300,
   });
 }
 
@@ -136,7 +142,7 @@ class AppDb {
     final d = await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 14,
+        version: 16,
         onConfigure: (db) async {
           if (!kIsWeb) {
             await db.execute('PRAGMA foreign_keys = ON;');
@@ -221,6 +227,21 @@ class AppDb {
               "ALTER TABLE log_entries ADD COLUMN fat_100 REAL;",
             );
           }
+          if (!await _hasColumn(db, 'log_entries', 'fiber_100')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN fiber_100 REAL;",
+            );
+          }
+          if (!await _hasColumn(db, 'log_entries', 'sugar_100')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN sugar_100 REAL;",
+            );
+          }
+          if (!await _hasColumn(db, 'log_entries', 'sodium_100')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN sodium_100 REAL;",
+            );
+          }
 
           if (!await _hasColumn(db, 'log_entries', 'entry_type')) {
             await db.execute(
@@ -252,6 +273,21 @@ class AppDb {
               "ALTER TABLE log_entries ADD COLUMN manual_fat REAL;",
             );
           }
+          if (!await _hasColumn(db, 'log_entries', 'manual_fiber')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN manual_fiber REAL;",
+            );
+          }
+          if (!await _hasColumn(db, 'log_entries', 'manual_sugar')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN manual_sugar REAL;",
+            );
+          }
+          if (!await _hasColumn(db, 'log_entries', 'manual_sodium')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN manual_sodium REAL;",
+            );
+          }
 
           if (!await _hasColumn(db, 'day_targets', 'source')) {
             await db.execute(
@@ -261,6 +297,21 @@ class AppDb {
           if (!await _hasColumn(db, 'day_targets', 'calculator_json')) {
             await db.execute(
               "ALTER TABLE day_targets ADD COLUMN calculator_json TEXT;",
+            );
+          }
+          if (!await _hasColumn(db, 'day_targets', 'fiber_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN fiber_target INTEGER NOT NULL DEFAULT 30;",
+            );
+          }
+          if (!await _hasColumn(db, 'day_targets', 'sugar_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN sugar_target INTEGER NOT NULL DEFAULT 50;",
+            );
+          }
+          if (!await _hasColumn(db, 'day_targets', 'sodium_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN sodium_target INTEGER NOT NULL DEFAULT 2300;",
             );
           }
 
@@ -355,13 +406,19 @@ class AppDb {
         protein_100 REAL,
         carbs_100 REAL,
         fat_100 REAL,
+        fiber_100 REAL,
+        sugar_100 REAL,
+        sodium_100 REAL,
 
         entry_type TEXT NOT NULL DEFAULT 'food',
         manual_name TEXT,
         manual_kcal REAL,
         manual_protein REAL,
         manual_carbs REAL,
-        manual_fat REAL
+        manual_fat REAL,
+        manual_fiber REAL,
+        manual_sugar REAL,
+        manual_sodium REAL
       );
     ''');
 
@@ -379,6 +436,9 @@ class AppDb {
         protein_target INTEGER NOT NULL,
         carbs_target INTEGER NOT NULL,
         fat_target INTEGER NOT NULL,
+        fiber_target INTEGER NOT NULL DEFAULT 30,
+        sugar_target INTEGER NOT NULL DEFAULT 50,
+        sodium_target INTEGER NOT NULL DEFAULT 2300,
         source TEXT DEFAULT 'manual',
         calculator_json TEXT
       );
@@ -400,8 +460,8 @@ class AppDb {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS meal_template_items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        template_id INTEGER NOT NULL,
-        food_id INTEGER NOT NULL,
+        template_id INTEGER NOT NULL REFERENCES meal_templates(id) ON DELETE CASCADE,
+        food_id INTEGER NOT NULL REFERENCES foods(id) ON DELETE RESTRICT,
         amount REAL NOT NULL,
         unit TEXT NOT NULL,
         base_amount REAL NOT NULL,
@@ -531,6 +591,23 @@ class AppDb {
           where: 'is_system = 1 AND id NOT IN (${placeholders(args.length)})',
           whereArgs: args,
         );
+      }
+
+      // Propagate fiber/sugar/sodium to user-imported copies (is_system=0)
+      // that still have 0 values — preserves any manual edits by the user.
+      for (final m in foods) {
+        final name = (m['name'] ?? '').toString().trim();
+        if (name.isEmpty) continue;
+        final fiber  = (m['fiber']  as num?)?.toDouble() ?? 0;
+        final sugar  = (m['sugar']  as num?)?.toDouble() ?? 0;
+        final sodium = (m['sodium'] as num?)?.toDouble() ?? 0;
+        await txn.rawUpdate('''
+          UPDATE foods SET
+            fiber  = CASE WHEN fiber  = 0 THEN ? ELSE fiber  END,
+            sugar  = CASE WHEN sugar  = 0 THEN ? ELSE sugar  END,
+            sodium = CASE WHEN sodium = 0 THEN ? ELSE sodium END
+          WHERE is_system = 0 AND name = ?
+        ''', [fiber, sugar, sodium, name]);
       }
 
       final existingTemplateRows = await txn.query(
@@ -735,9 +812,69 @@ class AppDb {
     );
   }
 
+  Future<List<String>> getTemplateNamesUsingFood(int foodId) async {
+    final d = await db;
+    final rows = await d.rawQuery(
+      '''
+      SELECT DISTINCT t.name
+      FROM meal_template_items i
+      JOIN meal_templates t ON t.id = i.template_id
+      WHERE i.food_id = ? AND t.is_system = 0
+      ORDER BY t.name COLLATE NOCASE ASC
+      ''',
+      [foodId],
+    );
+    return rows
+        .map((row) => (row['name'] as String?)?.trim() ?? '')
+        .where((name) => name.isNotEmpty)
+        .toList();
+  }
+
   Future<int> deleteFood(int id) async {
+    final templateNames = await getTemplateNamesUsingFood(id);
+    if (templateNames.isNotEmpty) {
+      throw StateError('Food is still used in meal templates');
+    }
     final d = await db;
     return d.delete('foods', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> _copyMissingServings({
+    required DatabaseExecutor dbx,
+    required int sourceFoodId,
+    required int targetFoodId,
+  }) async {
+    final sourceRows = await dbx.query(
+      'food_servings',
+      where: 'food_id = ?',
+      whereArgs: [sourceFoodId],
+      orderBy: 'id ASC',
+    );
+
+    if (sourceRows.isEmpty) return;
+
+    final targetRows = await dbx.query(
+      'food_servings',
+      where: 'food_id = ?',
+      whereArgs: [targetFoodId],
+    );
+    final existingNames = targetRows
+        .map((row) => ((row['name'] as String?) ?? '').trim().toLowerCase())
+        .where((name) => name.isNotEmpty)
+        .toSet();
+
+    for (final row in sourceRows) {
+      final name = ((row['name'] as String?) ?? '').trim();
+      if (name.isEmpty || existingNames.contains(name.toLowerCase())) {
+        continue;
+      }
+      await dbx.insert('food_servings', {
+        'food_id': targetFoodId,
+        'name': name,
+        'grams': ((row['grams'] as num?) ?? 0).toDouble(),
+      });
+      existingNames.add(name.toLowerCase());
+    }
   }
 
   Future<int> importSystemFoodToUser(int systemFoodId) async {
@@ -759,7 +896,15 @@ class AppDb {
       whereArgs: [name],
       limit: 1,
     );
-    if (existingUser.isNotEmpty) return (existingUser.first['id'] as int);
+    if (existingUser.isNotEmpty) {
+      final existingId = existingUser.first['id'] as int;
+      await _copyMissingServings(
+        dbx: d,
+        sourceFoodId: systemFoodId,
+        targetFoodId: existingId,
+      );
+      return existingId;
+    }
 
     final newId = await d.insert('foods', {
       'name': name,
@@ -776,6 +921,12 @@ class AppDb {
       'category': sys.first['category'],
       'system_key': null,
     });
+
+    await _copyMissingServings(
+      dbx: d,
+      sourceFoodId: systemFoodId,
+      targetFoodId: newId,
+    );
 
     return newId;
   }
@@ -803,6 +954,9 @@ class AppDb {
         manualProtein: entry.manualProtein ?? 0,
         manualCarbs: entry.manualCarbs ?? 0,
         manualFat: entry.manualFat ?? 0,
+        manualFiber: entry.manualFiber ?? 0,
+        manualSugar: entry.manualSugar ?? 0,
+        manualSodium: entry.manualSodium ?? 0,
       );
       return d.insert('log_entries', e.toMap());
     }
@@ -812,7 +966,10 @@ class AppDb {
         entry.calories100 != null &&
         entry.protein100 != null &&
         entry.carbs100 != null &&
-        entry.fat100 != null;
+        entry.fat100 != null &&
+        entry.fiber100 != null &&
+        entry.sugar100 != null &&
+        entry.sodium100 != null;
 
     if (hasSnap) {
       return d.insert('log_entries', entry.toMap());
@@ -835,6 +992,9 @@ class AppDb {
           protein100: f.protein,
           carbs100: f.carbs,
           fat100: f.fat,
+          fiber100: f.fiber,
+          sugar100: f.sugar,
+          sodium100: f.sodium,
           entryType: 'food',
         );
         return d.insert('log_entries', withSnap.toMap());
@@ -851,6 +1011,9 @@ class AppDb {
     double protein = 0,
     double carbs = 0,
     double fat = 0,
+    double fiber = 0,
+    double sugar = 0,
+    double sodium = 0,
     String? time,
     String? label,
   }) async {
@@ -868,6 +1031,9 @@ class AppDb {
       manualProtein: protein,
       manualCarbs: carbs,
       manualFat: fat,
+      manualFiber: fiber,
+      manualSugar: sugar,
+      manualSodium: sodium,
     );
     return insertLog(entry);
   }
@@ -923,9 +1089,20 @@ class AppDb {
           ELSE COALESCE(le.fat_100, f.fat)
         END as fat,
 
-        COALESCE(f.fiber, 0) as fiber,
-        COALESCE(f.sugar, 0) as sugar,
-        COALESCE(f.sodium, 0) as sodium
+        CASE
+          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fiber, 0)
+          ELSE COALESCE(le.fiber_100, f.fiber, 0)
+        END as fiber,
+
+        CASE
+          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sugar, 0)
+          ELSE COALESCE(le.sugar_100, f.sugar, 0)
+        END as sugar,
+
+        CASE
+          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sodium, 0)
+          ELSE COALESCE(le.sodium_100, f.sodium, 0)
+        END as sodium
 
       FROM log_entries le
       LEFT JOIN foods f ON f.id = le.food_id
@@ -952,6 +1129,9 @@ class AppDb {
           proteinAdd: ((r['protein'] as num?) ?? 0).toDouble(),
           carbsAdd: ((r['carbs'] as num?) ?? 0).toDouble(),
           fatAdd: ((r['fat'] as num?) ?? 0).toDouble(),
+          fiberAdd: ((r['fiber'] as num?) ?? 0).toDouble(),
+          sugarAdd: ((r['sugar'] as num?) ?? 0).toDouble(),
+          sodiumAdd: ((r['sodium'] as num?) ?? 0).toDouble(),
         );
         continue;
       }
@@ -999,6 +1179,9 @@ class AppDb {
         protein: (r['protein_target'] as num).toInt(),
         carbs: (r['carbs_target'] as num).toInt(),
         fat: (r['fat_target'] as num).toInt(),
+        fiber: (r['fiber_target'] as num?)?.toInt() ?? 30,
+        sugar: (r['sugar_target'] as num?)?.toInt() ?? 50,
+        sodium: (r['sodium_target'] as num?)?.toInt() ?? 2300,
       );
     }
 
@@ -1007,6 +1190,9 @@ class AppDb {
       protein: await TargetSettings.getProtein(),
       carbs: await TargetSettings.getCarbs(),
       fat: await TargetSettings.getFat(),
+      fiber: await TargetSettings.getFiber(),
+      sugar: await TargetSettings.getSugar(),
+      sodium: await TargetSettings.getSodium(),
     );
   }
 
@@ -1023,6 +1209,9 @@ class AppDb {
       'protein_target': t.protein,
       'carbs_target': t.carbs,
       'fat_target': t.fat,
+      'fiber_target': t.fiber,
+      'sugar_target': t.sugar,
+      'sodium_target': t.sodium,
       'source': source,
       'calculator_json': calculatorJson,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
@@ -1072,6 +1261,21 @@ class AppDb {
       orderBy: 'label COLLATE NOCASE ASC, name COLLATE NOCASE ASC',
     );
     return rows.map(MealTemplate.fromMap).toList();
+  }
+
+  Future<MealTemplate?> getUserMealTemplateByExactName(String name) async {
+    final d = await db;
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return null;
+    final rows = await d.query(
+      'meal_templates',
+      where: 'is_system = 0 AND name = ?',
+      whereArgs: [trimmed],
+      orderBy: 'id DESC',
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return MealTemplate.fromMap(rows.first);
   }
 
   Future<List<MealTemplate>> getSystemMealTemplates({String? query}) async {
@@ -1282,6 +1486,9 @@ class AppDb {
         f.protein,
         f.carbs,
         f.fat,
+        f.fiber,
+        f.sugar,
+        f.sodium,
         f.base_amount as food_base_amount,
         f.unit as food_unit
       FROM meal_template_items i
@@ -1349,7 +1556,7 @@ class AppDb {
               COALESCE(f.name, 'Unknown')
             )
         END,
-        ' • '
+        ' | '
       ), 'No items') as ingredients_preview
     FROM meal_templates t
     LEFT JOIN meal_template_items i ON i.template_id = t.id
@@ -1533,6 +1740,9 @@ class AppDb {
     double protein = 0;
     double carbs = 0;
     double fat = 0;
+    double fiber = 0;
+    double sugar = 0;
+    double sodium = 0;
 
     for (final row in joined) {
       final amount = ((row['amount'] as num?) ?? 0).toDouble();
@@ -1544,6 +1754,9 @@ class AppDb {
       protein += (((row['protein'] as num?) ?? 0).toDouble()) * factor;
       carbs += (((row['carbs'] as num?) ?? 0).toDouble()) * factor;
       fat += (((row['fat'] as num?) ?? 0).toDouble()) * factor;
+      fiber += (((row['fiber'] as num?) ?? 0).toDouble()) * factor;
+      sugar += (((row['sugar'] as num?) ?? 0).toDouble()) * factor;
+      sodium += (((row['sodium'] as num?) ?? 0).toDouble()) * factor;
     }
 
     await insertManualLog(
@@ -1553,6 +1766,9 @@ class AppDb {
       protein: protein,
       carbs: carbs,
       fat: fat,
+      fiber: fiber,
+      sugar: sugar,
+      sodium: sodium,
       time: time,
       label: (labelOverride?.trim().isNotEmpty == true)
           ? labelOverride!.trim()
@@ -1738,3 +1954,4 @@ class AppDb {
     }
   }
 }
+

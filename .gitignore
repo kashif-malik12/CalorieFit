@@ -45,6 +45,7 @@ app.*.map.json
 /android/app/release
 /android/key.properties
 /upload-keystore.jks
+/env/*.local.json
 /.claude/
 /.tmp-legal-site/
 /output/
