@@ -343,6 +343,16 @@ String _microLine({
       'Na ${_numStr(sodium)}mg';
 }
 
+String _fatDetailLine({
+  required double saturatedFat,
+  required double transFat,
+  required double cholesterol,
+}) {
+  return 'Sat ${_numStr(saturatedFat)}g | '
+      'Trans ${_numStr(transFat)}g | '
+      'Chol ${_numStr(cholesterol)}mg';
+}
+
 String _foodListSubtitle(Food f, {String? extra}) {
   final lines = <String>[
     '${_baseLabel(f)}${extra != null && extra.isNotEmpty ? ' | $extra' : ''}',
@@ -402,6 +412,9 @@ String _logSubtitleFromRow(Map<String, Object?> r) {
     final fiber = ((r['fiber'] as num?) ?? 0).toDouble();
     final sugar = ((r['sugar'] as num?) ?? 0).toDouble();
     final sodium = ((r['sodium'] as num?) ?? 0).toDouble();
+    final cholesterol = ((r['cholesterol'] as num?) ?? 0).toDouble();
+    final saturatedFat = ((r['saturated_fat'] as num?) ?? 0).toDouble();
+    final transFat = ((r['trans_fat'] as num?) ?? 0).toDouble();
 
     final lines = <String>[
       if (meta.isNotEmpty) meta,
@@ -415,6 +428,11 @@ String _logSubtitleFromRow(Map<String, Object?> r) {
         fiber: fiber,
         sugar: sugar,
         sodium: sodium,
+      ),
+      _fatDetailLine(
+        saturatedFat: saturatedFat,
+        transFat: transFat,
+        cholesterol: cholesterol,
       ),
     ];
     return lines.join('\n');
@@ -437,6 +455,11 @@ String _logSubtitleFromRow(Map<String, Object?> r) {
     final fiber = (((r['fiber'] as num?) ?? 0).toDouble()) * factor;
     final sugar = (((r['sugar'] as num?) ?? 0).toDouble()) * factor;
     final sodium = (((r['sodium'] as num?) ?? 0).toDouble()) * factor;
+    final cholesterol =
+        (((r['cholesterol'] as num?) ?? 0).toDouble()) * factor;
+    final saturatedFat =
+        (((r['saturated_fat'] as num?) ?? 0).toDouble()) * factor;
+    final transFat = (((r['trans_fat'] as num?) ?? 0).toDouble()) * factor;
 
     final amountStr = amount.toStringAsFixed(amount == amount.roundToDouble() ? 0 : 1);
 
@@ -453,6 +476,11 @@ String _logSubtitleFromRow(Map<String, Object?> r) {
         fiber: fiber,
         sugar: sugar,
         sodium: sodium,
+      ),
+      _fatDetailLine(
+        saturatedFat: saturatedFat,
+        transFat: transFat,
+        cholesterol: cholesterol,
       ),
     ];
     return lines.join('\n');
@@ -474,6 +502,9 @@ Future<void> _showTodayEntryDetails(
   final fiber = ((row['fiber'] as num?) ?? 0).toDouble();
   final sugar = ((row['sugar'] as num?) ?? 0).toDouble();
   final sodium = ((row['sodium'] as num?) ?? 0).toDouble();
+  final cholesterol = ((row['cholesterol'] as num?) ?? 0).toDouble();
+  final saturatedFat = ((row['saturated_fat'] as num?) ?? 0).toDouble();
+  final transFat = ((row['trans_fat'] as num?) ?? 0).toDouble();
   List<Map<String, Object?>> templateItems = const [];
 
   if (entryType == 'manual') {
@@ -501,117 +532,148 @@ Future<void> _showTodayEntryDetails(
 
   await showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     useSafeArea: true,
-    builder: (ctx) => SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            if ((time != null && time.isNotEmpty) ||
-                (label != null && label.isNotEmpty))
-              Text(
-                [
-                  if (time != null && time.isNotEmpty) time,
-                  if (label != null && label.isNotEmpty) label,
-                ].join(' | '),
-                style: const TextStyle(fontSize: 13, color: Colors.black54),
-              ),
-            const SizedBox(height: 10),
-            Text(
-              amountLabel(),
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Nutrition summary',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(_macroLine(
-                      calories: calories,
-                      protein: protein,
-                      carbs: carbs,
-                      fat: fat,
-                    )),
-                    const SizedBox(height: 6),
-                    Text(_microLine(
-                      fiber: fiber,
-                      sugar: sugar,
-                      sodium: sodium,
-                    )),
-                  ],
-                ),
-              ),
-            ),
-            if (templateItems.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Card(
-                margin: EdgeInsets.zero,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+    builder:
+        (ctx) => SafeArea(
+          child: FractionallySizedBox(
+            heightFactor: 0.9,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
                     children: [
-                      const Text(
-                        'Foods in template',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      ...templateItems.map((item) {
-                        final foodName =
-                            (item['food_name'] as String?) ?? 'Unknown';
-                        final amount =
-                            ((item['amount'] as num?) ?? 0).toDouble();
-                        final unit = (item['unit'] as String?) ?? 'g';
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            '${_numStr(amount)} $unit | $foodName',
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        );
-                      }),
+                      IconButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        icon: const Icon(Icons.close),
+                      ),
                     ],
                   ),
-                ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if ((time != null && time.isNotEmpty) ||
+                              (label != null && label.isNotEmpty))
+                            Text(
+                              [
+                                if (time != null && time.isNotEmpty) time,
+                                if (label != null && label.isNotEmpty) label,
+                              ].join(' | '),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          const SizedBox(height: 10),
+                          Text(
+                            amountLabel(),
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Card(
+                            margin: EdgeInsets.zero,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const Text(
+                                    'Nutrition summary',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(_macroLine(
+                                    calories: calories,
+                                    protein: protein,
+                                    carbs: carbs,
+                                    fat: fat,
+                                  )),
+                                  const SizedBox(height: 6),
+                                  Text(_microLine(
+                                    fiber: fiber,
+                                    sugar: sugar,
+                                    sodium: sodium,
+                                  )),
+                                  const SizedBox(height: 6),
+                                  Text(_fatDetailLine(
+                                    saturatedFat: saturatedFat,
+                                    transFat: transFat,
+                                    cholesterol: cholesterol,
+                                  )),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (templateItems.isNotEmpty) ...[
+                            const SizedBox(height: 12),
+                            Card(
+                              margin: EdgeInsets.zero,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const Text(
+                                      'Foods in template',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ...templateItems.map((item) {
+                                      final foodName =
+                                          (item['food_name'] as String?) ??
+                                          'Unknown';
+                                      final amount =
+                                          ((item['amount'] as num?) ?? 0)
+                                              .toDouble();
+                                      final unit =
+                                          (item['unit'] as String?) ?? 'g';
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
+                                        child: Text(
+                                          '${_numStr(amount)} $unit | $foodName',
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ],
+            ),
+          ),
         ),
-      ),
-    ),
   );
 }
 
@@ -1562,6 +1624,9 @@ class _TodayPageState extends State<TodayPage> {
                             fiber100: f.fiber,
                             sugar100: f.sugar,
                             sodium100: f.sodium,
+                            cholesterol100: f.cholesterol,
+                            saturatedFat100: f.saturatedFat,
+                            transFat100: f.transFat,
                             entryType: 'food',
                           ),
                         );
@@ -1807,6 +1872,7 @@ class _TodayPageState extends State<TodayPage> {
           builder: (ctx, setInner) {
             double totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
             double totalFi = 0, totalSu = 0, totalSo = 0;
+            double totalChol = 0, totalSat = 0, totalTrans = 0;
             for (int i = 0; i < joined.length; i++) {
               if (!enabled[i]) continue;
               final row = joined[i];
@@ -1825,6 +1891,12 @@ class _TodayPageState extends State<TodayPage> {
               totalFi += (((row['fiber'] as num?) ?? 0).toDouble()) * factor;
               totalSu += (((row['sugar'] as num?) ?? 0).toDouble()) * factor;
               totalSo += (((row['sodium'] as num?) ?? 0).toDouble()) * factor;
+              totalChol +=
+                  (((row['cholesterol'] as num?) ?? 0).toDouble()) * factor;
+              totalSat +=
+                  (((row['saturated_fat'] as num?) ?? 0).toDouble()) * factor;
+              totalTrans +=
+                  (((row['trans_fat'] as num?) ?? 0).toDouble()) * factor;
             }
 
             return SafeArea(
@@ -1859,6 +1931,15 @@ class _TodayPageState extends State<TodayPage> {
                     Text(
                       '${totalKcal.round()} kcal  |  P ${_numStr(totalP)}g  |  C ${_numStr(totalC)}g  |  F ${_numStr(totalF)}g'
                       '  |  Fi ${_numStr(totalFi)}g  |  Su ${_numStr(totalSu)}g  |  Na ${_numStr(totalSo)}mg',
+                      style: const TextStyle(fontSize: 13, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _fatDetailLine(
+                        saturatedFat: totalSat,
+                        transFat: totalTrans,
+                        cholesterol: totalChol,
+                      ),
                       style: const TextStyle(fontSize: 13, color: Colors.black54),
                     ),
                     const SizedBox(height: 8),
@@ -1966,6 +2047,9 @@ class _TodayPageState extends State<TodayPage> {
                                 fiber: totalFi,
                                 sugar: totalSu,
                                 sodium: totalSo,
+                                cholesterol: totalChol,
+                                saturatedFat: totalSat,
+                                transFat: totalTrans,
                                 time: _fmtTime(time),
                                 label: label,
                               );
@@ -2236,6 +2320,12 @@ class _TodayPageState extends State<TodayPage> {
                       protein: result.protein * factor,
                       carbs: result.carbs * factor,
                       fat: result.fat * factor,
+                      fiber: result.fiber * factor,
+                      sugar: result.sugar * factor,
+                      sodium: result.sodium * factor,
+                      cholesterol: result.cholesterol * factor,
+                      saturatedFat: result.saturatedFat * factor,
+                      transFat: result.transFat * factor,
                       time: _fmtTime(selectedTime),
                       label: selectedLabel,
                     );
@@ -2250,6 +2340,9 @@ class _TodayPageState extends State<TodayPage> {
                         fiber: result.fiber,
                         sugar: result.sugar,
                         sodium: result.sodium,
+                        cholesterol: result.cholesterol,
+                        saturatedFat: result.saturatedFat,
+                        transFat: result.transFat,
                         unit: 'g',
                         baseAmount: 100,
                         isSystem: false,
@@ -2836,6 +2929,15 @@ class _FoodsPageState extends State<FoodsPage> {
     final fiberCtrl = TextEditingController(text: (existing?.fiber ?? 0).toString());
     final sugarCtrl = TextEditingController(text: (existing?.sugar ?? 0).toString());
     final sodiumCtrl = TextEditingController(text: (existing?.sodium ?? 0).toString());
+    final cholesterolCtrl = TextEditingController(
+      text: (existing?.cholesterol ?? 0).toString(),
+    );
+    final saturatedFatCtrl = TextEditingController(
+      text: (existing?.saturatedFat ?? 0).toString(),
+    );
+    final transFatCtrl = TextEditingController(
+      text: (existing?.transFat ?? 0).toString(),
+    );
 
     String selectedUnit = existing?.unit ?? 'g';
     List<FoodServing> servings = existing?.id != null
@@ -2915,6 +3017,12 @@ class _FoodsPageState extends State<FoodsPage> {
                         fiberCtrl.text = result.fiber.toStringAsFixed(1);
                         sugarCtrl.text = result.sugar.toStringAsFixed(1);
                         sodiumCtrl.text = result.sodium.toStringAsFixed(0);
+                        cholesterolCtrl.text =
+                            result.cholesterol.toStringAsFixed(0);
+                        saturatedFatCtrl.text =
+                            result.saturatedFat.toStringAsFixed(1);
+                        transFatCtrl.text =
+                            result.transFat.toStringAsFixed(1);
                         selectedUnit = 'g';
                       });
                     },
@@ -2942,6 +3050,28 @@ class _FoodsPageState extends State<FoodsPage> {
                   TextField(controller: fiberCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Fiber (g)')),
                   TextField(controller: sugarCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sugar (g)')),
                   TextField(controller: sodiumCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sodium (mg)')),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: cholesterolCtrl,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Cholesterol (mg)',
+                    ),
+                  ),
+                  TextField(
+                    controller: saturatedFatCtrl,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Saturated fat (g)',
+                    ),
+                  ),
+                  TextField(
+                    controller: transFatCtrl,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Trans fat (g)',
+                    ),
+                  ),
                   if (existing?.id != null) ...[
                     const SizedBox(height: 14),
                     const Divider(),
@@ -3008,6 +3138,9 @@ class _FoodsPageState extends State<FoodsPage> {
                     fiber: parseNum(fiberCtrl),
                     sugar: parseNum(sugarCtrl),
                     sodium: parseNum(sodiumCtrl),
+                    cholesterol: parseNum(cholesterolCtrl),
+                    saturatedFat: parseNum(saturatedFatCtrl),
+                    transFat: parseNum(transFatCtrl),
                     unit: selectedUnit,
                     baseAmount: _computeBaseAmount(selectedUnit),
                     isSystem: false,
@@ -3024,6 +3157,9 @@ class _FoodsPageState extends State<FoodsPage> {
                         id: newId, name: food.name, calories: food.calories,
                         protein: food.protein, carbs: food.carbs, fat: food.fat,
                         fiber: food.fiber, sugar: food.sugar, sodium: food.sodium,
+                        cholesterol: food.cholesterol,
+                        saturatedFat: food.saturatedFat,
+                        transFat: food.transFat,
                         unit: food.unit, baseAmount: food.baseAmount,
                         isSystem: false, category: food.category,
                       ));
@@ -3572,6 +3708,28 @@ class _TemplatesPageState extends State<TemplatesPage> {
     if (mounted) setState(() {});
   }
 
+  Future<void> _duplicateTemplate(MealTemplate template) async {
+    final duplicatedId = await AppDb.instance.duplicateUserMealTemplate(
+      template.id!,
+    );
+    final duplicatedTemplate = await AppDb.instance.getMealTemplateById(
+      duplicatedId,
+    );
+    if (!mounted) return;
+
+    setState(() {});
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TemplateEditPage(
+          templateId: duplicatedId,
+          title: duplicatedTemplate?.name ?? '${template.name} (Copy)',
+        ),
+      ),
+    );
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -3616,12 +3774,27 @@ class _TemplatesPageState extends State<TemplatesPage> {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline),
-          onPressed: () async {
-            await AppDb.instance.deleteMealTemplate(t.id!);
-            if (mounted) setState(() {});
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) async {
+            if (value == 'duplicate') {
+              await _duplicateTemplate(t);
+              return;
+            }
+            if (value == 'delete') {
+              await AppDb.instance.deleteMealTemplate(t.id!);
+              if (mounted) setState(() {});
+            }
           },
+          itemBuilder: (ctx) => const [
+            PopupMenuItem<String>(
+              value: 'duplicate',
+              child: Text('Duplicate'),
+            ),
+            PopupMenuItem<String>(
+              value: 'delete',
+              child: Text('Delete'),
+            ),
+          ],
         ),
         onTap: () async {
           await Navigator.push(
@@ -3658,6 +3831,50 @@ class TemplateEditPage extends StatefulWidget {
 }
 
 class _TemplateEditPageState extends State<TemplateEditPage> {
+  late String _templateTitle;
+
+  @override
+  void initState() {
+    super.initState();
+    _templateTitle = widget.title;
+  }
+
+  Future<void> _renameTemplate() async {
+    final nameCtrl = TextEditingController(text: _templateTitle);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Rename template'),
+        content: TextField(
+          controller: nameCtrl,
+          autofocus: true,
+          decoration: const InputDecoration(labelText: 'Template name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+    final newName = nameCtrl.text.trim();
+    if (newName.isEmpty || newName == _templateTitle) return;
+
+    await AppDb.instance.updateMealTemplateName(
+      templateId: widget.templateId,
+      name: newName,
+    );
+    if (!mounted) return;
+    setState(() => _templateTitle = newName);
+  }
+
   Future<void> _addFoodToTemplate() async {
     Food? selected;
     List<FoodServing> servings = [];
@@ -3924,8 +4141,12 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(_templateTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.drive_file_rename_outline),
+            onPressed: _renameTemplate,
+          ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: _addFoodToTemplate,
@@ -3975,9 +4196,15 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
                         protein: ((row['protein'] as num?) ?? 0).toDouble(),
                         carbs: ((row['carbs'] as num?) ?? 0).toDouble(),
                         fat: ((row['fat'] as num?) ?? 0).toDouble(),
-                        fiber: 0,
-                        sugar: 0,
-                        sodium: 0,
+                        fiber: ((row['fiber'] as num?) ?? 0).toDouble(),
+                        sugar: ((row['sugar'] as num?) ?? 0).toDouble(),
+                        sodium: ((row['sodium'] as num?) ?? 0).toDouble(),
+                        cholesterol:
+                            ((row['cholesterol'] as num?) ?? 0).toDouble(),
+                        saturatedFat:
+                            ((row['saturated_fat'] as num?) ?? 0).toDouble(),
+                        transFat:
+                            ((row['trans_fat'] as num?) ?? 0).toDouble(),
                         unit: (row['food_unit'] as String?) ?? 'g',
                         baseAmount:
                             ((row['food_base_amount'] as num?) ?? 100).toDouble(),

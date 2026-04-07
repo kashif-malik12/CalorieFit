@@ -13,6 +13,9 @@ class Food {
   final double fiber;
   final double sugar;
   final double sodium;
+  final double cholesterol;
+  final double saturatedFat;
+  final double transFat;
 
   final String unit;       // g, ml, tbsp, tsp, cup, liter, piece, slice
   final double baseAmount; // 100 for g/ml, 1 for others
@@ -30,6 +33,9 @@ class Food {
     this.fiber = 0,
     this.sugar = 0,
     this.sodium = 0,
+    this.cholesterol = 0,
+    this.saturatedFat = 0,
+    this.transFat = 0,
     this.unit = 'g',
     this.baseAmount = 100,
     this.isSystem = false,
@@ -47,6 +53,9 @@ class Food {
       'fiber': fiber,
       'sugar': sugar,
       'sodium': sodium,
+      'cholesterol': cholesterol,
+      'saturated_fat': saturatedFat,
+      'trans_fat': transFat,
       'unit': unit,
       'base_amount': baseAmount,
       'is_system': isSystem ? 1 : 0,
@@ -65,6 +74,9 @@ class Food {
       fiber: ((m['fiber'] as num?) ?? 0).toDouble(),
       sugar: ((m['sugar'] as num?) ?? 0).toDouble(),
       sodium: ((m['sodium'] as num?) ?? 0).toDouble(),
+      cholesterol: ((m['cholesterol'] as num?) ?? 0).toDouble(),
+      saturatedFat: ((m['saturated_fat'] as num?) ?? 0).toDouble(),
+      transFat: ((m['trans_fat'] as num?) ?? 0).toDouble(),
       unit: (m['unit'] as String?) ?? 'g',
       baseAmount: ((m['base_amount'] as num?) ?? 100).toDouble(),
       isSystem: ((m['is_system'] as num?) ?? 0).toInt() == 1,
@@ -99,6 +111,9 @@ class LogEntry {
   final double? fiber100;
   final double? sugar100;
   final double? sodium100;
+  final double? cholesterol100;
+  final double? saturatedFat100;
+  final double? transFat100;
 
   // Manual one-time entry support
   final String entryType; // 'food' or 'manual'
@@ -110,6 +125,9 @@ class LogEntry {
   final double? manualFiber;
   final double? manualSugar;
   final double? manualSodium;
+  final double? manualCholesterol;
+  final double? manualSaturatedFat;
+  final double? manualTransFat;
 
   const LogEntry({
     this.id,
@@ -129,6 +147,9 @@ class LogEntry {
     this.fiber100,
     this.sugar100,
     this.sodium100,
+    this.cholesterol100,
+    this.saturatedFat100,
+    this.transFat100,
 
     this.entryType = 'food',
     this.manualName,
@@ -139,6 +160,9 @@ class LogEntry {
     this.manualFiber,
     this.manualSugar,
     this.manualSodium,
+    this.manualCholesterol,
+    this.manualSaturatedFat,
+    this.manualTransFat,
   });
 
   Map<String, Object?> toMap() {
@@ -160,6 +184,9 @@ class LogEntry {
       'fiber_100': fiber100,
       'sugar_100': sugar100,
       'sodium_100': sodium100,
+      'cholesterol_100': cholesterol100,
+      'saturated_fat_100': saturatedFat100,
+      'trans_fat_100': transFat100,
 
       'entry_type': entryType,
       'manual_name': manualName,
@@ -170,6 +197,9 @@ class LogEntry {
       'manual_fiber': manualFiber,
       'manual_sugar': manualSugar,
       'manual_sodium': manualSodium,
+      'manual_cholesterol': manualCholesterol,
+      'manual_saturated_fat': manualSaturatedFat,
+      'manual_trans_fat': manualTransFat,
     };
   }
 
@@ -192,6 +222,9 @@ class LogEntry {
       fiber100: (m['fiber_100'] as num?)?.toDouble(),
       sugar100: (m['sugar_100'] as num?)?.toDouble(),
       sodium100: (m['sodium_100'] as num?)?.toDouble(),
+      cholesterol100: (m['cholesterol_100'] as num?)?.toDouble(),
+      saturatedFat100: (m['saturated_fat_100'] as num?)?.toDouble(),
+      transFat100: (m['trans_fat_100'] as num?)?.toDouble(),
 
       entryType: (m['entry_type'] as String?) ?? 'food',
       manualName: m['manual_name'] as String?,
@@ -202,6 +235,10 @@ class LogEntry {
       manualFiber: (m['manual_fiber'] as num?)?.toDouble(),
       manualSugar: (m['manual_sugar'] as num?)?.toDouble(),
       manualSodium: (m['manual_sodium'] as num?)?.toDouble(),
+      manualCholesterol: (m['manual_cholesterol'] as num?)?.toDouble(),
+      manualSaturatedFat:
+          (m['manual_saturated_fat'] as num?)?.toDouble(),
+      manualTransFat: (m['manual_trans_fat'] as num?)?.toDouble(),
     );
   }
 }
@@ -327,6 +364,9 @@ class DayTotals {
   final double fiber;
   final double sugar;
   final double sodium;
+  final double cholesterol;
+  final double saturatedFat;
+  final double transFat;
 
   const DayTotals({
     this.calories = 0,
@@ -336,6 +376,9 @@ class DayTotals {
     this.fiber = 0,
     this.sugar = 0,
     this.sodium = 0,
+    this.cholesterol = 0,
+    this.saturatedFat = 0,
+    this.transFat = 0,
   });
 
   DayTotals addScaledFood(Food f, double amount) {
@@ -350,6 +393,9 @@ class DayTotals {
       fiber: fiber + (f.fiber * factor),
       sugar: sugar + (f.sugar * factor),
       sodium: sodium + (f.sodium * factor),
+      cholesterol: cholesterol + (f.cholesterol * factor),
+      saturatedFat: saturatedFat + (f.saturatedFat * factor),
+      transFat: transFat + (f.transFat * factor),
     );
   }
 
@@ -361,6 +407,9 @@ class DayTotals {
     double fiberAdd = 0,
     double sugarAdd = 0,
     double sodiumAdd = 0,
+    double cholesterolAdd = 0,
+    double saturatedFatAdd = 0,
+    double transFatAdd = 0,
   }) {
     return DayTotals(
       calories: calories + caloriesAdd,
@@ -370,6 +419,9 @@ class DayTotals {
       fiber: fiber + fiberAdd,
       sugar: sugar + sugarAdd,
       sodium: sodium + sodiumAdd,
+      cholesterol: cholesterol + cholesterolAdd,
+      saturatedFat: saturatedFat + saturatedFatAdd,
+      transFat: transFat + transFatAdd,
     );
   }
 }

@@ -11,6 +11,12 @@ const String kUsdaApiKey = String.fromEnvironment(
   'USDA_API_KEY',
   defaultValue: '',
 );
+const String _kUsdaFallbackApiKey = 'DEMO_KEY';
+
+String get _resolvedUsdaApiKey {
+  final key = kUsdaApiKey.trim();
+  return key.isEmpty ? _kUsdaFallbackApiKey : key;
+}
 
 class FoodSearchException implements Exception {
   final String message;
@@ -36,7 +42,7 @@ Never _throwSearchError(Object error) {
 void _throwHttpError(int statusCode) {
   if (statusCode == 401 || statusCode == 403) {
     throw const FoodSearchException(
-      'USDA search is not configured correctly right now.',
+      'USDA search is unavailable right now. Try again later.',
     );
   }
   if (statusCode == 429) {
@@ -50,14 +56,6 @@ void _throwHttpError(int statusCode) {
     );
   }
   throw FoodSearchException('USDA request failed (HTTP $statusCode).');
-}
-
-void _ensureApiKeyConfigured() {
-  if (kUsdaApiKey.trim().isEmpty) {
-    throw const FoodSearchException(
-      'USDA search is not configured on this build.',
-    );
-  }
 }
 
 // ── Serving-size lookup ────────────────────────────────────────────────────
@@ -89,13 +87,12 @@ Future<List<FoodCandidate>> searchFoodCandidates(
   String query, {
   int pageSize = 15,
 }) async {
-  _ensureApiKeyConfigured();
   final trimmed = query.trim();
   if (trimmed.isEmpty) return [];
 
   final uri = Uri.https('api.nal.usda.gov', '/fdc/v1/foods/search', {
     'query': trimmed,
-    'api_key': kUsdaApiKey,
+    'api_key': _resolvedUsdaApiKey,
     'pageSize': '$pageSize',
     'dataType': 'Foundation,SR Legacy',
   });
@@ -125,11 +122,10 @@ Future<List<FoodCandidate>> searchFoodCandidates(
 /// Fetch the detailed record for [fdcId] and extract its standard portions.
 /// Filters out trivial entries like "100 g" which add no value.
 Future<List<ServingPortion>> fetchPortions(int fdcId) async {
-  _ensureApiKeyConfigured();
   final uri = Uri.https(
     'api.nal.usda.gov',
     '/fdc/v1/food/$fdcId',
-    {'api_key': kUsdaApiKey},
+    {'api_key': _resolvedUsdaApiKey},
   );
 
   http.Response response;
@@ -193,6 +189,9 @@ class FoodSearchResult {
   final double fiber;
   final double sugar;
   final double sodium;    // mg per 100 g
+  final double cholesterol; // mg per 100 g
+  final double saturatedFat;
+  final double transFat;
 
   const FoodSearchResult({
     required this.name,
@@ -203,6 +202,9 @@ class FoodSearchResult {
     this.fiber = 0,
     this.sugar = 0,
     this.sodium = 0,
+    this.cholesterol = 0,
+    this.saturatedFat = 0,
+    this.transFat = 0,
   });
 
   /// Pretty label shown in the results list.
@@ -223,6 +225,9 @@ const _kNutrientIds = {
   1079: 'fiber',     // Fiber, total dietary
   2000: 'sugar',     // Sugars, total
   1093: 'sodium',    // Sodium, Na
+  1253: 'cholesterol', // Cholesterol
+  1258: 'saturated_fat', // Fatty acids, total saturated
+  1257: 'trans_fat', // Fatty acids, total trans
 };
 
 /// Capitalises each word (USDA names are ALL-CAPS).
@@ -233,13 +238,12 @@ String _titleCase(String s) => s
     .join(' ');
 
 Future<List<FoodSearchResult>> searchFoodsOnline(String query) async {
-  _ensureApiKeyConfigured();
   final trimmed = query.trim();
   if (trimmed.isEmpty) return [];
 
   final uri = Uri.https('api.nal.usda.gov', '/fdc/v1/foods/search', {
     'query': trimmed,
-    'api_key': kUsdaApiKey,
+    'api_key': _resolvedUsdaApiKey,
     'pageSize': '20',
     'dataType': 'Foundation,SR Legacy',
   });
@@ -283,6 +287,9 @@ Future<List<FoodSearchResult>> searchFoodsOnline(String query) async {
       fiber: get(1079),
       sugar: get(2000),
       sodium: get(1093),
+      cholesterol: get(1253),
+      saturatedFat: get(1258),
+      transFat: get(1257),
     ));
   }
 
