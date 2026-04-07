@@ -76,9 +76,16 @@ Expected output:
 - `build/app/outputs/bundle/release/app-release.aab`
 
 Important:
-- USDA search in the released app will only work if the AAB is built with the USDA key included.
+- USDA search works best when the AAB is built with the USDA key included.
 - In VS Code, use the `Flutter Build AAB` task so `env/dart_defines.local.json` is applied automatically.
-- If you build with plain `flutter build appbundle` and omit the Dart define file, the release app will show USDA search as not configured.
+- If you build with plain `flutter build appbundle` and omit the Dart define file, the release app now falls back to USDA `DEMO_KEY`.
+- `DEMO_KEY` is acceptable as a fallback, but a real USDA key is still recommended for better reliability and fewer rate-limit issues.
+- Before every new Play upload, increment the Flutter build number in `pubspec.yaml` so Android `versionCode` is unique.
+
+Latest successful release artifact:
+- App version: `1.1.1`
+- Android build number / versionCode: `4`
+- Output: `build/app/outputs/bundle/release/app-release.aab`
 
 ## Play Console Tasks
 
