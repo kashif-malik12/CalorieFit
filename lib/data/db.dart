@@ -18,6 +18,9 @@ class MacroTargets {
   final int fiber;
   final int sugar;
   final int sodium;
+  final int cholesterol;
+  final int saturatedFat;
+  final int transFat;
 
   const MacroTargets({
     required this.calories,
@@ -27,6 +30,9 @@ class MacroTargets {
     this.fiber = 30,
     this.sugar = 50,
     this.sodium = 2300,
+    this.cholesterol = 300,
+    this.saturatedFat = 20,
+    this.transFat = 0,
   });
 }
 
@@ -142,7 +148,7 @@ class AppDb {
     final d = await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 17,
+        version: 18,
         onConfigure: (db) async {
           if (!kIsWeb) {
             await db.execute('PRAGMA foreign_keys = ON;');
@@ -333,6 +339,21 @@ class AppDb {
               "ALTER TABLE log_entries ADD COLUMN manual_trans_fat REAL;",
             );
           }
+          if (!await _hasColumn(db, 'day_targets', 'cholesterol_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN cholesterol_target INTEGER NOT NULL DEFAULT 300;",
+            );
+          }
+          if (!await _hasColumn(db, 'day_targets', 'saturated_fat_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN saturated_fat_target INTEGER NOT NULL DEFAULT 20;",
+            );
+          }
+          if (!await _hasColumn(db, 'day_targets', 'trans_fat_target')) {
+            await db.execute(
+              "ALTER TABLE day_targets ADD COLUMN trans_fat_target INTEGER NOT NULL DEFAULT 0;",
+            );
+          }
 
           if (!await _hasColumn(db, 'day_targets', 'source')) {
             await db.execute(
@@ -493,6 +514,9 @@ class AppDb {
         fiber_target INTEGER NOT NULL DEFAULT 30,
         sugar_target INTEGER NOT NULL DEFAULT 50,
         sodium_target INTEGER NOT NULL DEFAULT 2300,
+        cholesterol_target INTEGER NOT NULL DEFAULT 300,
+        saturated_fat_target INTEGER NOT NULL DEFAULT 20,
+        trans_fat_target INTEGER NOT NULL DEFAULT 0,
         source TEXT DEFAULT 'manual',
         calculator_json TEXT
       );
@@ -1292,6 +1316,9 @@ class AppDb {
         fiber: (r['fiber_target'] as num?)?.toInt() ?? 30,
         sugar: (r['sugar_target'] as num?)?.toInt() ?? 50,
         sodium: (r['sodium_target'] as num?)?.toInt() ?? 2300,
+        cholesterol: (r['cholesterol_target'] as num?)?.toInt() ?? 300,
+        saturatedFat: (r['saturated_fat_target'] as num?)?.toInt() ?? 20,
+        transFat: (r['trans_fat_target'] as num?)?.toInt() ?? 0,
       );
     }
 
@@ -1303,6 +1330,9 @@ class AppDb {
       fiber: await TargetSettings.getFiber(),
       sugar: await TargetSettings.getSugar(),
       sodium: await TargetSettings.getSodium(),
+      cholesterol: await TargetSettings.getCholesterol(),
+      saturatedFat: await TargetSettings.getSaturatedFat(),
+      transFat: await TargetSettings.getTransFat(),
     );
   }
 
@@ -1322,6 +1352,9 @@ class AppDb {
       'fiber_target': t.fiber,
       'sugar_target': t.sugar,
       'sodium_target': t.sodium,
+      'cholesterol_target': t.cholesterol,
+      'saturated_fat_target': t.saturatedFat,
+      'trans_fat_target': t.transFat,
       'source': source,
       'calculator_json': calculatorJson,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
@@ -1448,14 +1481,18 @@ class AppDb {
     await d.delete('meal_templates', where: 'id = ?', whereArgs: [templateId]);
   }
 
-  Future<void> updateMealTemplateName({
+  Future<void> updateMealTemplateDetails({
     required int templateId,
     required String name,
+    required String label,
   }) async {
     final d = await db;
     await d.update(
       'meal_templates',
-      {'name': name.trim()},
+      {
+        'name': name.trim(),
+        'label': label.trim().isEmpty ? 'Breakfast' : label.trim(),
+      },
       where: 'id = ? AND is_system = 0',
       whereArgs: [templateId],
     );

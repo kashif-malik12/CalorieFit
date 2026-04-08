@@ -918,6 +918,9 @@ Widget _targetsTable({required DayTotals totals, required MacroTargets targets})
                 _macroRow('Fiber', totals.fiber, targets.fiber, 'g'),
                 _macroRow('Sugar', totals.sugar, targets.sugar, 'g'),
                 _macroRow('Sodium', totals.sodium, targets.sodium, 'mg'),
+                _macroRow('Cholesterol', totals.cholesterol, targets.cholesterol, 'mg'),
+                _macroRow('Saturated fat', totals.saturatedFat, targets.saturatedFat, 'g'),
+                _macroRow('Trans fat', totals.transFat, targets.transFat, 'g'),
               ],
             ),
           ),
@@ -983,6 +986,9 @@ Future<void> editDefaultTargetsOneDialog(BuildContext context) async {
   final fi = await TargetSettings.getFiber();
   final su = await TargetSettings.getSugar();
   final so = await TargetSettings.getSodium();
+  final ch = await TargetSettings.getCholesterol();
+  final sf = await TargetSettings.getSaturatedFat();
+  final tf = await TargetSettings.getTransFat();
 
   final cCtrl = TextEditingController(text: c.toString());
   final pCtrl = TextEditingController(text: p.toString());
@@ -991,6 +997,9 @@ Future<void> editDefaultTargetsOneDialog(BuildContext context) async {
   final fiCtrl = TextEditingController(text: fi.toString());
   final suCtrl = TextEditingController(text: su.toString());
   final soCtrl = TextEditingController(text: so.toString());
+  final chCtrl = TextEditingController(text: ch.toString());
+  final sfCtrl = TextEditingController(text: sf.toString());
+  final tfCtrl = TextEditingController(text: tf.toString());
 
   final res = await showDialog<bool>(
     context: context,
@@ -1006,6 +1015,9 @@ Future<void> editDefaultTargetsOneDialog(BuildContext context) async {
             TextField(controller: fiCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Fiber (g)')),
             TextField(controller: suCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sugar (g)')),
             TextField(controller: soCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sodium (mg)')),
+            TextField(controller: chCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Cholesterol (mg)')),
+            TextField(controller: sfCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Saturated fat (g)')),
+            TextField(controller: tfCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Trans fat (g)')),
           ],
         ),
       ),
@@ -1027,6 +1039,9 @@ Future<void> editDefaultTargetsOneDialog(BuildContext context) async {
   await TargetSettings.setFiber(parse(fiCtrl));
   await TargetSettings.setSugar(parse(suCtrl));
   await TargetSettings.setSodium(parse(soCtrl));
+  await TargetSettings.setCholesterol(parse(chCtrl));
+  await TargetSettings.setSaturatedFat(parse(sfCtrl));
+  await TargetSettings.setTransFat(parse(tfCtrl));
 
   if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Default targets saved')));
@@ -1043,6 +1058,9 @@ Future<void> editTargetsForDateOneDialog(BuildContext context, String date) asyn
   final fiCtrl = TextEditingController(text: cur.fiber.toString());
   final suCtrl = TextEditingController(text: cur.sugar.toString());
   final soCtrl = TextEditingController(text: cur.sodium.toString());
+  final chCtrl = TextEditingController(text: cur.cholesterol.toString());
+  final sfCtrl = TextEditingController(text: cur.saturatedFat.toString());
+  final tfCtrl = TextEditingController(text: cur.transFat.toString());
 
   final res = await showDialog<bool>(
     context: context,
@@ -1058,6 +1076,9 @@ Future<void> editTargetsForDateOneDialog(BuildContext context, String date) asyn
             TextField(controller: fiCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Fiber (g)')),
             TextField(controller: suCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sugar (g)')),
             TextField(controller: soCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Sodium (mg)')),
+            TextField(controller: chCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Cholesterol (mg)')),
+            TextField(controller: sfCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Saturated fat (g)')),
+            TextField(controller: tfCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Trans fat (g)')),
           ],
         ),
       ),
@@ -1082,6 +1103,9 @@ Future<void> editTargetsForDateOneDialog(BuildContext context, String date) asyn
       fiber: parse(fiCtrl),
       sugar: parse(suCtrl),
       sodium: parse(soCtrl),
+      cholesterol: parse(chCtrl),
+      saturatedFat: parse(sfCtrl),
+      transFat: parse(tfCtrl),
     ),
   );
 
@@ -1119,17 +1143,26 @@ int _goalAdjustment(String value) {
 }
 
 Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) async {
-  // Load existing fiber/sugar/sodium so calculator doesn't wipe them
+  // Load existing extra targets so calculator doesn't wipe them
   final existingTargets = await AppDb.instance.getTargetsForDate(date);
-  final existingFiber = existingTargets.fiber;
-  final existingSugar = existingTargets.sugar;
-  final existingSodium = existingTargets.sodium;
 
   if (!context.mounted) return;
 
   final heightCtrl = TextEditingController(text: '170');
   final weightCtrl = TextEditingController(text: '70');
   final ageCtrl = TextEditingController(text: '30');
+  final fiberCtrl = TextEditingController(text: existingTargets.fiber.toString());
+  final sugarCtrl = TextEditingController(text: existingTargets.sugar.toString());
+  final sodiumCtrl = TextEditingController(text: existingTargets.sodium.toString());
+  final cholesterolCtrl = TextEditingController(
+    text: existingTargets.cholesterol.toString(),
+  );
+  final saturatedFatCtrl = TextEditingController(
+    text: existingTargets.saturatedFat.toString(),
+  );
+  final transFatCtrl = TextEditingController(
+    text: existingTargets.transFat.toString(),
+  );
 
   String sex = 'Male';
   String activity = 'Moderate';
@@ -1183,6 +1216,12 @@ Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) asy
         final carbs = (((targetCalories - (protein * 4) - (fat * 9)) / 4))
             .clamp(0, 100000)
             .round();
+        final fiber = parseInt(fiberCtrl);
+        final sugar = parseInt(sugarCtrl);
+        final sodium = parseInt(sodiumCtrl);
+        final cholesterol = parseInt(cholesterolCtrl);
+        final saturatedFat = parseInt(saturatedFatCtrl);
+        final transFat = parseInt(transFatCtrl);
 
         return AlertDialog(
           title: const Text('BMI & calorie target'),
@@ -1242,6 +1281,49 @@ Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) asy
                   ],
                   onChanged: (v) => setInner(() => goal = v ?? 'Maintain'),
                 ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: fiberCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Fiber target (g)'),
+                  onChanged: (_) => setInner(() {}),
+                ),
+                TextField(
+                  controller: sugarCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Sugar target (g)'),
+                  onChanged: (_) => setInner(() {}),
+                ),
+                TextField(
+                  controller: sodiumCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Sodium target (mg)'),
+                  onChanged: (_) => setInner(() {}),
+                ),
+                TextField(
+                  controller: cholesterolCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Cholesterol target (mg)',
+                  ),
+                  onChanged: (_) => setInner(() {}),
+                ),
+                TextField(
+                  controller: saturatedFatCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Saturated fat target (g)',
+                  ),
+                  onChanged: (_) => setInner(() {}),
+                ),
+                TextField(
+                  controller: transFatCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Trans fat target (g)',
+                  ),
+                  onChanged: (_) => setInner(() {}),
+                ),
                 const SizedBox(height: 16),
                 Card(
                   child: Padding(
@@ -1258,6 +1340,12 @@ Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) asy
                         Text('Protein target: ${protein > 0 ? protein : '-'} g'),
                         Text('Carbs target: ${carbs >= 0 ? carbs : '-'} g'),
                         Text('Fat target: ${fat > 0 ? fat : '-'} g'),
+                        Text('Fiber target: $fiber g'),
+                        Text('Sugar target: $sugar g'),
+                        Text('Sodium target: $sodium mg'),
+                        Text('Saturated fat target: $saturatedFat g'),
+                        Text('Trans fat target: $transFat g'),
+                        Text('Cholesterol target: $cholesterol mg'),
                       ],
                     ),
                   ),
@@ -1278,7 +1366,12 @@ Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) asy
                 await TargetSettings.setProtein(protein);
                 await TargetSettings.setCarbs(carbs);
                 await TargetSettings.setFat(fat);
-                // Fiber/sugar/sodium are not calculated - preserve existing defaults
+                await TargetSettings.setFiber(fiber);
+                await TargetSettings.setSugar(sugar);
+                await TargetSettings.setSodium(sodium);
+                await TargetSettings.setCholesterol(cholesterol);
+                await TargetSettings.setSaturatedFat(saturatedFat);
+                await TargetSettings.setTransFat(transFat);
 
                 if (ctx.mounted) Navigator.pop(ctx);
                 if (context.mounted) {
@@ -1300,9 +1393,12 @@ Future<void> showBmiAndCalorieToolsDialog(BuildContext context, String date) asy
                     protein: protein,
                     carbs: carbs,
                     fat: fat,
-                    fiber: existingFiber,
-                    sugar: existingSugar,
-                    sodium: existingSodium,
+                    fiber: fiber,
+                    sugar: sugar,
+                    sodium: sodium,
+                    cholesterol: cholesterol,
+                    saturatedFat: saturatedFat,
+                    transFat: transFat,
                   ),
                   source: 'calculator',
                   calculatorJson: jsonEncode({
@@ -3832,23 +3928,47 @@ class TemplateEditPage extends StatefulWidget {
 
 class _TemplateEditPageState extends State<TemplateEditPage> {
   late String _templateTitle;
+  String _templateLabel = 'Breakfast';
 
   @override
   void initState() {
     super.initState();
     _templateTitle = widget.title;
+    _loadTemplateDetails();
   }
 
-  Future<void> _renameTemplate() async {
+  Future<void> _loadTemplateDetails() async {
+    final template = await AppDb.instance.getMealTemplateById(widget.templateId);
+    if (!mounted || template == null) return;
+    setState(() {
+      _templateTitle = template.name;
+      _templateLabel = template.label;
+    });
+  }
+
+  Future<void> _editTemplateDetails() async {
     final nameCtrl = TextEditingController(text: _templateTitle);
+    final labelCtrl = TextEditingController(text: _templateLabel);
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Rename template'),
-        content: TextField(
-          controller: nameCtrl,
-          autofocus: true,
-          decoration: const InputDecoration(labelText: 'Template name'),
+        title: const Text('Edit template'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameCtrl,
+              autofocus: true,
+              decoration: const InputDecoration(labelText: 'Template name'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: labelCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Label (custom allowed)',
+              ),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -3865,14 +3985,22 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
 
     if (ok != true) return;
     final newName = nameCtrl.text.trim();
-    if (newName.isEmpty || newName == _templateTitle) return;
+    final newLabel = labelCtrl.text.trim().isEmpty
+        ? 'Breakfast'
+        : labelCtrl.text.trim();
+    if (newName.isEmpty) return;
+    if (newName == _templateTitle && newLabel == _templateLabel) return;
 
-    await AppDb.instance.updateMealTemplateName(
+    await AppDb.instance.updateMealTemplateDetails(
       templateId: widget.templateId,
       name: newName,
+      label: newLabel,
     );
     if (!mounted) return;
-    setState(() => _templateTitle = newName);
+    setState(() {
+      _templateTitle = newName;
+      _templateLabel = newLabel;
+    });
   }
 
   Future<void> _addFoodToTemplate() async {
@@ -4058,6 +4186,9 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
 
   Future<void> _editTemplateItem(MealTemplateItem item, Food? food) async {
     if (item.id == null) return;
+    final servings = food?.id != null
+        ? await AppDb.instance.getFoodServings(food!.id!)
+        : <FoodServing>[];
     final amountCtrl = TextEditingController(
       text: item.amount.toStringAsFixed(
         item.amount == item.amount.roundToDouble() ? 0 : 1,
@@ -4099,6 +4230,34 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
+                if (servings.isNotEmpty) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Quick serving',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: servings.map((s) {
+                      return ActionChip(
+                        label: Text(
+                          '${s.name} (${_numStr(s.grams)} ${item.unit})',
+                        ),
+                        onPressed: () {
+                          amountCtrl.text = _numStr(s.grams);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 TextField(
                   controller: amountCtrl,
                   autofocus: true,
@@ -4145,7 +4304,7 @@ class _TemplateEditPageState extends State<TemplateEditPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.drive_file_rename_outline),
-            onPressed: _renameTemplate,
+            onPressed: _editTemplateDetails,
           ),
           IconButton(
             icon: const Icon(Icons.add),

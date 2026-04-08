@@ -9,6 +9,9 @@ class TargetSettings {
   static const _kFiber = 'targets_fiber';
   static const _kSugar = 'targets_sugar';
   static const _kSodium = 'targets_sodium';
+  static const _kCholesterol = 'targets_cholesterol';
+  static const _kSaturatedFat = 'targets_saturated_fat';
+  static const _kTransFat = 'targets_trans_fat';
 
   static Future<int> getCalories() async {
     final sp = await SharedPreferences.getInstance();
@@ -43,6 +46,21 @@ class TargetSettings {
   static Future<int> getSodium() async {
     final sp = await SharedPreferences.getInstance();
     return sp.getInt(_kSodium) ?? 2300;
+  }
+
+  static Future<int> getCholesterol() async {
+    final sp = await SharedPreferences.getInstance();
+    return sp.getInt(_kCholesterol) ?? 300;
+  }
+
+  static Future<int> getSaturatedFat() async {
+    final sp = await SharedPreferences.getInstance();
+    return sp.getInt(_kSaturatedFat) ?? 20;
+  }
+
+  static Future<int> getTransFat() async {
+    final sp = await SharedPreferences.getInstance();
+    return sp.getInt(_kTransFat) ?? 0;
   }
 
   static Future<void> setCalories(int v) async {
@@ -80,6 +98,21 @@ class TargetSettings {
     await sp.setInt(_kSodium, v);
   }
 
+  static Future<void> setCholesterol(int v) async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.setInt(_kCholesterol, v);
+  }
+
+  static Future<void> setSaturatedFat(int v) async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.setInt(_kSaturatedFat, v);
+  }
+
+  static Future<void> setTransFat(int v) async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.setInt(_kTransFat, v);
+  }
+
   static Future<void> resetAllTargets() async {
     final sp = await SharedPreferences.getInstance();
     await sp.remove(_kCalories);
@@ -89,5 +122,8 @@ class TargetSettings {
     await sp.remove(_kFiber);
     await sp.remove(_kSugar);
     await sp.remove(_kSodium);
+    await sp.remove(_kCholesterol);
+    await sp.remove(_kSaturatedFat);
+    await sp.remove(_kTransFat);
   }
 }
