@@ -33,6 +33,11 @@ import 'screens/meal_photo_journal_screen.dart';
 import 'screens/health_sync_screen.dart';
 import 'screens/widget_settings_screen.dart';
 import 'screens/language_selection_dialog.dart';
+import 'screens/onboarding_wizard_screen.dart';
+import 'screens/health_export_dialog.dart';
+import 'screens/grocery_list_screen.dart';
+import 'services/health_export_service.dart';
+import 'services/grocery_list_service.dart';
 import 'services/health_sync_service.dart';
 import 'services/widget_sync_service.dart';
 import 'services/app_localization.dart';
@@ -189,6 +194,7 @@ class InitGate extends StatefulWidget {
 
 class _InitGateState extends State<InitGate> {
   late final Future<void> _initFuture = _init();
+  bool _isOnboarded = true;
 
   Future<void> _init() async {
     try {
@@ -201,6 +207,8 @@ class _InitGateState extends State<InitGate> {
 
       final days = await RetentionSettings.getRetentionDays();
       await AppDb.instance.purgeDataOlderThanDays(days);
+
+      _isOnboarded = await OnboardingWizardScreen.isCompleted();
     } catch (e, st) {
       throw Exception('$e\n\n$st');
     }
@@ -234,6 +242,14 @@ class _InitGateState extends State<InitGate> {
               padding: const EdgeInsets.all(16),
               child: SelectableText('App failed to start:\n\n${snap.error}'),
             ),
+          );
+        }
+
+        if (!_isOnboarded) {
+          return OnboardingWizardScreen(
+            onFinished: () {
+              setState(() => _isOnboarded = true);
+            },
           );
         }
 
@@ -433,7 +449,38 @@ class _HomeShellState extends State<HomeShell> {
                 title: const Text('Goal & TDEE Wizard'),
                 onTap: () {
                   Navigator.pop(context);
-                  _showGoalWizardDialog(context, () => setState(() {}));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => OnboardingWizardScreen(
+                        onFinished: () {
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_cart_outlined, color: Colors.green),
+                title: const Text('Smart Grocery Checklist'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const GroceryListScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.description_outlined, color: Colors.deepOrange),
+                title: const Text('Clinical & Doctor Export (CSV)'),
+                onTap: () {
+                  Navigator.pop(context);
+                  HealthExportDialog.show(context);
                 },
               ),
               ListTile(

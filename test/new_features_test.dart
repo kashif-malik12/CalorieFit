@@ -8,6 +8,9 @@ import 'package:calorie_fit/services/report_service.dart';
 import 'package:calorie_fit/services/open_food_facts_service.dart';
 import 'package:calorie_fit/services/health_sync_service.dart';
 import 'package:calorie_fit/services/app_localization.dart';
+import 'package:calorie_fit/screens/onboarding_wizard_screen.dart';
+import 'package:calorie_fit/services/grocery_list_service.dart';
+import 'package:calorie_fit/services/health_export_service.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
 void main() {
@@ -234,6 +237,40 @@ void main() {
 
       // Reset to English
       await AppLocalization.setLanguage(AppLanguage.en);
+    });
+  });
+
+  group('TDEE Onboarding Wizard Tests', () {
+    test('Mifflin-St Jeor calculation accurately computes BMR, TDEE, and macro splits', () {
+      final res = TdeeCalculationResult.calculate(
+        isMale: true,
+        age: 28,
+        heightCm: 175.0,
+        weightKg: 75.0,
+        activityMultiplier: 1.55, // Moderate
+        goal: 'lose',
+      );
+
+      // BMR: 10*75 + 6.25*175 - 5*28 + 5 = 750 + 1093.75 - 140 + 5 = 1708.75 -> 1709
+      expect(res.bmr, closeTo(1709, 2));
+      // TDEE: 1708.75 * 1.55 = ~2648.56
+      expect(res.tdee, closeTo(2649, 3));
+      // Deficit 500 kcal
+      expect(res.targetCalories, closeTo(res.tdee - 500, 2));
+      // Protein: 75 * 2 = 150g
+      expect(res.proteinGrams, 150);
+      expect(res.fatGrams, greaterThan(30));
+      expect(res.carbsGrams, greaterThan(50));
+    });
+  });
+
+  group('Grocery List Service Tests', () {
+    test('Correctly guesses categories for different types of foods', () {
+      expect(GroceryItem.guessCategory('Fresh Organic Apples'), 'Produce & Greens');
+      expect(GroceryItem.guessCategory('Boneless Chicken Breast'), 'Meat, Seafood & Eggs');
+      expect(GroceryItem.guessCategory('Whole Milk 2L'), 'Dairy & Refrigerated');
+      expect(GroceryItem.guessCategory('Rolled Oats 1kg'), 'Grains & Bakery');
+      expect(GroceryItem.guessCategory('Olive Oil & Himalayan Salt'), 'Pantry & Spices');
     });
   });
 }

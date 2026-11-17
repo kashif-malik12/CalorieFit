@@ -1,0 +1,90 @@
+name: Deploy to Google Play Store
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Build & Release App Bundle
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          flutter pub get
+          pip install google-api-python-client google-auth pillow
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release
+
+      - name: Write Google Play Service Account Key
+        env:
+          PLAY_STORE_JSON_KEY: ${{ secrets.PLAY_STORE_JSON_KEY }}
+        run: |
+          echo "$PLAY_STORE_JSON_KEY" > play_service_account.json
+
+      - name: Upload to Google Play Production
+        if: env.PLAY_STORE_JSON_KEY != ''
+        env:
+          PLAY_STORE_JSON_KEY: ${{ secrets.PLAY_STORE_JSON_KEY }}
+        run: |
+          python -c "
+          import os, sys
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+
+          key_file = 'play_service_account.json'
+          aab_path = 'build/app/outputs/bundle/release/app-release.aab'
+          package_name = 'com.caloriefit.app'
+          track = 'production'
+
+          credentials = service_account.Credentials.from_service_account_file(
+              key_file,
+              scopes=['https://www.googleapis.com/auth/androidpublisher']
+          )
+          service = build('androidpublisher', 'v3', credentials=credentials)
+          edit = service.edits().insert(packageName=package_name, body={}).execute()
+          edit_id = edit['id']
+
+          media = MediaFileUpload(aab_path, mimetype='application/octet-stream', resumable=True)
+          bundle = service.edits().bundles().upload(packageName=package_name, editId=edit_id, media_body=media, ackBundleInstallationWarning=True).execute()
+          vc = bundle['versionCode']
+          print(f'Uploaded bundle with versionCode: {vc}')
+
+          service.edits().tracks().update(
+              packageName=package_name,
+              editId=edit_id,
+              track=track,
+              body={'track': track, 'releases': [{'name': f'{vc} (Release)', 'status': 'completed', 'versionCodes': [str(vc)]}]}
+          ).execute()
+
+          service.edits().commit(packageName=package_name, editId=edit_id).execute()
+          print('Successfully released to Google Play!')
+          "
