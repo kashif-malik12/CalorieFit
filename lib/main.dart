@@ -30,6 +30,13 @@ import 'screens/recipe_builder_screen.dart';
 import 'screens/review_prompt_dialog.dart';
 import 'screens/ai_meal_estimator_screen.dart';
 import 'screens/meal_photo_journal_screen.dart';
+import 'screens/health_sync_screen.dart';
+import 'screens/widget_settings_screen.dart';
+import 'screens/language_selection_dialog.dart';
+import 'services/health_sync_service.dart';
+import 'services/widget_sync_service.dart';
+import 'services/app_localization.dart';
+import 'services/open_food_facts_service.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -46,6 +53,7 @@ const String kPrivacyPolicyContactEmail = 'admin@tradister.com';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ThemeService.init();
+  await AppLocalization.init();
 
   if (kIsWeb) {
     common.databaseFactory = databaseFactoryFfiWeb;
@@ -69,33 +77,41 @@ class CalorieFitApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: ThemeService.themeModeNotifier,
-      builder: (_, mode, __) {
-        return MaterialApp(
-          title: 'CalorieFit',
-          debugShowCheckedModeBanner: false,
-          themeMode: mode,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorSchemeSeed: kBrandPrimary,
-            brightness: Brightness.light,
-            scaffoldBackgroundColor: kBrandSurface,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.white,
-              foregroundColor: kBrandPrimary,
-              surfaceTintColor: Colors.transparent,
-            ),
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorSchemeSeed: kBrandPrimary,
-            brightness: Brightness.dark,
-            appBarTheme: const AppBarTheme(
-              surfaceTintColor: Colors.transparent,
-            ),
-          ),
-          home: const InitGate(),
+    return ValueListenableBuilder<AppLanguage>(
+      valueListenable: AppLocalization.currentLanguageNotifier,
+      builder: (_, lang, __) {
+        return ValueListenableBuilder<ThemeMode>(
+          valueListenable: ThemeService.themeModeNotifier,
+          builder: (_, mode, __) {
+            return MaterialApp(
+              title: 'app_title'.tr(),
+              debugShowCheckedModeBanner: false,
+              themeMode: mode,
+              theme: ThemeData(
+                useMaterial3: true,
+                colorSchemeSeed: kBrandPrimary,
+                brightness: Brightness.light,
+                scaffoldBackgroundColor: kBrandSurface,
+                appBarTheme: const AppBarTheme(
+                  backgroundColor: Colors.white,
+                  foregroundColor: kBrandPrimary,
+                  surfaceTintColor: Colors.transparent,
+                ),
+              ),
+              darkTheme: ThemeData(
+                useMaterial3: true,
+                colorSchemeSeed: kBrandPrimary,
+                brightness: Brightness.dark,
+                appBarTheme: const AppBarTheme(
+                  surfaceTintColor: Colors.transparent,
+                ),
+              ),
+              home: Directionality(
+                textDirection: AppLocalization.textDirection,
+                child: const InitGate(),
+              ),
+            );
+          },
         );
       },
     );
@@ -557,6 +573,40 @@ class _HomeShellState extends State<HomeShell> {
                       builder: (_) => const MealPhotoJournalScreen(),
                     ),
                   );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.favorite_outline, color: Colors.pink),
+                title: const Text('Google Health Connect Sync'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const HealthSyncScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.widgets_outlined, color: Colors.indigo),
+                title: const Text('Home Screen Widgets'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const WidgetSettingsScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language, color: Colors.teal),
+                title: const Text('Change Language / زبان / اللغة'),
+                onTap: () {
+                  Navigator.pop(context);
+                  LanguageSelectionDialog.show(context);
                 },
               ),
               ListTile(
@@ -2037,6 +2087,18 @@ class _TodayPageState extends State<TodayPage> {
               onTap: () => Navigator.pop(ctx, 'ai_estimator'),
             ),
             ListTile(
+              leading: const Icon(Icons.favorite_outline, color: Colors.pink),
+              title: const Text('Google Health Connect Sync'),
+              subtitle: const Text('Sync steps and active workout burn'),
+              onTap: () => Navigator.pop(ctx, 'health_connect'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.widgets_outlined, color: Colors.indigo),
+              title: const Text('Home Screen Widgets'),
+              subtitle: const Text('Configure quick glance widgets'),
+              onTap: () => Navigator.pop(ctx, 'widgets'),
+            ),
+            ListTile(
               leading: const Icon(Icons.copy_all, color: Colors.blue),
               title: const Text("Copy yesterday's meals"),
               subtitle: const Text('Duplicate yesterday into today'),
@@ -2096,6 +2158,24 @@ class _TodayPageState extends State<TodayPage> {
             ),
           ),
         );
+        break;
+      case 'health_connect':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const HealthSyncScreen(),
+          ),
+        );
+        setState(() {});
+        break;
+      case 'widgets':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const WidgetSettingsScreen(),
+          ),
+        );
+        setState(() {});
         break;
       case 'copy_yesterday':
         await _copyYesterdayMeals();
@@ -3116,8 +3196,13 @@ class _TodayPageState extends State<TodayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BrandedAppBarTitle(title: 'Daily Log', subtitle: _date),
+        title: BrandedAppBarTitle(title: 'daily_diary'.tr(), subtitle: _date),
         actions: [
+          IconButton(
+            tooltip: 'Language',
+            icon: const Icon(Icons.language),
+            onPressed: () => LanguageSelectionDialog.show(context),
+          ),
           IconButton(
             tooltip: 'Data retention',
             icon: const Icon(Icons.storage),

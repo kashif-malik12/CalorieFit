@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:calorie_fit/data/models.dart';
 import 'package:calorie_fit/services/reminder_service.dart';
 import 'package:calorie_fit/services/ai_nutrition_estimator.dart';
 import 'package:calorie_fit/services/report_service.dart';
+import 'package:calorie_fit/services/open_food_facts_service.dart';
+import 'package:calorie_fit/services/health_sync_service.dart';
+import 'package:calorie_fit/services/app_localization.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
 void main() {
@@ -159,6 +163,77 @@ void main() {
       expect(meal.totalCarbs, greaterThan(5));
       expect(meal.totalFat, greaterThan(10));
       expect(meal.confidence, isIn(['High', 'Estimated']));
+    });
+  });
+
+  group('Open Food Facts Service Tests', () {
+    test('Parses raw product json to CalorieFit Food model', () {
+      final service = OpenFoodFactsService();
+      final mockJson = {
+        'product_name': 'Organic Rolled Oats',
+        'brands': 'Bob\'s Red Mill',
+        'categories': 'Breakfast Cereals',
+        'nutriments': {
+          'energy-kcal_100g': 375.0,
+          'proteins_100g': 13.0,
+          'carbohydrates_100g': 68.0,
+          'fat_100g': 6.5,
+          'fiber_100g': 10.0,
+          'sugars_100g': 1.0,
+          'sodium_100g': 0.005,
+          'saturated-fat_100g': 1.0,
+        }
+      };
+
+      final food = service.parseProductToFood(mockJson);
+      expect(food, isNotNull);
+      expect(food!.name, contains('Organic Rolled Oats'));
+      expect(food.name, contains('Bob\'s Red Mill'));
+      expect(food.calories, 375.0);
+      expect(food.protein, 13.0);
+      expect(food.carbs, 68.0);
+      expect(food.fat, 6.5);
+      expect(food.fiber, 10.0);
+      expect(food.sodium, 5.0); // 0.005 * 1000 mg
+    });
+  });
+
+  group('Health Sync Service Tests', () {
+    test('Calculates burned calories and distance accurately from step counts', () {
+      final service = HealthSyncService();
+
+      final calories = service.calculateCaloriesFromSteps(10000, weightKg: 70.0);
+      expect(calories, closeTo(400.0, 1.0));
+
+      final distanceKm = service.calculateDistanceKm(10000);
+      expect(distanceKm, closeTo(7.62, 0.1));
+    });
+  });
+
+  group('App Localization Tests', () {
+    test('Translates keys and detects RTL direction properly', () async {
+      SharedPreferences.setMockInitialValues({});
+      await AppLocalization.setLanguage(AppLanguage.en);
+      expect(AppLocalization.tr('calories'), 'Calories');
+      expect(AppLocalization.tr('water'), 'Water');
+      expect(AppLocalization.current.isRtl, isFalse);
+
+      await AppLocalization.setLanguage(AppLanguage.es);
+      expect(AppLocalization.tr('calories'), 'Calorías');
+      expect(AppLocalization.tr('water'), 'Agua');
+      expect(AppLocalization.current.isRtl, isFalse);
+
+      await AppLocalization.setLanguage(AppLanguage.ur);
+      expect(AppLocalization.tr('calories'), 'کیلوریز');
+      expect(AppLocalization.tr('water'), 'پانی');
+      expect(AppLocalization.current.isRtl, isTrue);
+
+      await AppLocalization.setLanguage(AppLanguage.ar);
+      expect(AppLocalization.tr('calories'), 'السعرات الحرارية');
+      expect(AppLocalization.current.isRtl, isTrue);
+
+      // Reset to English
+      await AppLocalization.setLanguage(AppLanguage.en);
     });
   });
 }

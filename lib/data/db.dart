@@ -2920,6 +2920,12 @@ class AppDb {
     return d.insert('exercise_logs', log.toMap());
   }
 
+  Future<int> updateExerciseLog(ExerciseLog log) async {
+    final d = await db;
+    if (log.id == null) return -1;
+    return d.update('exercise_logs', log.toMap(), where: 'id = ?', whereArgs: [log.id]);
+  }
+
   Future<void> deleteExerciseLog(int id) async {
     final d = await db;
     await d.delete('exercise_logs', where: 'id = ?', whereArgs: [id]);
