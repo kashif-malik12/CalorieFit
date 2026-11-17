@@ -2,6 +2,36 @@
 
 ---
 
+## 📘 Facebook Post (Community & Friends & Groups)
+
+**Target Groups:** Fitness groups, Intermittent Fasting groups, Android Apps groups, Tech & Privacy communities.
+
+**Post Text:**
+```text
+Hey everyone! 👋
+
+If you’ve tried using calorie tracking apps lately, you probably noticed how bloated they’ve become—pushing $80/year subscriptions just to scan a barcode, bombarding you with full-screen video ads, and sharing your personal health/weight data with third-party advertisers.
+
+I got fed up with that experience, so I built CalorieFit: a clean, 100% private, free alternative for Android.
+
+Here is what makes it different:
+🔒 100% Local-First: All your food logs, weight entries, and fasting timers live locally on your phone in SQLite. No account or email needed, and works completely offline.
+🚫 Zero Ads & Zero Paywalls: Free barcode scanner, free macro tracking, no interruptions.
+🤖 AI Meal Estimator: Simply describe your plate in plain words (e.g. "Grilled chicken with quinoa and avocado") and it estimates calories and macros instantly.
+⏳ Built-in Intermittent Fasting: Tracks 14:10, 16:8, 18:6, and 20:4 windows right inside your diary.
+⌚ Health Connect Sync: Automatically pulls steps & workouts from Google Fit to calculate your true Net Calories.
+📱 Home Screen Widgets: Glanceable widgets for your remaining calorie budget and fast timers.
+
+It’s completely free on the Google Play Store:
+👉 https://play.google.com/store/apps/details?id=com.caloriefit.app
+
+Website: https://kashif-malik12.github.io/CalorieFit/
+
+If you’re working on health or fitness goals, I’d love for you to give it a try and let me know your thoughts! Feel free to share with anyone tired of expensive diet app subscriptions! 🙌
+```
+
+---
+
 ## 🐦 Twitter / X Launch Thread (High Engagement)
 
 ### Tweet 1 (Hook):
