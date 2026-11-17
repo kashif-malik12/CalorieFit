@@ -36,6 +36,10 @@ import 'screens/language_selection_dialog.dart';
 import 'screens/onboarding_wizard_screen.dart';
 import 'screens/health_export_dialog.dart';
 import 'screens/grocery_list_screen.dart';
+import 'screens/achievements_screen.dart';
+import 'screens/app_lock_screen.dart';
+import 'services/gamification_service.dart';
+import 'services/privacy_lock_service.dart';
 import 'services/health_export_service.dart';
 import 'services/grocery_list_service.dart';
 import 'services/health_sync_service.dart';
@@ -195,6 +199,7 @@ class InitGate extends StatefulWidget {
 class _InitGateState extends State<InitGate> {
   late final Future<void> _initFuture = _init();
   bool _isOnboarded = true;
+  bool _isLocked = false;
 
   Future<void> _init() async {
     try {
@@ -209,6 +214,7 @@ class _InitGateState extends State<InitGate> {
       await AppDb.instance.purgeDataOlderThanDays(days);
 
       _isOnboarded = await OnboardingWizardScreen.isCompleted();
+      _isLocked = await PrivacyLockService.instance.isLockEnabled();
     } catch (e, st) {
       throw Exception('$e\n\n$st');
     }
@@ -242,6 +248,14 @@ class _InitGateState extends State<InitGate> {
               padding: const EdgeInsets.all(16),
               child: SelectableText('App failed to start:\n\n${snap.error}'),
             ),
+          );
+        }
+
+        if (_isLocked) {
+          return AppLockScreen(
+            onUnlocked: () {
+              setState(() => _isLocked = false);
+            },
           );
         }
 
@@ -481,6 +495,27 @@ class _HomeShellState extends State<HomeShell> {
                 onTap: () {
                   Navigator.pop(context);
                   HealthExportDialog.show(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.emoji_events_outlined, color: Colors.amber),
+                title: const Text('Achievements & Streaks 🔥'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AchievementsScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.lock_outline, color: Colors.indigo),
+                title: const Text('Privacy PIN Lock'),
+                onTap: () {
+                  Navigator.pop(context);
+                  PrivacyLockSettingsDialog.show(context);
                 },
               ),
               ListTile(
@@ -2065,6 +2100,99 @@ class _TodayPageState extends State<TodayPage> {
   String _fmtTime(TimeOfDay t) =>
       '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
+  Widget _buildQuickFavoritesBar() {
+    final quickItems = [
+      {'name': 'Black Coffee', 'icon': '☕', 'cal': 5.0, 'p': 0.3, 'c': 0.0, 'f': 0.0, 'grams': 240.0, 'meal': 'Breakfast'},
+      {'name': '2 Eggs', 'icon': '🍳', 'cal': 140.0, 'p': 12.0, 'c': 1.0, 'f': 10.0, 'grams': 100.0, 'meal': 'Breakfast'},
+      {'name': 'Whey Protein', 'icon': '🥛', 'cal': 120.0, 'p': 24.0, 'c': 3.0, 'f': 1.5, 'grams': 30.0, 'meal': 'Morning Snack'},
+      {'name': 'Banana', 'icon': '🍌', 'cal': 105.0, 'p': 1.3, 'c': 27.0, 'f': 0.3, 'grams': 118.0, 'meal': 'Afternoon Snack'},
+      {'name': 'Greek Yogurt', 'icon': '🥣', 'cal': 130.0, 'p': 15.0, 'c': 6.0, 'f': 4.0, 'grams': 170.0, 'meal': 'Morning Snack'},
+      {'name': 'Avocado', 'icon': '🥑', 'cal': 160.0, 'p': 2.0, 'c': 8.5, 'f': 14.7, 'grams': 100.0, 'meal': 'Lunch'},
+    ];
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('⚡ 1-Tap Quick Staples', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey)),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const AchievementsScreen()));
+                },
+                child: FutureBuilder<UserStreakInfo>(
+                  future: GamificationService.instance.calculateStreak(),
+                  builder: (ctx, snap) {
+                    final s = snap.data?.currentStreakDays ?? 0;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text('🔥 $s day streak', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.deepOrange)),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: quickItems.map((item) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ActionChip(
+                    avatar: Text(item['icon'] as String, style: const TextStyle(fontSize: 14)),
+                    label: Text('${item['name']} (${(item['cal'] as double).round()}k)'),
+                    onPressed: () async {
+                      final timeStr = DateFormat('HH:mm').format(DateTime.now());
+                      final newLog = LogEntry(
+                        date: _date,
+                        foodId: null,
+                        grams: item['grams'] as double,
+                        unit: 'g',
+                        baseAmount: 100,
+                        label: item['meal'] as String,
+                        time: timeStr,
+                        foodName: item['name'] as String,
+                        calories100: ((item['cal'] as double) / (item['grams'] as double)) * 100,
+                        protein100: ((item['p'] as double) / (item['grams'] as double)) * 100,
+                        carbs100: ((item['c'] as double) / (item['grams'] as double)) * 100,
+                        fat100: ((item['f'] as double) / (item['grams'] as double)) * 100,
+                      );
+                      final id = await AppDb.instance.insertLog(newLog);
+                      if (mounted) {
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Logged ${item['name']} to ${item['meal']}!'),
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () async {
+                                await AppDb.instance.deleteLog(id);
+                                if (mounted) setState(() {});
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _pickDate() async {
     final now = DateTime.now();
     final initial = DateTime.tryParse(_date) ?? now;
@@ -3598,6 +3726,7 @@ FutureBuilder<double>(
                 _targetsTable(totals: totals, targets: targets),
                 const SizedBox(height: 12),
                 _buildMicronutrientAlerts(totals),
+                _buildQuickFavoritesBar(),
                 if (rows.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),

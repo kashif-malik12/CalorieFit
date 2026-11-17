@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalorieFit - Private Macro Tracker, AI Estimator & Fasting Timer</title>
+  <meta name="description" content="CalorieFit is a 100% private, local-first calorie counter, intermittent fasting timer, and AI meal nutrition tracker. No ads. No tracking.">
+  <link rel="icon" type="image/png" href="../assets/branding/caloriefit_mark.png">
+  <style>
+    :root {
+      --primary: #0B3C49;
+      --accent: #3AC47D;
+      --bg: #F4FBF7;
+      --text: #1E293B;
+      --card-bg: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+    header { background: #FFFFFF; border-bottom: 1px solid #E2E8F0; padding: 18px 0; position: sticky; top: 0; z-index: 50; }
+    .nav { display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; color: var(--primary); text-decoration: none; }
+    .brand img { width: 36px; height: 36px; border-radius: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 9999px; font-weight: 600; text-decoration: none; transition: 0.2s ease; }
+    .btn-primary { background: var(--primary); color: #FFFFFF; }
+    .btn-primary:hover { background: #082D37; }
+    .btn-accent { background: var(--accent); color: #0B3C49; font-weight: 700; }
+    .btn-accent:hover { filter: brightness(0.95); }
+    .hero { padding: 80px 0 60px; text-align: center; }
+    .hero h1 { font-size: 48px; font-weight: 800; color: var(--primary); margin-bottom: 20px; letter-spacing: -0.02em; }
+    .hero p { font-size: 20px; color: #475569; max-width: 760px; margin: 0 auto 36px; }
+    .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px; }
+    .badge { background: #E0F2FE; color: #0369A1; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    .badge-accent { background: #DCFCE7; color: #15803D; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin: 60px 0; }
+    .feature-card { background: var(--card-bg); border-radius: 20px; padding: 32px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .feature-icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(58, 196, 125, 0.15); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; }
+    .feature-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
+    .feature-card p { color: #64748B; font-size: 15px; }
+    footer { background: #FFFFFF; border-top: 1px solid #E2E8F0; padding: 40px 0; text-align: center; color: #64748B; font-size: 14px; }
+    footer a { color: var(--primary); text-decoration: none; margin: 0 10px; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#" class="brand">
+        <img src="../assets/branding/caloriefit_mark.png" alt="CalorieFit Logo">
+        CalorieFit
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" class="btn btn-primary" target="_blank">
+        Get on Google Play
+      </a>
+    </div>
+  </header>
+
+  <section class="hero container">
+    <div class="badges">
+      <span class="badge badge-accent">🔒 100% Local-First & Private</span>
+      <span class="badge">🚫 Zero Ads</span>
+      <span class="badge badge-accent">⚡ Offline First</span>
+      <span class="badge">🌐 7 Languages Supported</span>
+    </div>
+    <h1>Eat Mindfully. Fast Smarter.<br>Keep Your Data Private.</h1>
+    <p>CalorieFit combines natural language AI nutrition estimation, precision intermittent fasting, Google Health Connect sync, and home screen widgets—stored directly on your device.</p>
+    <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" class="btn btn-accent" target="_blank" style="font-size: 18px; padding: 16px 36px;">
+      📲 Download Free on Google Play
+    </a>
+  </section>
+
+  <section class="container">
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI Meal Nutrition Estimator</h3>
+        <p>Describe your meal in plain English (e.g. <em>"Grilled salmon with quinoa and broccoli"</em>) or take a photo to instantly calculate calories, protein, carbs, and fat.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏳</div>
+        <h3>Intermittent Fasting Timer</h3>
+        <p>Built-in fasting protocols (14:10, 16:8, 18:6, 20:4, 24h) with circular progress, remaining hours countdown, and physiological ketosis tracking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⌚</div>
+        <h3>Google Health Connect Sync</h3>
+        <p>Auto-sync steps and workout calories from Google Fit and Health Connect. Automatically computes your true <strong>Net Calories</strong>.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Home Screen Glanceable Widgets</h3>
+        <p>Keep your daily calorie budget, macro progress bars, and active fasting countdown right on your Android home screen.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛒</div>
+        <h3>Smart Grocery Shopping List</h3>
+        <p>Auto-categorize ingredients into Produce, Dairy, Meat, and Grains. One-tap import directly from today’s meals or custom recipes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>Doctor & Dietitian CSV Export</h3>
+        <p>Generate clinical compliance summaries and structured CSV spreadsheets covering up to 30 days of nutrition, fasting, and exercise data.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 CalorieFit. All rights reserved. Built with privacy at heart.</p>
+      <div style="margin-top: 10px;">
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank">Google Play Store</a> |
+        <a href="mailto:ali.kashifmalik@gmail.com">Contact Support</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

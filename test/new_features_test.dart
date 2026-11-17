@@ -11,6 +11,8 @@ import 'package:calorie_fit/services/app_localization.dart';
 import 'package:calorie_fit/screens/onboarding_wizard_screen.dart';
 import 'package:calorie_fit/services/grocery_list_service.dart';
 import 'package:calorie_fit/services/health_export_service.dart';
+import 'package:calorie_fit/services/privacy_lock_service.dart';
+import 'package:calorie_fit/services/gamification_service.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
 void main() {
@@ -271,6 +273,43 @@ void main() {
       expect(GroceryItem.guessCategory('Whole Milk 2L'), 'Dairy & Refrigerated');
       expect(GroceryItem.guessCategory('Rolled Oats 1kg'), 'Grains & Bakery');
       expect(GroceryItem.guessCategory('Olive Oil & Himalayan Salt'), 'Pantry & Spices');
+    });
+  });
+
+  group('Privacy Lock Service Tests', () {
+    test('Saves, verifies and removes 4-digit PIN', () async {
+      SharedPreferences.setMockInitialValues({});
+      final service = PrivacyLockService.instance;
+
+      expect(await service.isLockEnabled(), isFalse);
+      expect(await service.hasPin(), isFalse);
+
+      await service.savePin('4829');
+      expect(await service.isLockEnabled(), isTrue);
+      expect(await service.hasPin(), isTrue);
+      expect(await service.verifyPin('4829'), isTrue);
+      expect(await service.verifyPin('0000'), isFalse);
+
+      await service.removePin();
+      expect(await service.isLockEnabled(), isFalse);
+      expect(await service.hasPin(), isFalse);
+    });
+  });
+
+  group('Gamification and Badges Tests', () {
+    test('Constructs and evaluates achievement badge model', () {
+      const badge = AchievementBadge(
+        id: 'streak_7',
+        title: '7-Day Champion',
+        description: 'Log 7 consecutive days',
+        iconEmoji: '🏆',
+        isUnlocked: true,
+        progressPercent: 1.0,
+      );
+
+      expect(badge.id, 'streak_7');
+      expect(badge.isUnlocked, isTrue);
+      expect(badge.progressPercent, 1.0);
     });
   });
 }
