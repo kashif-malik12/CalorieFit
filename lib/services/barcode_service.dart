@@ -31,6 +31,11 @@ class OpenFoodProduct {
     this.imageUrl,
   });
 
+  double get calories100 => calories;
+  double get protein100 => protein;
+  double get carbs100 => carbs;
+  double get fat100 => fat;
+
   Food toFood() {
     final title = brand.isNotEmpty ? '$name ($brand)' : name;
     return Food(
@@ -49,8 +54,13 @@ class OpenFoodProduct {
   }
 }
 
+typedef BarcodeProduct = OpenFoodProduct;
+
 class BarcodeService {
   BarcodeService._();
+  static final BarcodeService instance = BarcodeService._();
+
+  Future<OpenFoodProduct?> lookupBarcode(String barcode) => fetchProduct(barcode);
 
   static Future<OpenFoodProduct?> fetchProduct(String barcode) async {
     final cleanBarcode = barcode.trim();
@@ -63,7 +73,7 @@ class BarcodeService {
     try {
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'CalorieFit - Flutter App - Version 1.1'},
+        headers: {'User-Agent': 'CalorieFit - Flutter App - Version 1.3'},
       ).timeout(const Duration(seconds: 8));
 
       if (response.statusCode != 200) return null;

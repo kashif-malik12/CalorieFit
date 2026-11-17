@@ -18,6 +18,12 @@ import 'services/food_search.dart';
 import 'services/auth_service.dart';
 import 'services/theme_service.dart';
 import 'services/barcode_service.dart';
+import 'services/reminder_service.dart';
+import 'screens/analytics_screen.dart';
+import 'screens/report_screen.dart';
+import 'screens/reminders_dialog.dart';
+import 'screens/backup_sync_dialog.dart';
+import 'screens/barcode_scanner_screen.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -409,11 +415,61 @@ class _HomeShellState extends State<HomeShell> {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.bar_chart, color: Colors.blueAccent),
+                title: const Text('Analytics & Visual Charts'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AnalyticsScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.assignment_outlined, color: Colors.teal),
+                title: const Text('Health & Nutrition Report'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ReportScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.notifications_active_outlined, color: Colors.orange),
+                title: const Text('Daily Reminders & Nudges'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (_) => const RemindersDialog(),
+                  );
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.qr_code_scanner, color: Colors.green),
                 title: const Text('Scan / Barcode Lookup'),
                 onTap: () {
                   Navigator.pop(context);
-                  _showBarcodeLookupDialog(context, () => setState(() {}));
+                  _openBarcodeScanner(context, () => setState(() {}));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.cloud_sync_outlined, color: Colors.cyan),
+                title: const Text('Backup & Cloud Sync'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (_) => BackupSyncDialog(
+                      onDataRestored: () => setState(() {}),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -1852,7 +1908,7 @@ class _TodayPageState extends State<TodayPage> {
         await _searchOnlineAndLog();
         break;
       case 'barcode':
-        await _showBarcodeLookupDialog(context, () => setState(() {}));
+        await _openBarcodeScanner(context, () => setState(() {}));
         break;
       case 'copy_yesterday':
         await _copyYesterdayMeals();
@@ -2909,6 +2965,16 @@ class _TodayPageState extends State<TodayPage> {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Using default targets for this date')));
             },
           ),
+          IconButton(
+            tooltip: 'Visual Analytics & Charts',
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
+              );
+            },
+          ),
           IconButton(onPressed: _pickDate, icon: const Icon(Icons.date_range)),
         ],
       ),
@@ -2935,6 +3001,42 @@ class _TodayPageState extends State<TodayPage> {
 
             return ListView(
               children: [
+                FutureBuilder<ReminderSettings>(
+                  future: ReminderService.instance.loadSettings(),
+                  builder: (_, snap) {
+                    if (!snap.hasData) return const SizedBox.shrink();
+                    final notice = ReminderService.instance.getNextReminderNotice(snap.data!);
+                    if (notice == null) return const SizedBox.shrink();
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.notifications_active, color: Colors.orange, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              notice,
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              await showDialog(context: context, builder: (_) => const RemindersDialog());
+                              if (mounted) setState(() {});
+                            },
+                            child: const Text('Edit', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
                Card(
   child: Padding(
     padding: const EdgeInsets.all(16),
@@ -2985,6 +3087,34 @@ class _TodayPageState extends State<TodayPage> {
           spacing: 8,
           runSpacing: 8,
           children: [
+            OutlinedButton.icon(
+              icon: const Icon(Icons.bar_chart, color: Colors.blueAccent),
+              label: const Text('Charts & Trends'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
+                );
+              },
+            ),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.assignment_outlined, color: Colors.teal),
+              label: const Text('Health Report'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ReportScreen()),
+                );
+              },
+            ),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.notifications_active_outlined, color: Colors.orange),
+              label: const Text('Reminders'),
+              onPressed: () async {
+                await showDialog(context: context, builder: (_) => const RemindersDialog());
+                if (mounted) setState(() {});
+              },
+            ),
             OutlinedButton.icon(
               icon: const Icon(Icons.monitor_weight_outlined),
               label: const Text('BMI & calories'),
@@ -5143,6 +5273,16 @@ class _HistoryPageState extends State<HistoryPage> {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Using default targets for this date')));
             },
           ),
+          IconButton(
+            tooltip: 'Visual Analytics & Charts',
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
+              );
+            },
+          ),
           IconButton(onPressed: _pickDate, icon: const Icon(Icons.date_range)),
         ],
       ),
@@ -7158,7 +7298,49 @@ Future<void> _showWeeklySummaryDialog(BuildContext context, String date) async {
   );
 }
 
-// ---------------- BARCODE LOOKUP DIALOG ----------------
+// ---------------- BARCODE SCANNER & LOOKUP ----------------
+
+Future<void> _openBarcodeScanner(BuildContext context, VoidCallback onUpdated) async {
+  await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => BarcodeScannerScreen(
+        onAddProduct: (product, grams, mealCategory) async {
+          final f = product.toFood();
+          final newId = await AppDb.instance.insertFood(f);
+          final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+          final timeStr = DateFormat('HH:mm').format(DateTime.now());
+          await AppDb.instance.insertLog(
+            LogEntry(
+              date: todayStr,
+              foodId: newId,
+              grams: grams,
+              unit: 'g',
+              baseAmount: 100,
+              label: mealCategory,
+              time: timeStr,
+              foodName: f.name,
+              calories100: f.calories,
+              protein100: f.protein,
+              carbs100: f.carbs,
+              fat100: f.fat,
+              fiber100: f.fiber,
+              sugar100: f.sugar,
+              sodium100: f.sodium,
+            ),
+          );
+          onUpdated();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Logged ${grams.round()}g of "${product.name}" ($mealCategory)!')),
+            );
+          }
+        },
+      ),
+    ),
+  );
+  onUpdated();
+}
 
 Future<void> _showBarcodeLookupDialog(BuildContext context, VoidCallback onUpdated) async {
   final barcodeCtrl = TextEditingController();
@@ -7183,6 +7365,15 @@ Future<void> _showBarcodeLookupDialog(BuildContext context, VoidCallback onUpdat
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.camera_alt),
+                  label: const Text('Open Camera Scanner View'),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    _openBarcodeScanner(context, onUpdated);
+                  },
+                ),
+                const SizedBox(height: 12),
                 TextField(
                   controller: barcodeCtrl,
                   keyboardType: TextInputType.number,
