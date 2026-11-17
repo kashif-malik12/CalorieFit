@@ -501,3 +501,110 @@ class WaterLog {
     );
   }
 }
+
+class FastingSession {
+  final int? id;
+  final String protocol; // '16:8', '14:10', '18:6', '20:4', 'custom'
+  final double targetHours;
+  final DateTime startTime;
+  final DateTime? endTime;
+  final bool isCompleted;
+  final String? notes;
+
+  const FastingSession({
+    this.id,
+    required this.protocol,
+    required this.targetHours,
+    required this.startTime,
+    this.endTime,
+    this.isCompleted = false,
+    this.notes,
+  });
+
+  bool get isActive => endTime == null && !isCompleted;
+
+  Duration get elapsed {
+    final end = endTime ?? DateTime.now();
+    return end.difference(startTime);
+  }
+
+  double get progressPercent {
+    final totalMinutes = targetHours * 60;
+    if (totalMinutes <= 0) return 0.0;
+    return (elapsed.inMinutes / totalMinutes).clamp(0.0, 1.0);
+  }
+
+  Duration get remaining {
+    final targetDuration = Duration(minutes: (targetHours * 60).round());
+    final rem = targetDuration - elapsed;
+    return rem.isNegative ? Duration.zero : rem;
+  }
+
+  Map<String, Object?> toMap() {
+    return {
+      if (id != null) 'id': id,
+      'protocol': protocol,
+      'target_hours': targetHours,
+      'start_time': startTime.toIso8601String(),
+      'end_time': endTime?.toIso8601String(),
+      'is_completed': isCompleted ? 1 : 0,
+      'notes': notes,
+    };
+  }
+
+  static FastingSession fromMap(Map<String, Object?> m) {
+    return FastingSession(
+      id: m['id'] as int?,
+      protocol: (m['protocol'] as String?) ?? '16:8',
+      targetHours: ((m['target_hours'] as num?) ?? 16.0).toDouble(),
+      startTime: DateTime.tryParse((m['start_time'] as String?) ?? '') ?? DateTime.now(),
+      endTime: m['end_time'] != null ? DateTime.tryParse(m['end_time'] as String) : null,
+      isCompleted: (m['is_completed'] as int? ?? 0) == 1,
+      notes: m['notes'] as String?,
+    );
+  }
+}
+
+class ExerciseLog {
+  final int? id;
+  final String date;
+  final String activityName;
+  final int durationMinutes;
+  final double caloriesBurned;
+  final int steps;
+  final String? notes;
+
+  const ExerciseLog({
+    this.id,
+    required this.date,
+    required this.activityName,
+    required this.durationMinutes,
+    required this.caloriesBurned,
+    this.steps = 0,
+    this.notes,
+  });
+
+  Map<String, Object?> toMap() {
+    return {
+      if (id != null) 'id': id,
+      'date': date,
+      'activity_name': activityName,
+      'duration_minutes': durationMinutes,
+      'calories_burned': caloriesBurned,
+      'steps': steps,
+      'notes': notes,
+    };
+  }
+
+  static ExerciseLog fromMap(Map<String, Object?> m) {
+    return ExerciseLog(
+      id: m['id'] as int?,
+      date: (m['date'] as String?) ?? '',
+      activityName: (m['activity_name'] as String?) ?? 'Workout',
+      durationMinutes: ((m['duration_minutes'] as num?) ?? 0).toInt(),
+      caloriesBurned: ((m['calories_burned'] as num?) ?? 0.0).toDouble(),
+      steps: ((m['steps'] as num?) ?? 0).toInt(),
+      notes: m['notes'] as String?,
+    );
+  }
+}

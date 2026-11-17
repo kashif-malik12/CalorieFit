@@ -492,6 +492,34 @@ class AppDb {
           await db.execute(
             'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
           );
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS fasting_sessions (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              protocol TEXT NOT NULL,
+              target_hours REAL NOT NULL,
+              start_time TEXT NOT NULL,
+              end_time TEXT,
+              is_completed INTEGER NOT NULL DEFAULT 0,
+              notes TEXT
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_fasting_sessions_start ON fasting_sessions(start_time DESC);',
+          );
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS exercise_logs (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              date TEXT NOT NULL,
+              activity_name TEXT NOT NULL,
+              duration_minutes INTEGER NOT NULL,
+              calories_burned REAL NOT NULL,
+              steps INTEGER NOT NULL DEFAULT 0,
+              notes TEXT
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_exercise_logs_date ON exercise_logs(date DESC);',
+          );
         },
       ),
     );
@@ -710,6 +738,36 @@ class AppDb {
     ''');
     await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS fasting_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        protocol TEXT NOT NULL,
+        target_hours REAL NOT NULL,
+        start_time TEXT NOT NULL,
+        end_time TEXT,
+        is_completed INTEGER NOT NULL DEFAULT 0,
+        notes TEXT
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_fasting_sessions_start ON fasting_sessions(start_time DESC);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS exercise_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL,
+        activity_name TEXT NOT NULL,
+        duration_minutes INTEGER NOT NULL,
+        calories_burned REAL NOT NULL,
+        steps INTEGER NOT NULL DEFAULT 0,
+        notes TEXT
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_exercise_logs_date ON exercise_logs(date DESC);',
     );
   }
 
@@ -1074,6 +1132,12 @@ class AppDb {
       orderBy: 'category COLLATE NOCASE ASC, name COLLATE NOCASE ASC',
     );
     return rows.map(Food.fromMap).toList();
+  }
+
+  Future<List<Food>> getActiveFoods({String? query}) async {
+    final user = await getUserFoods(query: query);
+    final system = await getSystemFoods(query: query);
+    return [...user, ...system];
   }
 
   Future<Food?> getFoodById(int id) async {
@@ -2751,6 +2815,109 @@ class AppDb {
       });
     }
     return result;
+  }
+
+  // ---------------- INTERMITTENT FASTING ----------------
+
+  Future<FastingSession?> getActiveFastingSession() async {
+    final d = await db;
+    final rows = await d.query(
+      'fasting_sessions',
+      where: 'end_time IS NULL AND is_completed = 0',
+      orderBy: 'start_time DESC',
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return FastingSession.fromMap(rows.first);
+  }
+
+  Future<List<FastingSession>> getRecentFastingSessions({int limit = 20}) async {
+    final d = await db;
+    final rows = await d.query(
+      'fasting_sessions',
+      orderBy: 'start_time DESC',
+      limit: limit,
+    );
+    return rows.map(FastingSession.fromMap).toList();
+  }
+
+  Future<int> startFastingSession({
+    required String protocol,
+    required double targetHours,
+    String? notes,
+  }) async {
+    final d = await db;
+    final active = await getActiveFastingSession();
+    if (active?.id != null) {
+      await endFastingSession(active!.id!, isCompleted: false);
+    }
+    return d.insert('fasting_sessions', {
+      'protocol': protocol,
+      'target_hours': targetHours,
+      'start_time': DateTime.now().toIso8601String(),
+      'end_time': null,
+      'is_completed': 0,
+      'notes': notes,
+    });
+  }
+
+  Future<void> endFastingSession(int id, {bool isCompleted = true}) async {
+    final d = await db;
+    await d.update(
+      'fasting_sessions',
+      {
+        'end_time': DateTime.now().toIso8601String(),
+        'is_completed': isCompleted ? 1 : 0,
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> cancelFastingSession(int id) async {
+    final d = await db;
+    await d.delete('fasting_sessions', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ---------------- EXERCISE & ACTIVITY LOGGING ----------------
+
+  Future<List<ExerciseLog>> getExerciseLogsForDate(String date) async {
+    final d = await db;
+    final rows = await d.query(
+      'exercise_logs',
+      where: 'date = ?',
+      whereArgs: [date],
+      orderBy: 'id ASC',
+    );
+    return rows.map(ExerciseLog.fromMap).toList();
+  }
+
+  Future<double> getTotalExerciseCaloriesForDate(String date) async {
+    final logs = await getExerciseLogsForDate(date);
+    double sum = 0.0;
+    for (final l in logs) {
+      sum += l.caloriesBurned;
+    }
+    return sum;
+  }
+
+  Future<int> getTotalStepsForDate(String date) async {
+    final logs = await getExerciseLogsForDate(date);
+    int sum = 0;
+    for (final l in logs) {
+      sum += l.steps;
+    }
+    return sum;
+  }
+
+  Future<int> insertExerciseLog(ExerciseLog log) async {
+    final d = await db;
+    return d.insert('exercise_logs', log.toMap());
+  }
+
+  Future<void> deleteExerciseLog(int id) async {
+    final d = await db;
+    await d.delete('exercise_logs', where: 'id = ?', whereArgs: [id]);
   }
 }
 

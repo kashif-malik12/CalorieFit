@@ -24,6 +24,10 @@ import 'screens/report_screen.dart';
 import 'screens/reminders_dialog.dart';
 import 'screens/backup_sync_dialog.dart';
 import 'screens/barcode_scanner_screen.dart';
+import 'screens/fasting_screen.dart';
+import 'screens/exercise_screen.dart';
+import 'screens/recipe_builder_screen.dart';
+import 'screens/review_prompt_dialog.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -478,6 +482,61 @@ class _HomeShellState extends State<HomeShell> {
                 onTap: () {
                   Navigator.pop(context);
                   _showExportCsvDialog(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.timer_outlined, color: Colors.teal),
+                title: const Text('Intermittent Fasting'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const FastingScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.fitness_center_outlined, color: Colors.orange),
+                title: const Text('Activity & Exercise Burn'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ExerciseScreen(
+                        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        onUpdated: () => setState(() {}),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.soup_kitchen_outlined, color: Colors.deepPurple),
+                title: const Text('Recipe & Meal Builder'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RecipeBuilderScreen(
+                        onSaved: () => setState(() {}),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.star_rate_outlined, color: Colors.amber),
+                title: const Text('Rate CalorieFit ⭐'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (_) => const ReviewPromptDialog(),
+                  );
                 },
               ),
               ListTile(
@@ -1882,6 +1941,18 @@ class _TodayPageState extends State<TodayPage> {
               onTap: () => Navigator.pop(ctx, 'barcode'),
             ),
             ListTile(
+              leading: const Icon(Icons.soup_kitchen_outlined, color: Colors.deepPurple),
+              title: const Text('Create Recipe / Dish'),
+              subtitle: const Text('Combine foods into custom meal'),
+              onTap: () => Navigator.pop(ctx, 'recipe'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.fitness_center_outlined, color: Colors.orange),
+              title: const Text('Log Workout / Activity'),
+              subtitle: const Text('Track calories burned and steps'),
+              onTap: () => Navigator.pop(ctx, 'exercise'),
+            ),
+            ListTile(
               leading: const Icon(Icons.copy_all, color: Colors.blue),
               title: const Text("Copy yesterday's meals"),
               subtitle: const Text('Duplicate yesterday into today'),
@@ -1909,6 +1980,27 @@ class _TodayPageState extends State<TodayPage> {
         break;
       case 'barcode':
         await _openBarcodeScanner(context, () => setState(() {}));
+        break;
+      case 'recipe':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RecipeBuilderScreen(
+              onSaved: () => setState(() {}),
+            ),
+          ),
+        );
+        break;
+      case 'exercise':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ExerciseScreen(
+              date: _date,
+              onUpdated: () => setState(() {}),
+            ),
+          ),
+        );
         break;
       case 'copy_yesterday':
         await _copyYesterdayMeals();
@@ -3116,6 +3208,45 @@ class _TodayPageState extends State<TodayPage> {
               },
             ),
             OutlinedButton.icon(
+              icon: const Icon(Icons.timer_outlined, color: Colors.teal),
+              label: const Text('Fasting Timer'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const FastingScreen()),
+                );
+              },
+            ),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.fitness_center_outlined, color: Colors.orange),
+              label: const Text('Activity & Workouts'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ExerciseScreen(
+                      date: _date,
+                      onUpdated: () => setState(() {}),
+                    ),
+                  ),
+                );
+              },
+            ),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.soup_kitchen_outlined, color: Colors.deepPurple),
+              label: const Text('Recipe Builder'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => RecipeBuilderScreen(
+                      onSaved: () => setState(() {}),
+                    ),
+                  ),
+                );
+              },
+            ),
+            OutlinedButton.icon(
               icon: const Icon(Icons.monitor_weight_outlined),
               label: const Text('BMI & calories'),
               onPressed: () async {
@@ -3160,6 +3291,54 @@ class _TodayPageState extends State<TodayPage> {
 const SizedBox(height: 12),
 _buildWaterTrackerCard(context, _date, () => setState(() {})),
 const SizedBox(height: 12),
+FutureBuilder<double>(
+  future: AppDb.instance.getTotalExerciseCaloriesForDate(_date),
+  builder: (_, snap) {
+    final burned = snap.data ?? 0.0;
+    if (burned <= 0) return const SizedBox.shrink();
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.local_fire_department, color: Colors.orange),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${burned.round()} kcal burned in workouts today',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                Text(
+                  'Net Calories: ${(totals.calories - burned).round()} kcal',
+                  style: TextStyle(fontSize: 11, color: Theme.of(context).hintColor),
+                ),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ExerciseScreen(date: _date, onUpdated: () => setState(() {})),
+                ),
+              );
+            },
+            child: const Text('View'),
+          ),
+        ],
+      ),
+    );
+  },
+),
                 _progressBarCalories(taken: totals.calories.round(), target: targets.calories, totals: totals, targets: targets),
                 const SizedBox(height: 12),
                 _targetsTable(totals: totals, targets: targets),

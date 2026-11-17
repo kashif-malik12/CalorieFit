@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:calorie_fit/data/models.dart';
 import 'package:calorie_fit/services/reminder_service.dart';
 import 'package:calorie_fit/services/report_service.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
@@ -107,6 +108,43 @@ void main() {
       expect(text, contains('Protein: 145.2g'));
       expect(text, contains('Hydration goal met!'));
       expect(text, contains('Net Change: -0.7 kg'));
+    });
+  });
+
+  group('Fasting and Exercise Tests', () {
+    test('FastingSession progress and remaining time calculations', () {
+      final start = DateTime.now().subtract(const Duration(hours: 8));
+      final session = FastingSession(
+        protocol: '16:8',
+        targetHours: 16.0,
+        startTime: start,
+      );
+
+      expect(session.isActive, isTrue);
+      expect(session.elapsed.inHours, closeTo(8, 1));
+      // 8 / 16 = 50%
+      expect(session.progressPercent, closeTo(0.5, 0.05));
+      expect(session.remaining.inHours, closeTo(8, 1));
+    });
+
+    test('ExerciseLog serialization and calculation', () {
+      const exercise = ExerciseLog(
+        date: '2026-11-17',
+        activityName: 'Running',
+        durationMinutes: 45,
+        caloriesBurned: 450,
+        steps: 5200,
+      );
+
+      final map = exercise.toMap();
+      expect(map['activity_name'], 'Running');
+      expect(map['duration_minutes'], 45);
+      expect(map['calories_burned'], 450.0);
+      expect(map['steps'], 5200);
+
+      final restored = ExerciseLog.fromMap(map);
+      expect(restored.activityName, 'Running');
+      expect(restored.caloriesBurned, 450.0);
     });
   });
 }
