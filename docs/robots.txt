@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kashif-malik12.github.io/CalorieFit/sitemap.xml
