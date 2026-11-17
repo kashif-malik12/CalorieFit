@@ -63,7 +63,7 @@ void main() {
     expect(after, hasLength(1));
     expect(after.first['name'], 'Black Coffee');
     expect((after.first['calories'] as num).toDouble(), 2);
-    expect(after.first['seed_version'], 1);
+    expect(after.first['seed_version'], before.first['seed_version']);
     expect(after.first['is_active'], 1);
   });
 

@@ -148,7 +148,7 @@ class AppDb {
     final d = await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 18,
+        version: 19,
         onConfigure: (db) async {
           if (!kIsWeb) {
             await db.execute('PRAGMA foreign_keys = ON;');
@@ -419,6 +419,79 @@ class AppDb {
               'CREATE INDEX IF NOT EXISTS idx_food_servings_food ON food_servings(food_id);',
             );
           }
+
+          // Q&A and notifications
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS questions (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id TEXT NOT NULL,
+              author_name TEXT NOT NULL,
+              is_random_name INTEGER NOT NULL DEFAULT 0,
+              question TEXT NOT NULL,
+              created_at TEXT NOT NULL,
+              status TEXT NOT NULL DEFAULT 'open'
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_questions_created ON questions(created_at DESC);',
+          );
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS question_replies (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+              reply_text TEXT NOT NULL,
+              admin_name TEXT NOT NULL,
+              created_at TEXT NOT NULL
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_question_replies_qid ON question_replies(question_id);',
+          );
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS question_notifications (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id TEXT NOT NULL,
+              question_id INTEGER NOT NULL,
+              message TEXT NOT NULL,
+              is_read INTEGER NOT NULL DEFAULT 0,
+              created_at TEXT NOT NULL
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_question_notifs_user ON question_notifications(user_id, is_read);',
+          );
+
+          // v19: Favorites, Notes, Water, and Weight logs
+          if (!await _hasColumn(db, 'foods', 'is_favorite')) {
+            await db.execute(
+              "ALTER TABLE foods ADD COLUMN is_favorite INTEGER NOT NULL DEFAULT 0;",
+            );
+          }
+          if (!await _hasColumn(db, 'log_entries', 'notes')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN notes TEXT;",
+            );
+          }
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS water_logs (
+              date TEXT PRIMARY KEY,
+              amount_ml INTEGER NOT NULL DEFAULT 0,
+              target_ml INTEGER NOT NULL DEFAULT 2000
+            );
+          ''');
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS weight_logs (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              date TEXT NOT NULL,
+              weight REAL NOT NULL,
+              unit TEXT NOT NULL DEFAULT 'kg',
+              notes TEXT,
+              created_at TEXT NOT NULL
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
+          );
         },
       ),
     );
@@ -453,7 +526,8 @@ class AppDb {
         is_active INTEGER NOT NULL DEFAULT 1,
         category TEXT,
         system_key TEXT,
-        seed_version INTEGER NOT NULL DEFAULT 1
+        seed_version INTEGER NOT NULL DEFAULT 1,
+        is_favorite INTEGER NOT NULL DEFAULT 0
       );
     ''');
 
@@ -493,7 +567,8 @@ class AppDb {
         manual_sodium REAL,
         manual_cholesterol REAL,
         manual_saturated_fat REAL,
-        manual_trans_fat REAL
+        manual_trans_fat REAL,
+        notes TEXT
       );
     ''');
 
@@ -573,6 +648,68 @@ class AppDb {
     ''');
     await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_food_servings_food ON food_servings(food_id);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        author_name TEXT NOT NULL,
+        is_random_name INTEGER NOT NULL DEFAULT 0,
+        question TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'open'
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_questions_created ON questions(created_at DESC);',
+    );
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS question_replies (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+        reply_text TEXT NOT NULL,
+        admin_name TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_question_replies_qid ON question_replies(question_id);',
+    );
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS question_notifications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        question_id INTEGER NOT NULL,
+        message TEXT NOT NULL,
+        is_read INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_question_notifs_user ON question_notifications(user_id, is_read);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS water_logs (
+        date TEXT PRIMARY KEY,
+        amount_ml INTEGER NOT NULL DEFAULT 0,
+        target_ml INTEGER NOT NULL DEFAULT 2000
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS weight_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL,
+        weight REAL NOT NULL,
+        unit TEXT NOT NULL DEFAULT 'kg',
+        notes TEXT,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
     );
   }
 
@@ -685,24 +822,66 @@ class AppDb {
         final cholesterol = (m['cholesterol'] as num?)?.toDouble() ?? 0;
         final saturatedFat = (m['saturated_fat'] as num?)?.toDouble() ?? 0;
         final transFat = (m['trans_fat'] as num?)?.toDouble() ?? 0;
-        await txn.rawUpdate('''
-          UPDATE foods SET
-            fiber = CASE WHEN fiber = 0 THEN ? ELSE fiber END,
-            sugar = CASE WHEN sugar = 0 THEN ? ELSE sugar END,
-            sodium = CASE WHEN sodium = 0 THEN ? ELSE sodium END,
-            cholesterol = CASE WHEN cholesterol = 0 THEN ? ELSE cholesterol END,
-            saturated_fat = CASE WHEN saturated_fat = 0 THEN ? ELSE saturated_fat END,
-            trans_fat = CASE WHEN trans_fat = 0 THEN ? ELSE trans_fat END
-          WHERE is_system = 0 AND name = ?
-        ''', [
-          fiber,
-          sugar,
-          sodium,
-          cholesterol,
-          saturatedFat,
-          transFat,
-          name,
-        ]);
+        final key = (m['system_key'] ?? '').toString().trim();
+
+        if (key == 'olive_oil' || key == 'egg_whole' || key == 'dates_medjool') {
+          final unit = (m['unit'] ?? 'g').toString();
+          final baseAmt = (m['baseAmount'] as num?)?.toDouble() ?? 1;
+          final cal = (m['calories'] as num?)?.toDouble() ?? 0;
+          final p = (m['protein'] as num?)?.toDouble() ?? 0;
+          final c = (m['carbs'] as num?)?.toDouble() ?? 0;
+          final f = (m['fat'] as num?)?.toDouble() ?? 0;
+          await txn.rawUpdate('''
+            UPDATE foods SET
+              unit = ?,
+              base_amount = ?,
+              calories = ?,
+              protein = ?,
+              carbs = ?,
+              fat = ?,
+              fiber = ?,
+              sugar = ?,
+              sodium = ?,
+              cholesterol = ?,
+              saturated_fat = ?,
+              trans_fat = ?
+            WHERE is_system = 0 AND (system_key = ? OR name = ?)
+          ''', [
+            unit,
+            baseAmt,
+            cal,
+            p,
+            c,
+            f,
+            fiber,
+            sugar,
+            sodium,
+            cholesterol,
+            saturatedFat,
+            transFat,
+            key,
+            name,
+          ]);
+        } else {
+          await txn.rawUpdate('''
+            UPDATE foods SET
+              fiber = CASE WHEN fiber = 0 THEN ? ELSE fiber END,
+              sugar = CASE WHEN sugar = 0 THEN ? ELSE sugar END,
+              sodium = CASE WHEN sodium = 0 THEN ? ELSE sodium END,
+              cholesterol = CASE WHEN cholesterol = 0 THEN ? ELSE cholesterol END,
+              saturated_fat = CASE WHEN saturated_fat = 0 THEN ? ELSE saturated_fat END,
+              trans_fat = CASE WHEN trans_fat = 0 THEN ? ELSE trans_fat END
+            WHERE is_system = 0 AND name = ?
+          ''', [
+            fiber,
+            sugar,
+            sodium,
+            cholesterol,
+            saturatedFat,
+            transFat,
+            name,
+          ]);
+        }
       }
 
       final existingTemplateRows = await txn.query(
@@ -852,18 +1031,35 @@ class AppDb {
 
   // ---------------- FOODS: USER vs SYSTEM ----------------
 
-  Future<List<Food>> getUserFoods({String? query}) async {
+  Future<List<Food>> getUserFoods({String? query, bool favoritesOnly = false}) async {
     final d = await db;
     final q = query?.trim();
+    String whereClause = 'is_system = 0';
+    final whereArgs = <dynamic>[];
+    if (favoritesOnly) {
+      whereClause += ' AND is_favorite = 1';
+    }
+    if (q != null && q.isNotEmpty) {
+      whereClause += ' AND name LIKE ?';
+      whereArgs.add('%$q%');
+    }
     final rows = await d.query(
       'foods',
-      where: (q == null || q.isEmpty)
-          ? 'is_system = 0'
-          : 'is_system = 0 AND name LIKE ?',
-      whereArgs: (q == null || q.isEmpty) ? null : ['%$q%'],
-      orderBy: 'name COLLATE NOCASE ASC',
+      where: whereClause,
+      whereArgs: whereArgs.isEmpty ? null : whereArgs,
+      orderBy: 'is_favorite DESC, name COLLATE NOCASE ASC',
     );
     return rows.map(Food.fromMap).toList();
+  }
+
+  Future<void> toggleFoodFavorite(int foodId, bool isFavorite) async {
+    final d = await db;
+    await d.update(
+      'foods',
+      {'is_favorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [foodId],
+    );
   }
 
   Future<List<Food>> getSystemFoods({String? query}) async {
@@ -993,6 +1189,24 @@ class AppDb {
     );
     if (existingUser.isNotEmpty) {
       final existingId = existingUser.first['id'] as int;
+      await d.rawUpdate('''
+        UPDATE foods SET
+          fiber = CASE WHEN fiber = 0 THEN ? ELSE fiber END,
+          sugar = CASE WHEN sugar = 0 THEN ? ELSE sugar END,
+          sodium = CASE WHEN sodium = 0 THEN ? ELSE sodium END,
+          cholesterol = CASE WHEN cholesterol = 0 THEN ? ELSE cholesterol END,
+          saturated_fat = CASE WHEN saturated_fat = 0 THEN ? ELSE saturated_fat END,
+          trans_fat = CASE WHEN trans_fat = 0 THEN ? ELSE trans_fat END
+        WHERE id = ? AND is_system = 0
+      ''', [
+        (sys.first['fiber'] as num?)?.toDouble() ?? 0,
+        (sys.first['sugar'] as num?)?.toDouble() ?? 0,
+        (sys.first['sodium'] as num?)?.toDouble() ?? 0,
+        (sys.first['cholesterol'] as num?)?.toDouble() ?? 0,
+        (sys.first['saturated_fat'] as num?)?.toDouble() ?? 0,
+        (sys.first['trans_fat'] as num?)?.toDouble() ?? 0,
+        existingId,
+      ]);
       await _copyMissingServings(
         dbx: d,
         sourceFoodId: systemFoodId,
@@ -1103,6 +1317,7 @@ class AppDb {
           saturatedFat100: f.saturatedFat,
           transFat100: f.transFat,
           entryType: 'food',
+          notes: entry.notes,
         );
         return d.insert('log_entries', withSnap.toMap());
       }
@@ -1126,6 +1341,7 @@ class AppDb {
     double transFat = 0,
     String? time,
     String? label,
+    String? notes,
   }) async {
     final entry = LogEntry(
       date: date,
@@ -1147,6 +1363,7 @@ class AppDb {
       manualCholesterol: cholesterol,
       manualSaturatedFat: saturatedFat,
       manualTransFat: transFat,
+      notes: notes,
     );
     return insertLog(entry);
   }
@@ -1721,11 +1938,19 @@ class AppDb {
   Future<void> updateMealTemplateItem({
     required int itemId,
     required double amount,
+    int? foodId,
+    String? unit,
+    double? baseAmount,
   }) async {
     final d = await db;
     await d.update(
       'meal_template_items',
-      {'amount': amount},
+      {
+        'amount': amount,
+        if (foodId != null) 'food_id': foodId,
+        if (unit != null) 'unit': unit.trim().isEmpty ? 'g' : unit.trim(),
+        if (baseAmount != null) 'base_amount': baseAmount <= 0 ? 1 : baseAmount,
+      },
       where: 'id = ?',
       whereArgs: [itemId],
     );
@@ -2185,15 +2410,15 @@ class AppDb {
 
   /// Seeds common serving sizes for system foods. Safe to call multiple times.
   Future<void> seedSystemServings(Database d) async {
-    // Map of system_key → list of (name, grams)
+    // Map of system_key → list of (name, amountInBaseUnit)
     const seeds = <String, List<(String, double)>>{
-      'egg_whole':          [('1 egg', 50), ('2 eggs', 100)],
-      'olive_oil':          [('1 tsp', 4.5), ('1 tbsp', 13.5)],
+      'egg_whole':          [('1 Small', 0.8), ('1 Medium', 0.9), ('1 Large', 1.0), ('1 Extra Large', 1.1), ('2 Large', 2.0)],
+      'olive_oil':          [('1 tsp', 0.33), ('1 tbsp', 1.0), ('2 tbsp', 2.0)],
       'butter':             [('1 tsp', 4.7), ('1 tbsp', 14.2)],
       'peanut_butter':      [('1 tbsp', 16), ('2 tbsp', 32)],
       'almonds':            [('10 almonds', 12), ('1 oz (~23)', 28)],
       'walnuts':            [('7 halves', 28)],
-      'dates_medjool':      [('1 date', 24), ('3 dates', 72)],
+      'dates_medjool':      [('1 date', 1.0), ('2 dates', 2.0), ('3 dates', 3.0), ('5 dates', 5.0)],
       'oats':               [('½ cup dry', 40), ('1 cup dry', 80)],
       'milk_whole':         [('½ cup', 120), ('1 cup', 240)],
       'milk_skim':          [('½ cup', 120), ('1 cup', 240)],
@@ -2207,6 +2432,8 @@ class AppDb {
       'rice_brown_cooked':  [('½ cup', 98), ('1 cup', 195)],
       'potato_boiled':      [('1 small', 100), ('1 medium', 150)],
     };
+
+    final updateKeys = {'egg_whole', 'olive_oil', 'dates_medjool'};
 
     for (final entry in seeds.entries) {
       final key = entry.key;
@@ -2223,14 +2450,18 @@ class AppDb {
       if (rows.isEmpty) continue;
       final foodId = rows.first['id'] as int;
 
-      // Skip if this food already has servings
-      final existing = await d.query(
-        'food_servings',
-        where: 'food_id = ?',
-        whereArgs: [foodId],
-        limit: 1,
-      );
-      if (existing.isNotEmpty) continue;
+      if (updateKeys.contains(key)) {
+        await d.delete('food_servings', where: 'food_id = ?', whereArgs: [foodId]);
+      } else {
+        // Skip if this food already has servings
+        final existing = await d.query(
+          'food_servings',
+          where: 'food_id = ?',
+          whereArgs: [foodId],
+          limit: 1,
+        );
+        if (existing.isNotEmpty) continue;
+      }
 
       for (final s in servings) {
         await d.insert('food_servings', {
@@ -2239,7 +2470,287 @@ class AppDb {
           'grams': s.$2,
         });
       }
+
+      // If this is one of our updated foods, also update user-imported copies with these servings
+      if (updateKeys.contains(key)) {
+        final userFoods = await d.query(
+          'foods',
+          columns: ['id'],
+          where: 'is_system = 0 AND system_key = ?',
+          whereArgs: [key],
+        );
+        for (final uf in userFoods) {
+          final ufId = uf['id'] as int;
+          await d.delete('food_servings', where: 'food_id = ?', whereArgs: [ufId]);
+          for (final s in servings) {
+            await d.insert('food_servings', {
+              'food_id': ufId,
+              'name': s.$1,
+              'grams': s.$2,
+            });
+          }
+        }
+      }
     }
+  }
+
+  // ---------------- QUESTIONS & ANSWERS MODULE ----------------
+
+  Future<List<Map<String, dynamic>>> getQuestionsWithReplies() async {
+    final d = await db;
+    final qRows = await d.query('questions', orderBy: 'id DESC');
+    final result = <Map<String, dynamic>>[];
+    for (final q in qRows) {
+      final qId = q['id'] as int;
+      final replies = await d.query(
+        'question_replies',
+        where: 'question_id = ?',
+        whereArgs: [qId],
+        orderBy: 'id ASC',
+      );
+      result.add({
+        ...q,
+        'replies': replies,
+      });
+    }
+    return result;
+  }
+
+  Future<int> insertQuestion({
+    required String userId,
+    required String authorName,
+    required bool isRandomName,
+    required String question,
+  }) async {
+    final d = await db;
+    return d.insert('questions', {
+      'user_id': userId,
+      'author_name': authorName.trim(),
+      'is_random_name': isRandomName ? 1 : 0,
+      'question': question.trim(),
+      'created_at': DateTime.now().toIso8601String(),
+      'status': 'open',
+    });
+  }
+
+  Future<int> insertQuestionReply({
+    required int questionId,
+    required String replyText,
+    required String adminName,
+    required String targetUserId,
+    required String questionPreview,
+  }) async {
+    final d = await db;
+    final replyId = await d.insert('question_replies', {
+      'question_id': questionId,
+      'reply_text': replyText.trim(),
+      'admin_name': adminName.trim(),
+      'created_at': DateTime.now().toIso8601String(),
+    });
+
+    await d.update(
+      'questions',
+      {'status': 'answered'},
+      where: 'id = ?',
+      whereArgs: [questionId],
+    );
+
+    // Generate notification for user who asked
+    final preview = questionPreview.length > 35
+        ? '${questionPreview.substring(0, 35)}...'
+        : questionPreview;
+    await d.insert('question_notifications', {
+      'user_id': targetUserId,
+      'question_id': questionId,
+      'message': '$adminName replied to: "$preview"',
+      'is_read': 0,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+
+    return replyId;
+  }
+
+  Future<List<Map<String, Object?>>> getNotificationsForUser(String userId) async {
+    final d = await db;
+    return d.query(
+      'question_notifications',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+      orderBy: 'id DESC',
+    );
+  }
+
+  Future<int> getUnreadNotificationCount(String userId) async {
+    final d = await db;
+    final res = await d.rawQuery(
+      'SELECT COUNT(*) as cnt FROM question_notifications WHERE user_id = ? AND is_read = 0',
+      [userId],
+    );
+    return (res.first['cnt'] as num?)?.toInt() ?? 0;
+  }
+
+  Future<void> markNotificationAsRead(int notificationId) async {
+    final d = await db;
+    await d.update(
+      'question_notifications',
+      {'is_read': 1},
+      where: 'id = ?',
+      whereArgs: [notificationId],
+    );
+  }
+
+  Future<void> markAllNotificationsAsRead(String userId) async {
+    final d = await db;
+    await d.update(
+      'question_notifications',
+      {'is_read': 1},
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  // ---------------- WATER TRACKING ----------------
+
+  Future<WaterLog> getWaterLog(String date) async {
+    final d = await db;
+    final rows = await d.query('water_logs', where: 'date = ?', whereArgs: [date]);
+    if (rows.isEmpty) {
+      return WaterLog(date: date, amountMl: 0, targetMl: 2000);
+    }
+    return WaterLog.fromMap(rows.first);
+  }
+
+  Future<void> updateWaterAmount(String date, int deltaMl) async {
+    final d = await db;
+    final current = await getWaterLog(date);
+    final newAmount = (current.amountMl + deltaMl).clamp(0, 20000);
+    await d.insert(
+      'water_logs',
+      {'date': date, 'amount_ml': newAmount, 'target_ml': current.targetMl},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> setWaterTarget(String date, int targetMl) async {
+    final d = await db;
+    final current = await getWaterLog(date);
+    await d.insert(
+      'water_logs',
+      {'date': date, 'amount_ml': current.amountMl, 'target_ml': targetMl},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // ---------------- WEIGHT TRACKING ----------------
+
+  Future<List<WeightLog>> getWeightLogs({int limit = 50}) async {
+    final d = await db;
+    final rows = await d.query('weight_logs', orderBy: 'date DESC, id DESC', limit: limit);
+    return rows.map(WeightLog.fromMap).toList();
+  }
+
+  Future<WeightLog?> getLatestWeightLog() async {
+    final d = await db;
+    final rows = await d.query('weight_logs', orderBy: 'date DESC, id DESC', limit: 1);
+    if (rows.isEmpty) return null;
+    return WeightLog.fromMap(rows.first);
+  }
+
+  Future<int> insertWeightLog({
+    required String date,
+    required double weight,
+    String unit = 'kg',
+    String? notes,
+  }) async {
+    final d = await db;
+    return d.insert('weight_logs', {
+      'date': date,
+      'weight': weight,
+      'unit': unit,
+      'notes': notes,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future<int> deleteWeightLog(int id) async {
+    final d = await db;
+    return d.delete('weight_logs', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ---------------- COPY YESTERDAY'S LOG ----------------
+
+  Future<int> copyEntriesFromDate({
+    required String sourceDate,
+    required String targetDate,
+  }) async {
+    final d = await db;
+    final rows = await d.query('log_entries', where: 'date = ?', whereArgs: [sourceDate]);
+    int copiedCount = 0;
+    for (final r in rows) {
+      final map = Map<String, Object?>.from(r);
+      map.remove('id');
+      map['date'] = targetDate;
+      await d.insert('log_entries', map);
+      copiedCount++;
+    }
+    return copiedCount;
+  }
+
+  // ---------------- STREAKS & WEEKLY SUMMARY ----------------
+
+  Future<int> getStreakCount() async {
+    final d = await db;
+    final rows = await d.rawQuery(
+      'SELECT DISTINCT date FROM log_entries ORDER BY date DESC',
+    );
+    if (rows.isEmpty) return 0;
+    final dates = rows.map((r) => r['date'] as String).toSet();
+    final now = DateTime.now();
+    String fmt(DateTime dt) =>
+        "${dt.year.toString().padLeft(4, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}";
+    final todayStr = fmt(now);
+    final yesterdayStr = fmt(now.subtract(const Duration(days: 1)));
+
+    if (!dates.contains(todayStr) && !dates.contains(yesterdayStr)) {
+      return 0;
+    }
+
+    var checkDate = dates.contains(todayStr) ? now : now.subtract(const Duration(days: 1));
+    int streak = 0;
+
+    while (true) {
+      final s = fmt(checkDate);
+      if (dates.contains(s)) {
+        streak++;
+        checkDate = checkDate.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  Future<List<Map<String, dynamic>>> getWeeklySummary(String endDateStr) async {
+    final end = DateTime.tryParse(endDateStr) ?? DateTime.now();
+    String fmt(DateTime dt) =>
+        "${dt.year.toString().padLeft(4, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}";
+    final result = <Map<String, dynamic>>[];
+
+    for (int i = 6; i >= 0; i--) {
+      final d = end.subtract(Duration(days: i));
+      final dStr = fmt(d);
+      final totals = await getTotalsForDate(dStr);
+      final targets = await getTargetsForDate(dStr);
+      result.add({
+        'date': dStr,
+        'calories': totals.calories.round(),
+        'targetCalories': targets.calories,
+        'protein': totals.protein.round(),
+        'carbs': totals.carbs.round(),
+        'fat': totals.fat.round(),
+      });
+    }
+    return result;
   }
 }
 

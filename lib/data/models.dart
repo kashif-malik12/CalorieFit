@@ -22,6 +22,7 @@ class Food {
 
   final bool isSystem;
   final String? category;
+  final bool isFavorite;
 
   const Food({
     this.id,
@@ -40,6 +41,7 @@ class Food {
     this.baseAmount = 100,
     this.isSystem = false,
     this.category,
+    this.isFavorite = false,
   });
 
   Map<String, Object?> toMap() {
@@ -60,6 +62,7 @@ class Food {
       'base_amount': baseAmount,
       'is_system': isSystem ? 1 : 0,
       'category': category,
+      'is_favorite': isFavorite ? 1 : 0,
     };
   }
 
@@ -81,6 +84,7 @@ class Food {
       baseAmount: ((m['base_amount'] as num?) ?? 100).toDouble(),
       isSystem: ((m['is_system'] as num?) ?? 0).toInt() == 1,
       category: m['category'] as String?,
+      isFavorite: ((m['is_favorite'] as num?) ?? 0).toInt() == 1,
     );
   }
 }
@@ -128,6 +132,7 @@ class LogEntry {
   final double? manualCholesterol;
   final double? manualSaturatedFat;
   final double? manualTransFat;
+  final String? notes;
 
   const LogEntry({
     this.id,
@@ -163,6 +168,7 @@ class LogEntry {
     this.manualCholesterol,
     this.manualSaturatedFat,
     this.manualTransFat,
+    this.notes,
   });
 
   Map<String, Object?> toMap() {
@@ -200,6 +206,7 @@ class LogEntry {
       'manual_cholesterol': manualCholesterol,
       'manual_saturated_fat': manualSaturatedFat,
       'manual_trans_fat': manualTransFat,
+      'notes': notes,
     };
   }
 
@@ -239,6 +246,7 @@ class LogEntry {
       manualSaturatedFat:
           (m['manual_saturated_fat'] as num?)?.toDouble(),
       manualTransFat: (m['manual_trans_fat'] as num?)?.toDouble(),
+      notes: m['notes'] as String?,
     );
   }
 }
@@ -422,6 +430,74 @@ class DayTotals {
       cholesterol: cholesterol + cholesterolAdd,
       saturatedFat: saturatedFat + saturatedFatAdd,
       transFat: transFat + transFatAdd,
+    );
+  }
+}
+
+class WeightLog {
+  final int? id;
+  final String date;
+  final double weight;
+  final String unit; // 'kg' or 'lbs'
+  final String? notes;
+  final String createdAt;
+
+  const WeightLog({
+    this.id,
+    required this.date,
+    required this.weight,
+    this.unit = 'kg',
+    this.notes,
+    required this.createdAt,
+  });
+
+  Map<String, Object?> toMap() {
+    return {
+      if (id != null) 'id': id,
+      'date': date,
+      'weight': weight,
+      'unit': unit,
+      'notes': notes,
+      'created_at': createdAt,
+    };
+  }
+
+  static WeightLog fromMap(Map<String, Object?> m) {
+    return WeightLog(
+      id: (m['id'] as num?)?.toInt(),
+      date: (m['date'] as String?) ?? '',
+      weight: ((m['weight'] as num?) ?? 0).toDouble(),
+      unit: (m['unit'] as String?) ?? 'kg',
+      notes: m['notes'] as String?,
+      createdAt: (m['created_at'] as String?) ?? '',
+    );
+  }
+}
+
+class WaterLog {
+  final String date;
+  final int amountMl;
+  final int targetMl;
+
+  const WaterLog({
+    required this.date,
+    required this.amountMl,
+    this.targetMl = 2000,
+  });
+
+  Map<String, Object?> toMap() {
+    return {
+      'date': date,
+      'amount_ml': amountMl,
+      'target_ml': targetMl,
+    };
+  }
+
+  static WaterLog fromMap(Map<String, Object?> m) {
+    return WaterLog(
+      date: (m['date'] as String?) ?? '',
+      amountMl: ((m['amount_ml'] as num?) ?? 0).toInt(),
+      targetMl: ((m['target_ml'] as num?) ?? 2000).toInt(),
     );
   }
 }
