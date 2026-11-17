@@ -133,6 +133,7 @@ class LogEntry {
   final double? manualSaturatedFat;
   final double? manualTransFat;
   final String? notes;
+  final String? imagePath;
 
   const LogEntry({
     this.id,
@@ -169,6 +170,7 @@ class LogEntry {
     this.manualSaturatedFat,
     this.manualTransFat,
     this.notes,
+    this.imagePath,
   });
 
   Map<String, Object?> toMap() {
@@ -207,6 +209,7 @@ class LogEntry {
       'manual_saturated_fat': manualSaturatedFat,
       'manual_trans_fat': manualTransFat,
       'notes': notes,
+      'image_path': imagePath,
     };
   }
 
@@ -247,6 +250,7 @@ class LogEntry {
           (m['manual_saturated_fat'] as num?)?.toDouble(),
       manualTransFat: (m['manual_trans_fat'] as num?)?.toDouble(),
       notes: m['notes'] as String?,
+      imagePath: m['image_path'] as String?,
     );
   }
 }

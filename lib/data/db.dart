@@ -472,6 +472,11 @@ class AppDb {
               "ALTER TABLE log_entries ADD COLUMN notes TEXT;",
             );
           }
+          if (!await _hasColumn(db, 'log_entries', 'image_path')) {
+            await db.execute(
+              "ALTER TABLE log_entries ADD COLUMN image_path TEXT;",
+            );
+          }
           await db.execute('''
             CREATE TABLE IF NOT EXISTS water_logs (
               date TEXT PRIMARY KEY,

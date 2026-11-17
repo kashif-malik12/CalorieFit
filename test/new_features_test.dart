@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:calorie_fit/data/models.dart';
 import 'package:calorie_fit/services/reminder_service.dart';
+import 'package:calorie_fit/services/ai_nutrition_estimator.dart';
 import 'package:calorie_fit/services/report_service.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
@@ -145,6 +146,19 @@ void main() {
       final restored = ExerciseLog.fromMap(map);
       expect(restored.activityName, 'Running');
       expect(restored.caloriesBurned, 450.0);
+    });
+  });
+
+  group('AI Meal Nutrition Estimator Tests', () {
+    test('Estimates nutrition from natural language meal description', () async {
+      final meal = await AiNutritionEstimator.instance.estimateMeal('2 eggs with 1 toast and avocado');
+
+      expect(meal.items.isNotEmpty, isTrue);
+      expect(meal.totalCalories, greaterThan(200));
+      expect(meal.totalProtein, greaterThan(10));
+      expect(meal.totalCarbs, greaterThan(5));
+      expect(meal.totalFat, greaterThan(10));
+      expect(meal.confidence, isIn(['High', 'Estimated']));
     });
   });
 }

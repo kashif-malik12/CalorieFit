@@ -28,6 +28,8 @@ import 'screens/fasting_screen.dart';
 import 'screens/exercise_screen.dart';
 import 'screens/recipe_builder_screen.dart';
 import 'screens/review_prompt_dialog.dart';
+import 'screens/ai_meal_estimator_screen.dart';
+import 'screens/meal_photo_journal_screen.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -524,6 +526,35 @@ class _HomeShellState extends State<HomeShell> {
                       builder: (_) => RecipeBuilderScreen(
                         onSaved: () => setState(() {}),
                       ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.auto_awesome, color: Colors.purple),
+                title: const Text('AI Meal & Nutrition Estimator'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AiMealEstimatorScreen(
+                        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        onLogged: () => setState(() {}),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined, color: Colors.teal),
+                title: const Text('Visual Meal Journal'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MealPhotoJournalScreen(),
                     ),
                   );
                 },
@@ -1373,6 +1404,53 @@ Widget _targetsTable({required DayTotals totals, required MacroTargets targets})
   );
 }
 
+Widget _buildMicronutrientAlerts(DayTotals totals) {
+  final alerts = <Widget>[];
+
+  if (totals.sodium >= 2300) {
+    alerts.add(_microPill('⚠️ High Sodium: ${totals.sodium.round()}mg / 2300mg', Colors.deepOrange));
+  }
+  if (totals.saturatedFat >= 20) {
+    alerts.add(_microPill('⚠️ High Sat. Fat: ${totals.saturatedFat.round()}g / 20g', Colors.orange));
+  }
+  if (totals.sugar >= 50) {
+    alerts.add(_microPill('⚠️ High Sugar: ${totals.sugar.round()}g / 50g', Colors.amber.shade900));
+  }
+  if (totals.fiber >= 25) {
+    alerts.add(_microPill('✅ Optimal Fiber: ${totals.fiber.round()}g', Colors.green));
+  }
+
+  if (alerts.isEmpty) return const SizedBox.shrink();
+
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Wrap(
+      spacing: 8,
+      runSpacing: 6,
+      children: alerts,
+    ),
+  );
+}
+
+Widget _microPill(String label, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: 0.15),
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: color.withValues(alpha: 0.4)),
+    ),
+    child: Text(
+      label,
+      style: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.bold,
+        color: color,
+      ),
+    ),
+  );
+}
+
 // ---------------- Retention dialog ----------------
 
 Future<void> editRetentionDaysDialog(BuildContext context) async {
@@ -1953,6 +2031,12 @@ class _TodayPageState extends State<TodayPage> {
               onTap: () => Navigator.pop(ctx, 'exercise'),
             ),
             ListTile(
+              leading: const Icon(Icons.auto_awesome, color: Colors.purple),
+              title: const Text('AI Meal Estimator'),
+              subtitle: const Text('Describe what you ate in natural language'),
+              onTap: () => Navigator.pop(ctx, 'ai_estimator'),
+            ),
+            ListTile(
               leading: const Icon(Icons.copy_all, color: Colors.blue),
               title: const Text("Copy yesterday's meals"),
               subtitle: const Text('Duplicate yesterday into today'),
@@ -1998,6 +2082,17 @@ class _TodayPageState extends State<TodayPage> {
             builder: (_) => ExerciseScreen(
               date: _date,
               onUpdated: () => setState(() {}),
+            ),
+          ),
+        );
+        break;
+      case 'ai_estimator':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AiMealEstimatorScreen(
+              date: _date,
+              onLogged: () => setState(() {}),
             ),
           ),
         );
@@ -3247,6 +3342,33 @@ class _TodayPageState extends State<TodayPage> {
               },
             ),
             OutlinedButton.icon(
+              icon: const Icon(Icons.auto_awesome, color: Colors.purple),
+              label: const Text('AI Meal Estimator'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AiMealEstimatorScreen(
+                      date: _date,
+                      onLogged: () => setState(() {}),
+                    ),
+                  ),
+                );
+              },
+            ),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.photo_library_outlined, color: Colors.teal),
+              label: const Text('Meal Journal'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const MealPhotoJournalScreen(),
+                  ),
+                );
+              },
+            ),
+            OutlinedButton.icon(
               icon: const Icon(Icons.monitor_weight_outlined),
               label: const Text('BMI & calories'),
               onPressed: () async {
@@ -3343,6 +3465,7 @@ FutureBuilder<double>(
                 const SizedBox(height: 12),
                 _targetsTable(totals: totals, targets: targets),
                 const SizedBox(height: 12),
+                _buildMicronutrientAlerts(totals),
                 if (rows.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),
@@ -5489,6 +5612,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 const SizedBox(height: 12),
                 _targetsTable(totals: totals, targets: targets),
                 const SizedBox(height: 12),
+                _buildMicronutrientAlerts(totals),
                 const Text('Entries', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 if (rows.isEmpty)
