@@ -46,6 +46,9 @@ import 'services/health_sync_service.dart';
 import 'services/widget_sync_service.dart';
 import 'services/app_localization.dart';
 import 'services/open_food_facts_service.dart';
+import 'screens/health_hub_screen.dart';
+import 'widgets/modern_calorie_dashboard.dart';
+import 'widgets/modern_meal_card.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -105,6 +108,42 @@ class CalorieFitApp extends StatelessWidget {
                   backgroundColor: Colors.white,
                   foregroundColor: kBrandPrimary,
                   surfaceTintColor: Colors.transparent,
+                  elevation: 0,
+                ),
+                cardTheme: CardThemeData(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: Colors.black.withOpacity(0.06)),
+                  ),
+                  color: Colors.white,
+                ),
+                navigationBarTheme: NavigationBarThemeData(
+                  backgroundColor: Colors.white,
+                  surfaceTintColor: Colors.transparent,
+                  indicatorColor: kBrandPrimary.withOpacity(0.12),
+                  labelTextStyle: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kBrandPrimary);
+                    }
+                    return TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey.shade600);
+                  }),
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  fillColor: Colors.grey.shade50,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: kBrandPrimary, width: 2),
+                  ),
                 ),
               ),
               darkTheme: ThemeData(
@@ -113,6 +152,24 @@ class CalorieFitApp extends StatelessWidget {
                 brightness: Brightness.dark,
                 appBarTheme: const AppBarTheme(
                   surfaceTintColor: Colors.transparent,
+                  elevation: 0,
+                ),
+                cardTheme: CardThemeData(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: Colors.white.withOpacity(0.08)),
+                  ),
+                ),
+                navigationBarTheme: NavigationBarThemeData(
+                  surfaceTintColor: Colors.transparent,
+                  indicatorColor: kBrandAccent.withOpacity(0.2),
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
               ),
               home: Directionality(
@@ -289,8 +346,9 @@ class _HomeShellState extends State<HomeShell> {
   Widget build(BuildContext context) {
     final pages = [
       TodayPage(navIndex: 0, onNavTap: _onNavTap),
-      FoodsPage(navIndex: 1, onNavTap: _onNavTap),
-      GlobalPage(navIndex: 2, onNavTap: _onNavTap),
+      const FastingScreen(),
+      const AnalyticsScreen(),
+      HealthHubScreen(onRefreshDiary: () => setState(() {})),
     ];
 
     return Scaffold(
@@ -385,6 +443,32 @@ class _HomeShellState extends State<HomeShell> {
                           ],
                         ),
                       ],
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.restaurant_menu, color: Colors.teal),
+                title: const Text('My Foods Library'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FoodsPage(navIndex: 0, onNavTap: (_) {}),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.menu_book, color: Colors.indigo),
+                title: const Text('Global Food Booklet'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => GlobalPage(navIndex: 0, onNavTap: (_) {}),
                     ),
                   );
                 },
@@ -734,7 +818,11 @@ class _HomeShellState extends State<HomeShell> {
           ),
         ),
       ),
-      body: pages[_idx],
+      body: IndexedStack(
+        index: _idx,
+        children: pages,
+      ),
+      bottomNavigationBar: _bottomNav(_idx, _onNavTap),
     );
   }
 }
@@ -748,9 +836,26 @@ Widget _bottomNav(int currentIndex, void Function(int) onTap) {
     selectedIndex: currentIndex,
     onDestinationSelected: onTap,
     destinations: const [
-      NavigationDestination(icon: Icon(Icons.today), label: 'Daily Log'),
-      NavigationDestination(icon: Icon(Icons.restaurant_menu), label: 'My Foods'),
-      NavigationDestination(icon: Icon(Icons.menu_book), label: 'Booklet'),
+      NavigationDestination(
+        icon: Icon(Icons.calendar_today_outlined),
+        selectedIcon: Icon(Icons.calendar_today),
+        label: 'Diary',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.timer_outlined),
+        selectedIcon: Icon(Icons.timer),
+        label: 'Fasting',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.bar_chart_outlined),
+        selectedIcon: Icon(Icons.bar_chart),
+        label: 'Analytics',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.grid_view_outlined),
+        selectedIcon: Icon(Icons.grid_view),
+        label: 'Health Hub',
+      ),
     ],
   );
 }
@@ -2378,13 +2483,13 @@ class _TodayPageState extends State<TodayPage> {
     );
   }
 
-  Future<void> _addLogEntryFromFoods() async {
+  Future<void> _addLogEntryFromFoods({String defaultMeal = 'Breakfast'}) async {
     Food? selected;
     List<FoodServing> servings = [];
     final amountCtrl = TextEditingController(text: '1');
     final searchCtrl = TextEditingController();
     final notesCtrl = TextEditingController();
-    String selectedLabel = 'Breakfast';
+    String selectedLabel = defaultMeal;
     TimeOfDay selectedTime = TimeOfDay.now();
 
     await showModalBottomSheet(
@@ -2604,7 +2709,7 @@ class _TodayPageState extends State<TodayPage> {
     );
   }
 
-  Future<void> _addQuickManualEntry() async {
+  Future<void> _addQuickManualEntry({String defaultMeal = 'Breakfast'}) async {
   final nameCtrl = TextEditingController();
   final notesCtrl = TextEditingController();
   final kcalCtrl = TextEditingController();
@@ -2615,7 +2720,7 @@ class _TodayPageState extends State<TodayPage> {
   final suCtrl = TextEditingController(text: '0');
   final soCtrl = TextEditingController(text: '0');
 
-  String selectedLabel = 'Breakfast';
+  String selectedLabel = defaultMeal;
   TimeOfDay selectedTime = TimeOfDay.now();
 
   double d(TextEditingController t) =>
@@ -3371,69 +3476,123 @@ class _TodayPageState extends State<TodayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (ctx) => IconButton(
+            icon: const Icon(Icons.menu),
+            tooltip: 'Menu',
+            onPressed: () => Scaffold.of(ctx).openDrawer(),
+          ),
+        ),
         title: BrandedAppBarTitle(title: 'daily_diary'.tr(), subtitle: _date),
         actions: [
           IconButton(
-            tooltip: 'Language',
-            icon: const Icon(Icons.language),
-            onPressed: () => LanguageSelectionDialog.show(context),
+            tooltip: 'Select Date',
+            icon: const Icon(Icons.calendar_month_outlined),
+            onPressed: _pickDate,
           ),
           IconButton(
-            tooltip: 'Data retention',
-            icon: const Icon(Icons.storage),
-            onPressed: () async {
-              await editRetentionDaysDialog(context);
-              if (mounted) setState(() {});
-            },
-          ),
-          IconButton(
-            tooltip: 'Default targets',
-            icon: const Icon(Icons.flag),
-            onPressed: () async {
-              await editDefaultTargetsOneDialog(context);
-              if (mounted) setState(() {});
-            },
-          ),
-          IconButton(
-            tooltip: 'Targets for this date',
-            icon: const Icon(Icons.edit_calendar),
+            tooltip: 'Edit Daily Goals',
+            icon: const Icon(Icons.tune_outlined),
             onPressed: () async {
               await editTargetsForDateOneDialog(context, _date);
               if (mounted) setState(() {});
             },
           ),
-          IconButton(
-            tooltip: 'Reset targets for this date',
-            icon: const Icon(Icons.refresh),
-            onPressed: () async {
-              await AppDb.instance.clearTargetsForDate(_date);
-              if (!mounted) return;
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Using default targets for this date')));
+          PopupMenuButton<String>(
+            tooltip: 'More Options',
+            icon: const Icon(Icons.more_vert),
+            onSelected: (val) async {
+              switch (val) {
+                case 'copy_yesterday':
+                  await _copyYesterdayMeals();
+                  break;
+                case 'default_targets':
+                  await editDefaultTargetsOneDialog(context);
+                  if (mounted) setState(() {});
+                  break;
+                case 'reset_date_targets':
+                  await AppDb.instance.clearTargetsForDate(_date);
+                  if (!mounted) return;
+                  setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Using default targets for this date')));
+                  break;
+                case 'data_retention':
+                  await editRetentionDaysDialog(context);
+                  if (mounted) setState(() {});
+                  break;
+                case 'language':
+                  LanguageSelectionDialog.show(context);
+                  break;
+              }
             },
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'copy_yesterday',
+                child: Row(
+                  children: [
+                    Icon(Icons.copy_all, size: 18, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text("Copy Yesterday's Meals"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'default_targets',
+                child: Row(
+                  children: [
+                    Icon(Icons.flag_outlined, size: 18, color: Colors.teal),
+                    SizedBox(width: 8),
+                    Text('Default Targets'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'reset_date_targets',
+                child: Row(
+                  children: [
+                    Icon(Icons.refresh, size: 18, color: Colors.orange),
+                    SizedBox(width: 8),
+                    Text('Reset Targets for Date'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'data_retention',
+                child: Row(
+                  children: [
+                    Icon(Icons.storage_outlined, size: 18, color: Colors.purple),
+                    SizedBox(width: 8),
+                    Text('Data Retention'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'language',
+                child: Row(
+                  children: [
+                    Icon(Icons.language, size: 18, color: Colors.blueGrey),
+                    SizedBox(width: 8),
+                    Text('Language / زبان / اللغة'),
+                  ],
+                ),
+              ),
+            ],
           ),
-          IconButton(
-            tooltip: 'Visual Analytics & Charts',
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
-              );
-            },
-          ),
-          IconButton(onPressed: _pickDate, icon: const Icon(Icons.date_range)),
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: _showAddMenu, child: const Icon(Icons.add)),
-      bottomNavigationBar: _bottomNav(widget.navIndex, widget.onNavTap),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddMenu,
+        tooltip: 'Add food, exercise, scan',
+        child: const Icon(Icons.add),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: FutureBuilder(
           future: Future.wait([
             AppDb.instance.getTotalsForDate(_date),
             AppDb.instance.getTargetsForDate(_date),
             AppDb.instance.getLogRowsForDate(_date),
+            AppDb.instance.getTotalExerciseCaloriesForDate(_date),
           ]),
           builder: (_, snap) {
             if (snap.connectionState != ConnectionState.done) {
@@ -3445,6 +3604,15 @@ class _TodayPageState extends State<TodayPage> {
             final totals = (data?[0] as DayTotals?) ?? const DayTotals();
             final targets = (data?[1] as MacroTargets?) ?? const MacroTargets(calories: 2000, protein: 150, carbs: 200, fat: 70);
             final rows = (data?[2] as List<Map<String, Object?>>?) ?? const [];
+            final burned = (data?[3] as double?) ?? 0.0;
+
+            final breakfastEntries = rows.where((r) => (r['label'] as String?)?.trim() == 'Breakfast').toList();
+            final lunchEntries = rows.where((r) => (r['label'] as String?)?.trim() == 'Lunch').toList();
+            final dinnerEntries = rows.where((r) => (r['label'] as String?)?.trim() == 'Dinner').toList();
+            final snackEntries = rows.where((r) {
+              final l = (r['label'] as String?)?.trim();
+              return l == 'Morning Snack' || l == 'Afternoon Snack' || l == 'Evening Snack' || l == 'Snack' || l == 'Snacks' || (l != 'Breakfast' && l != 'Lunch' && l != 'Dinner');
+            }).toList();
 
             return ListView(
               children: [
@@ -3484,269 +3652,113 @@ class _TodayPageState extends State<TodayPage> {
                     );
                   },
                 ),
-               Card(
-  child: Padding(
-    padding: const EdgeInsets.all(16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Health tools',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            FutureBuilder<int>(
-              future: AppDb.instance.getStreakCount(),
-              builder: (_, snap) {
-                final streak = snap.data ?? 0;
-                if (streak <= 0) return const SizedBox.shrink();
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.orange.withValues(alpha: 0.5)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('🔥', style: TextStyle(fontSize: 13)),
-                      const SizedBox(width: 4),
-                      Text(
-                        '$streak Day${streak == 1 ? "" : "s"} Streak',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
-                        ),
+                FutureBuilder<int>(
+                  future: AppDb.instance.getStreakCount(),
+                  builder: (_, snap) {
+                    final streak = snap.data ?? 0;
+                    if (streak <= 0) return const SizedBox.shrink();
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            OutlinedButton.icon(
-              icon: const Icon(Icons.bar_chart, color: Colors.blueAccent),
-              label: const Text('Charts & Trends'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.assignment_outlined, color: Colors.teal),
-              label: const Text('Health Report'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ReportScreen()),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.notifications_active_outlined, color: Colors.orange),
-              label: const Text('Reminders'),
-              onPressed: () async {
-                await showDialog(context: context, builder: (_) => const RemindersDialog());
-                if (mounted) setState(() {});
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.timer_outlined, color: Colors.teal),
-              label: const Text('Fasting Timer'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const FastingScreen()),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.fitness_center_outlined, color: Colors.orange),
-              label: const Text('Activity & Workouts'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ExerciseScreen(
-                      date: _date,
-                      onUpdated: () => setState(() {}),
-                    ),
-                  ),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.soup_kitchen_outlined, color: Colors.deepPurple),
-              label: const Text('Recipe Builder'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => RecipeBuilderScreen(
-                      onSaved: () => setState(() {}),
-                    ),
-                  ),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.auto_awesome, color: Colors.purple),
-              label: const Text('AI Meal Estimator'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => AiMealEstimatorScreen(
-                      date: _date,
-                      onLogged: () => setState(() {}),
-                    ),
-                  ),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.photo_library_outlined, color: Colors.teal),
-              label: const Text('Meal Journal'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MealPhotoJournalScreen(),
-                  ),
-                );
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.monitor_weight_outlined),
-              label: const Text('BMI & calories'),
-              onPressed: () async {
-                await showBmiAndCalorieToolsDialog(context, _date);
-                if (mounted) setState(() {});
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.calculate_outlined, color: Colors.teal),
-              label: const Text('Goal & TDEE Wizard'),
-              onPressed: () => _showGoalWizardDialog(context, () => setState(() {})),
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.monitor_weight, color: Colors.purple),
-              label: const Text('Weight Tracker'),
-              onPressed: () => _showWeightTrackerDialog(context),
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.insights, color: Colors.indigo),
-              label: const Text('Weekly Overview'),
-              onPressed: () => _showWeeklySummaryDialog(context, _date),
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.flag_outlined),
-              label: const Text('Edit targets'),
-              onPressed: () async {
-                await editTargetsForDateOneDialog(context, _date);
-                if (mounted) setState(() {});
-              },
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.scale_outlined),
-              label: const Text('Tbsp converter'),
-              onPressed: () => _showTbspConverterDialog(context),
-            ),
-          ],
-        ),
-      ],
-    ),
-  ),
-),
-const SizedBox(height: 12),
-_buildWaterTrackerCard(context, _date, () => setState(() {})),
-const SizedBox(height: 12),
-FutureBuilder<double>(
-  future: AppDb.instance.getTotalExerciseCaloriesForDate(_date),
-  builder: (_, snap) {
-    final burned = snap.data ?? 0.0;
-    if (burned <= 0) return const SizedBox.shrink();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.orange.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.local_fire_department, color: Colors.orange),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${burned.round()} kcal burned in workouts today',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      child: Row(
+                        children: [
+                          const Text('🔥', style: TextStyle(fontSize: 18)),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              '$streak Day${streak == 1 ? "" : "s"} Streak! Keep logging to crush your goals.',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-                Text(
-                  'Net Calories: ${(totals.calories - burned).round()} kcal',
-                  style: TextStyle(fontSize: 11, color: Theme.of(context).hintColor),
+                ModernCalorieDashboard(
+                  takenCalories: totals.calories.round(),
+                  targetCalories: targets.calories,
+                  burnedCalories: burned,
+                  totals: totals,
+                  targets: targets,
+                  onEditTargets: () async {
+                    await editTargetsForDateOneDialog(context, _date);
+                    if (mounted) setState(() {});
+                  },
                 ),
-              ],
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ExerciseScreen(date: _date, onUpdated: () => setState(() {})),
-                ),
-              );
-            },
-            child: const Text('View'),
-          ),
-        ],
-      ),
-    );
-  },
-),
-                _progressBarCalories(taken: totals.calories.round(), target: targets.calories, totals: totals, targets: targets),
-                const SizedBox(height: 12),
-                _targetsTable(totals: totals, targets: targets),
-                const SizedBox(height: 12),
-                _buildMicronutrientAlerts(totals),
+                const SizedBox(height: 14),
+                _buildWaterTrackerCard(context, _date, () => setState(() {})),
+                const SizedBox(height: 14),
                 _buildQuickFavoritesBar(),
+                ModernMealSectionCard(
+                  categoryName: 'Breakfast',
+                  emoji: '🍳',
+                  entries: breakfastEntries,
+                  onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Breakfast'),
+                  onDeleteEntry: (logId) async {
+                    await AppDb.instance.deleteLog(logId);
+                    if (mounted) setState(() {});
+                  },
+                  onTapEntry: (entry) => _showTodayEntryDetails(context, entry),
+                ),
+                ModernMealSectionCard(
+                  categoryName: 'Lunch',
+                  emoji: '🥗',
+                  entries: lunchEntries,
+                  onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Lunch'),
+                  onDeleteEntry: (logId) async {
+                    await AppDb.instance.deleteLog(logId);
+                    if (mounted) setState(() {});
+                  },
+                  onTapEntry: (entry) => _showTodayEntryDetails(context, entry),
+                ),
+                ModernMealSectionCard(
+                  categoryName: 'Dinner',
+                  emoji: '🍲',
+                  entries: dinnerEntries,
+                  onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Dinner'),
+                  onDeleteEntry: (logId) async {
+                    await AppDb.instance.deleteLog(logId);
+                    if (mounted) setState(() {});
+                  },
+                  onTapEntry: (entry) => _showTodayEntryDetails(context, entry),
+                ),
+                ModernMealSectionCard(
+                  categoryName: 'Snacks',
+                  emoji: '🍎',
+                  entries: snackEntries,
+                  onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Afternoon Snack'),
+                  onDeleteEntry: (logId) async {
+                    await AppDb.instance.deleteLog(logId);
+                    if (mounted) setState(() {});
+                  },
+                  onTapEntry: (entry) => _showTodayEntryDetails(context, entry),
+                ),
                 if (rows.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Column(
-                      children: [
-                        const Text('No entries yet. Tap + to add what you ate.'),
-                        const SizedBox(height: 12),
-                        OutlinedButton.icon(
-                          icon: const Icon(Icons.copy_all, color: Colors.blue),
-                          label: const Text("Copy yesterday's meals"),
-                          onPressed: _copyYesterdayMeals,
-                        ),
-                      ],
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          OutlinedButton.icon(
+                            icon: const Icon(Icons.copy_all, color: Colors.blue),
+                            label: const Text("Copy yesterday's meals"),
+                            onPressed: _copyYesterdayMeals,
+                          ),
+                        ],
+                      ),
                     ),
-                  )
-                else ..._buildCategorizedLog(
-                  context,
-                  rows,
-                  () => setState(() {}),
-                ),
+                  ),
+                const SizedBox(height: 80),
               ],
             );
           },
