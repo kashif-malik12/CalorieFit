@@ -790,7 +790,7 @@ class _HomeShellState extends State<HomeShell> {
               ListTile(
                 leading: const Icon(Icons.system_update_alt_rounded, color: Colors.blueAccent),
                 title: const Text('Check for Updates'),
-                subtitle: const Text('v1.9.0 (Build 13)'),
+                subtitle: const Text('v${AppUpdateService.currentVersion} (Build ${AppUpdateService.currentBuildNumber})'),
                 onTap: () {
                   Navigator.pop(context);
                   AppUpdateService.instance.manualCheckForUpdates(context);

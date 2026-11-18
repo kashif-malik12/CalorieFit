@@ -300,7 +300,7 @@ class HealthHubScreen extends StatelessWidget {
             icon: Icons.system_update_alt_rounded,
             iconColor: Colors.blueAccent,
             title: 'Check for Updates',
-            subtitle: 'Current: v1.9.0 (Build 13) • Tap to check Google Play for new releases',
+            subtitle: 'Current: v${AppUpdateService.currentVersion} • Tap to check Google Play for new releases',
             badge: 'Play Store',
             onTap: () => AppUpdateService.instance.manualCheckForUpdates(context),
           ),
