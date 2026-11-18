@@ -1,0 +1,9 @@
+{
+  "version": "1.9.0",
+  "build_number": 13,
+  "min_supported_build": 1,
+  "force_update": false,
+  "release_date": "2026-11-18",
+  "release_notes": "• Modern 4-tab bottom navigation (Diary, Fasting, Analytics, Health Hub)\n• Hero circular energy & calorie budget gauge\n• Beautiful categorized meal cards with 1-tap food logging\n• Dedicated Health Hub power tools grid\n• Performance optimizations and smooth rounded surface design",
+  "play_store_url": "https://play.google.com/store/apps/details?id=com.caloriefit.app"
+}

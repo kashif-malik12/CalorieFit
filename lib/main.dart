@@ -49,6 +49,7 @@ import 'services/open_food_facts_service.dart';
 import 'screens/health_hub_screen.dart';
 import 'widgets/modern_calorie_dashboard.dart';
 import 'widgets/modern_meal_card.dart';
+import 'services/app_update_service.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
 
@@ -784,6 +785,15 @@ class _HomeShellState extends State<HomeShell> {
                     context: context,
                     builder: (_) => const ReviewPromptDialog(),
                   );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.system_update_alt_rounded, color: Colors.blueAccent),
+                title: const Text('Check for Updates'),
+                subtitle: const Text('v1.9.0 (Build 13)'),
+                onTap: () {
+                  Navigator.pop(context);
+                  AppUpdateService.instance.manualCheckForUpdates(context);
                 },
               ),
               ListTile(
@@ -2202,6 +2212,16 @@ class TodayPage extends StatefulWidget {
 class _TodayPageState extends State<TodayPage> {
   String _date = _fmtDate(DateTime.now());
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        AppUpdateService.instance.checkAndPrompt(context);
+      }
+    });
+  }
+
   String _fmtTime(TimeOfDay t) =>
       '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
@@ -3523,9 +3543,22 @@ class _TodayPageState extends State<TodayPage> {
                 case 'language':
                   LanguageSelectionDialog.show(context);
                   break;
+                case 'check_updates':
+                  AppUpdateService.instance.manualCheckForUpdates(context);
+                  break;
               }
             },
             itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'check_updates',
+                child: Row(
+                  children: [
+                    Icon(Icons.system_update_alt_rounded, size: 18, color: Colors.blueAccent),
+                    SizedBox(width: 8),
+                    Text('Check for Updates'),
+                  ],
+                ),
+              ),
               const PopupMenuItem(
                 value: 'copy_yesterday',
                 child: Row(

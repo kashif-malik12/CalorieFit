@@ -13,6 +13,7 @@ import 'package:calorie_fit/services/grocery_list_service.dart';
 import 'package:calorie_fit/services/health_export_service.dart';
 import 'package:calorie_fit/services/privacy_lock_service.dart';
 import 'package:calorie_fit/services/gamification_service.dart';
+import 'package:calorie_fit/services/app_update_service.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
 void main() {
@@ -310,6 +311,34 @@ void main() {
       expect(badge.id, 'streak_7');
       expect(badge.isUnlocked, isTrue);
       expect(badge.progressPercent, 1.0);
+    });
+  });
+
+  group('App Update Service Tests', () {
+    test('AppUpdateInfo correctly reflects update flags', () {
+      const info = AppUpdateInfo(
+        latestVersion: '1.9.1',
+        latestBuildNumber: 14,
+        releaseNotes: '• Major performance fixes\n• UI polish',
+        isUpdateAvailable: true,
+        forceUpdate: false,
+      );
+
+      expect(info.latestVersion, '1.9.1');
+      expect(info.latestBuildNumber, 14);
+      expect(info.isUpdateAvailable, isTrue);
+      expect(info.forceUpdate, isFalse);
+      expect(info.playStoreUrl, contains('com.caloriefit.app'));
+    });
+
+    test('Dismisses update build in SharedPreferences', () async {
+      SharedPreferences.setMockInitialValues({});
+      final service = AppUpdateService.instance;
+
+      await service.dismissUpdate(14);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getInt('caloriefit_last_dismissed_update_build'), 14);
+      expect(prefs.getInt('caloriefit_last_dismissed_update_time'), isNotNull);
     });
   });
 }

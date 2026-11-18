@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/app_update_service.dart';
 
 class ReviewPromptDialog extends StatefulWidget {
   const ReviewPromptDialog({super.key});
@@ -41,6 +42,7 @@ class _ReviewPromptDialogState extends State<ReviewPromptDialog> {
           content: Text('Thank you so much! Opening Google Play Store... ⭐⭐⭐⭐⭐'),
         ),
       );
+      await AppUpdateService.instance.openPlayStore();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
