@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Portfolio Dashboard | CEO Business Success & Performance Overview</title>
+  <title>Executive Portfolio Dashboard | CEO Business Success & Ventures Radar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -183,7 +183,7 @@
     /* Executive KPI Metric Banners */
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
       margin-bottom: 32px;
     }
@@ -209,8 +209,8 @@
       background: var(--border-accent);
     }
 
-    .kpi-box.accent-blue::after { background: var(--accent); }
     .kpi-box.accent-green::after { background: var(--green); }
+    .kpi-box.accent-blue::after { background: var(--accent); }
     .kpi-box.accent-purple::after { background: var(--purple); }
     .kpi-box.accent-yellow::after { background: var(--yellow); }
 
@@ -230,7 +230,7 @@
     }
 
     .kpi-icon {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
     }
 
     .kpi-num {
@@ -355,7 +355,7 @@
       font-weight: 700;
     }
 
-    /* Grid of Business Units */
+    /* Grid of Business Ventures */
     .bu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
@@ -385,9 +385,9 @@
       transform: translateY(-2px);
     }
 
-    .bu-card.priority-card {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: linear-gradient(180deg, rgba(56, 189, 248, 0.04) 0%, var(--bg-card) 30%);
+    .bu-card.lead-card {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 30%);
     }
 
     .bu-head {
@@ -451,7 +451,6 @@
     .badge-live { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
     .badge-active { background: var(--yellow-soft); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-mvp { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
-    .badge-corp { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); }
 
     .bu-desc {
       font-size: 0.85rem;
@@ -659,15 +658,15 @@
       <div class="header-titles">
         <div class="ceo-badge">C-Suite Executive Overview</div>
         <h1>
-          CEO Business Performance & Ecosystem Radar
+          CEO Business Performance & Ventures Radar
         </h1>
-        <p>Comprehensive operational metrics, verified user bases, asset tracking, and business unit economics</p>
+        <p>Operational health, verified customer bases, managed capital, and unit economics across commercial products</p>
       </div>
 
       <div class="top-actions">
         <div class="live-status-pill">
           <span class="status-dot"></span>
-          Fleet Healthy • All Tracks Operational
+          2 Live Play Store Deployments • All Ventures Operational
         </div>
         <div class="btn" id="clock-display" style="font-family:'JetBrains Mono';">CET 00:00:00</div>
         <button class="btn" id="theme-btn">Light Mode</button>
@@ -677,22 +676,13 @@
 
     <!-- Top Executive KPI Banners -->
     <div class="kpi-row">
-      <div class="kpi-box accent-blue">
-        <div class="kpi-head">
-          <span class="kpi-title">Verified Corporate Profiles</span>
-          <span class="kpi-icon">🏢</span>
-        </div>
-        <div class="kpi-num">95</div>
-        <div class="kpi-sub">Infovista Paris HQ & European IT directory</div>
-      </div>
-
       <div class="kpi-box accent-green">
         <div class="kpi-head">
-          <span class="kpi-title">Tracked Corporate Assets</span>
-          <span class="kpi-icon">💻</span>
+          <span class="kpi-title">Google Play Production Apps</span>
+          <span class="kpi-icon">📱</span>
         </div>
-        <div class="kpi-num">128</div>
-        <div class="kpi-sub">119 active laptop & device assignments (11 sites)</div>
+        <div class="kpi-num">2</div>
+        <div class="kpi-sub">CalorieFit (v1.10.1) & Allonssy (v1.3.2) live</div>
       </div>
 
       <div class="kpi-box accent-purple">
@@ -715,11 +705,20 @@
 
       <div class="kpi-box accent-blue">
         <div class="kpi-head">
-          <span class="kpi-title">Play Store Live Apps</span>
-          <span class="kpi-icon">📱</span>
+          <span class="kpi-title">Curated Educational Media</span>
+          <span class="kpi-icon">📺</span>
         </div>
-        <div class="kpi-num">2</div>
-        <div class="kpi-sub">CalorieFit & Allonssy production releases</div>
+        <div class="kpi-num">100</div>
+        <div class="kpi-sub">Curio Kids video library & 11 watch logs</div>
+      </div>
+
+      <div class="kpi-box accent-green">
+        <div class="kpi-head">
+          <span class="kpi-title">Fleet Operating Margin</span>
+          <span class="kpi-icon">⚡</span>
+        </div>
+        <div class="kpi-num">~99%</div>
+        <div class="kpi-sub">Client-side SQLite & €15/mo lean VPS footprint</div>
       </div>
     </div>
 
@@ -727,101 +726,36 @@
     <div class="controls-panel">
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-box" class="search-input" placeholder="Filter by business unit, entity, technology, metric...">
+        <input type="text" id="search-box" class="search-input" placeholder="Filter by product, market, technology, metric...">
       </div>
       <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">All Tracks (7)</button>
-        <button class="filter-tab" data-filter="enterprise">Enterprise IT Ops</button>
-        <button class="filter-tab" data-filter="health">Digital Health & Fitness</button>
-        <button class="filter-tab" data-filter="marketplace">Local Commerce</button>
-        <button class="filter-tab" data-filter="fintech">Fintech AI</button>
-        <button class="filter-tab" data-filter="media">EdTech & Media</button>
+        <button class="filter-tab active" data-filter="all">All Ventures (6)</button>
+        <button class="filter-tab" data-filter="mobile">Mobile Apps (3)</button>
+        <button class="filter-tab" data-filter="marketplace">Commerce & Marketplace (2)</button>
+        <button class="filter-tab" data-filter="fintech">Fintech AI (1)</button>
+        <button class="filter-tab" data-filter="media">EdTech & Media (2)</button>
       </div>
     </div>
 
     <!-- Section Title -->
     <div class="section-head">
       <div>
-        <h2>Business Unit Performance Portfolio</h2>
-        <p>Sorted by executive priority: Enterprise Corporate Ops first, followed by Production Consumer Platforms</p>
+        <h2>Active Commercial Product Ventures</h2>
+        <p>Prioritized by market readiness: Live Google Play Store apps first, followed by active growth platforms</p>
       </div>
     </div>
 
     <!-- Business Units Grid -->
     <div class="bu-grid" id="cards-container">
 
-      <!-- 1. Enterprise IT Operations & Corporate Fleet -->
-      <div class="bu-card priority-card" data-category="enterprise" data-name="enterprise it ops shortcuts asset management support agent infovista">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--accent);">🛠️</div>
-            <div>
-              <div class="bu-title">Enterprise IT Operations Suite</div>
-              <div class="bu-entity">Priority Track • Infovista Corporate IT Fleet</div>
-            </div>
-          </div>
-          <span class="status-badge badge-corp">On-Premises Production</span>
-        </div>
-
-        <p class="bu-desc">
-          Proprietary enterprise infrastructure management suite powering corporate IT asset tracking, automated Microsoft 365 / Entra ID script generation, and local support incident troubleshooting.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Active Employee Profiles</span>
-            <span class="data-metric-val blue">95 Verified Staff</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Managed Hardware Assets</span>
-            <span class="data-metric-val">128 Devices</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Active Assignments</span>
-            <span class="data-metric-val green">119 Assigned</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Facilities & Stock Rooms</span>
-            <span class="data-metric-val">11 Locations</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>IT Asset Management:</strong> Real-time hardware lifecycle tracking across Paris HQ, Massy, and European regional offices with 249 audit log events.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>IT Ops Shortcuts Generator:</strong> 47 production PowerShell scripts (23 Admin tenant workflows + 24 client workstation troubleshooting shortcuts).</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Support Diagnostic Agent:</strong> 36 documented incident cases resolved across 7 active playbooks (VPN, printers, Teams, permissions).</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>SaaS License Cost Avoidance:</span>
-          <span>100% Free (Zero Cloud Subscription)</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <span class="bu-link-btn">Infovista (IV SAS)</span>
-            <span class="bu-link-btn">Local Python / VBS / PowerShell</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. CalorieFit -->
-      <div class="bu-card" data-category="health" data-name="caloriefit macro tracker fasting local-first google play">
+      <!-- 1. CalorieFit -->
+      <div class="bu-card lead-card" data-category="mobile" data-name="caloriefit macro tracker fasting local-first google play health">
         <div class="bu-head">
           <div class="bu-brand">
             <div class="bu-icon" style="color:var(--green);">🥗</div>
             <div>
               <div class="bu-title">CalorieFit</div>
-              <div class="bu-entity">B2C Digital Health • Consumer Nutrition App</div>
+              <div class="bu-entity">Lead Venture • B2C Digital Health & Nutrition</div>
             </div>
           </div>
           <span class="status-badge badge-live">Play Store Live</span>
@@ -833,7 +767,7 @@
 
         <div class="data-metrics-grid">
           <div class="data-metric">
-            <span class="data-metric-label">Current Release</span>
+            <span class="data-metric-label">Production Release</span>
             <span class="data-metric-val green">v1.10.1 (Build 17)</span>
           </div>
           <div class="data-metric">
@@ -878,8 +812,8 @@
         </div>
       </div>
 
-      <!-- 3. Allonssy -->
-      <div class="bu-card" data-category="marketplace" data-name="allonssy tradister hyperlocal marketplace social paris supabase">
+      <!-- 2. Allonssy -->
+      <div class="bu-card" data-category="mobile marketplace" data-name="allonssy tradister hyperlocal marketplace social paris supabase">
         <div class="bu-head">
           <div class="bu-brand">
             <div class="bu-icon" style="color:var(--accent);">📍</div>
@@ -942,7 +876,7 @@
         </div>
       </div>
 
-      <!-- 4. eToro Autonomous Stock Portfolio Agent -->
+      <!-- 3. eToro Autonomous Stock Portfolio Agent -->
       <div class="bu-card" data-category="fintech" data-name="etoro stock investing trading quantitative ai portfolio">
         <div class="bu-head">
           <div class="bu-brand">
@@ -1002,6 +936,65 @@
           <div class="bu-links">
             <span class="bu-link-btn">Local Web: http://127.0.0.1:8000</span>
             <span class="bu-link-btn">Railway / Docker 24/7 Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. eSuperMarche -->
+      <div class="bu-card" data-category="mobile marketplace" data-name="esupermarche ecommerce multi-vendor grocery store flutter woocommerce">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--yellow);">🛒</div>
+            <div>
+              <div class="bu-title">eSuperMarche</div>
+              <div class="bu-entity">Retail E-Commerce • Multi-Vendor Grocery Marketplace</div>
+            </div>
+          </div>
+          <span class="status-badge badge-active">Live Staging Store</span>
+        </div>
+
+        <p class="bu-desc">
+          Full-stack multi-vendor grocery marketplace app providing digital storefronts for local supermarket merchants, live delivery dispatch, and multi-currency localized checkout.
+        </p>
+
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Platform Version</span>
+            <span class="data-metric-val">FluxStore 6.1.0</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Mobile OS Target</span>
+            <span class="data-metric-val green">Android 15 (SDK 35)</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Store Domain</span>
+            <span class="data-metric-val blue">esupermarche.com</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Push Marketing</span>
+            <span class="data-metric-val">OneSignal + Firebase</span>
+          </div>
+        </div>
+
+        <ul class="impact-list">
+          <li>
+            <span class="impact-bullet"></span>
+            <span><strong>Merchant Architecture:</strong> Multi-vendor catalog synchronization via WooCommerce REST API and WordPress backend.</span>
+          </li>
+          <li>
+            <span class="impact-bullet"></span>
+            <span><strong>Omnichannel Presence:</strong> Synchronized mobile client and web storefront for automated inventory sync.</span>
+          </li>
+        </ul>
+
+        <div class="econ-badge">
+          <span>Monetization Model:</span>
+          <span>Vendor Commission & Order Transaction Fee</span>
+        </div>
+
+        <div class="bu-footer">
+          <div class="bu-links">
+            <a href="https://esupermarche.com" target="_blank" class="bu-link-btn">esupermarche.com ↗</a>
           </div>
         </div>
       </div>
@@ -1071,7 +1064,7 @@
       </div>
 
       <!-- 6. Streamer -->
-      <div class="bu-card" data-category="media" data-name="streamer workout news podcast ai audio gemini capacitor">
+      <div class="bu-card" data-category="mobile media" data-name="streamer workout news podcast ai audio gemini capacitor">
         <div class="bu-head">
           <div class="bu-brand">
             <div class="bu-icon" style="color:var(--purple);">🎙️</div>
@@ -1130,72 +1123,13 @@
         </div>
       </div>
 
-      <!-- 7. eSuperMarche -->
-      <div class="bu-card" data-category="marketplace" data-name="esupermarche ecommerce multi-vendor grocery store flutter woocommerce">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--yellow);">🛒</div>
-            <div>
-              <div class="bu-title">eSuperMarche</div>
-              <div class="bu-entity">Retail E-Commerce • Multi-Vendor Grocery Marketplace</div>
-            </div>
-          </div>
-          <span class="status-badge badge-active">Live Staging Store</span>
-        </div>
-
-        <p class="bu-desc">
-          Full-stack multi-vendor grocery marketplace app providing digital storefronts for local supermarket merchants, live delivery dispatch, and multi-currency localized checkout.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Platform Version</span>
-            <span class="data-metric-val">FluxStore 6.1.0</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Mobile OS Target</span>
-            <span class="data-metric-val green">Android 15 (SDK 35)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Store Domain</span>
-            <span class="data-metric-val blue">esupermarche.com</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Push Marketing</span>
-            <span class="data-metric-val">OneSignal + Firebase</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Merchant Architecture:</strong> Multi-vendor catalog synchronization via WooCommerce REST API and WordPress backend.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Omnichannel Presence:</strong> Synchronized mobile client and web storefront for automated inventory sync.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Monetization Model:</span>
-          <span>Vendor Commission & Order Transaction Fee</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <a href="https://esupermarche.com" target="_blank" class="bu-link-btn">esupermarche.com ↗</a>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <!-- Executive Performance Matrix Table -->
     <div class="section-head" style="margin-top:20px;">
       <div>
-        <h2>CEO Cross-Portfolio Performance Matrix</h2>
-        <p>Comparative business overview across operating entity, real user base, asset scale, and economic profile</p>
+        <h2>CEO Cross-Venture Performance Matrix</h2>
+        <p>Comparative business overview across operating entity, verified customer base, managed assets, and economic profile</p>
       </div>
     </div>
 
@@ -1203,9 +1137,9 @@
       <table class="ceo-table">
         <thead>
           <tr>
-            <th>Business Unit / Platform</th>
+            <th>Product Venture</th>
             <th>Operating Entity</th>
-            <th>Verified Users / Profiles</th>
+            <th>Verified Customer Base</th>
             <th>Real Tracked Asset Base</th>
             <th>Economic Model / Margin</th>
             <th>Deployment Stage</th>
@@ -1213,20 +1147,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>🛠️</span>
-                <span>Enterprise IT Ops Suite</span>
-              </div>
-            </td>
-            <td>Infovista (IV SAS)</td>
-            <td><span class="tag-mono">95 Corporate Profiles</span></td>
-            <td>128 Managed Laptops & Devices (11 Sites)</td>
-            <td>100% Free / Internal Cost Avoidance</td>
-            <td>On-Premises Production</td>
-            <td><span class="status-badge badge-live">100% Optimal</span></td>
-          </tr>
           <tr>
             <td>
               <div class="table-brand-cell">
@@ -1239,7 +1159,7 @@
             <td>On-Device SQLite DB (7 Languages)</td>
             <td>~99% Margin ($0 Cloud Server Cost)</td>
             <td>Google Play Store (v1.10.1+17)</td>
-            <td><span class="status-badge badge-live">Live</span></td>
+            <td><span class="status-badge badge-live">Live Production</span></td>
           </tr>
           <tr>
             <td>
@@ -1253,7 +1173,7 @@
             <td>Ris-Orangis (91130) Directory & Menus</td>
             <td>€15/mo VPS (High Operating Leverage)</td>
             <td>Play Store & app.allonssy.com</td>
-            <td><span class="status-badge badge-live">Live</span></td>
+            <td><span class="status-badge badge-live">Live Production</span></td>
           </tr>
           <tr>
             <td>
@@ -1267,7 +1187,21 @@
             <td>$100,000.00 USD Capital Pool</td>
             <td>Automated Systematic Alpha / DCA</td>
             <td>24/7 Cloud (Railway / Docker)</td>
-            <td><span class="status-badge badge-live">Ready</span></td>
+            <td><span class="status-badge badge-live">Production Ready</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>🛒</span>
+                <span>eSuperMarche</span>
+              </div>
+            </td>
+            <td>Multi-Vendor Retail</td>
+            <td><span class="tag-mono">Supermarket Shoppers</span></td>
+            <td>WooCommerce Multi-Store Catalog</td>
+            <td>Vendor Take-Rate / Transaction Fee</td>
+            <td>Staging Store (esupermarche.com)</td>
+            <td><span class="status-badge badge-active">Live Staging</span></td>
           </tr>
           <tr>
             <td>
@@ -1296,20 +1230,6 @@
             <td>Sub-cent LLM Generation Cost</td>
             <td>Capacitor Android APK</td>
             <td><span class="status-badge badge-active">Active Dev</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>🛒</span>
-                <span>eSuperMarche</span>
-              </div>
-            </td>
-            <td>Multi-Vendor Retail</td>
-            <td><span class="tag-mono">Supermarket Shoppers</span></td>
-            <td>WooCommerce Multi-Store Catalog</td>
-            <td>Vendor Take-Rate / Transaction Fee</td>
-            <td>Staging Store (esupermarche.com)</td>
-            <td><span class="status-badge badge-active">Live Staging</span></td>
           </tr>
         </tbody>
       </table>
@@ -1399,26 +1319,22 @@
     // Export Executive Summary
     function exportExecutiveSummary() {
       const summary = {
-        executiveTitle: "CEO Overall Business Success & Ecosystem Report",
+        executiveTitle: "CEO Overall Business Success & Ventures Report",
         auditDate: new Date().toISOString(),
         kpiTotals: {
-          verifiedCorporateProfiles: 95,
-          managedHardwareAssets: 128,
-          activeAssignments: 119,
-          corporateLocations: 11,
+          googlePlayProductionApps: 2,
           verifiedLocalMerchants: 150,
           managedTradingCapitalUSD: 100000,
-          curatedMediaAssets: 100,
-          playStoreLiveApps: 2
+          curatedEducationalMedia: 100,
+          operatingMarginProfile: "~99%"
         },
-        businessUnits: [
-          { name: "Enterprise IT Operations Suite", entity: "Infovista (IV SAS)", stage: "On-Premises Production", staffProfiles: 95, assets: 128 },
+        ventures: [
           { name: "CalorieFit", entity: "Consumer Mobile Health", stage: "Play Store Live (v1.10.1+17)", margin: "~99%", telemetry: "100% Local-First" },
           { name: "Allonssy", entity: "Tradister SAS", stage: "Live Play Store & Web", pilotMerchants: 150, pilotCity: "Ris-Orangis (91130)" },
           { name: "eToro Autonomous Agent", entity: "Quantitative WealthTech", stage: "Production Ready", capitalUSD: 100000 },
+          { name: "eSuperMarche", entity: "Multi-Vendor Retail", stage: "Live Staging Store (esupermarche.com)" },
           { name: "Curio Kids MVP", entity: "Family EdTech Media", stage: "Active MVP", curatedVideos: 100, watchSessions: 11 },
-          { name: "Streamer Workout News", entity: "AI Fitness Audio", stage: "Android APK Built" },
-          { name: "eSuperMarche", entity: "Multi-Vendor Retail", stage: "Live Staging Store" }
+          { name: "Streamer Workout News", entity: "AI Fitness Audio", stage: "Android APK Built" }
         ]
       };
 
@@ -1426,7 +1342,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `CEO_Executive_Portfolio_Report_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `CEO_Ventures_Portfolio_Report_${new Date().toISOString().split('T')[0]}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
