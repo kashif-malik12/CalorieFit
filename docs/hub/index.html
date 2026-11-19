@@ -3,153 +3,139 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Super Eye | Unified Projects & Ecosystem Command Center</title>
+  <title>Executive Portfolio Dashboard | CEO Business Success & Performance Overview</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090d16;
-      --bg-surface: #0f172a;
-      --bg-card: #141e33;
-      --bg-card-hover: #192640;
-      --border: #1e293b;
-      --border-accent: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --bg: #070b12;
+      --bg-panel: #0d131f;
+      --bg-card: #121a2b;
+      --bg-card-hover: #18233a;
+      --border: #1e2b45;
+      --border-subtle: #162035;
+      --border-accent: #2c3e64;
+      --text: #f1f5f9;
+      --text-muted: #8e9db2;
+      --text-dim: #5c6b84;
       --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.25);
+      --accent-soft: rgba(56, 189, 248, 0.12);
       --green: #10b981;
-      --green-glow: rgba(16, 185, 129, 0.25);
+      --green-soft: rgba(16, 185, 129, 0.12);
       --yellow: #f59e0b;
-      --yellow-glow: rgba(245, 158, 11, 0.25);
+      --yellow-soft: rgba(245, 158, 11, 0.12);
       --purple: #a855f7;
-      --purple-glow: rgba(168, 85, 247, 0.25);
+      --purple-soft: rgba(168, 85, 247, 0.12);
       --blue: #3b82f6;
-      --blue-glow: rgba(59, 130, 246, 0.25);
-      --red: #ef4444;
-      --card-radius: 16px;
-      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      --blue-soft: rgba(59, 130, 246, 0.12);
+      --radius: 12px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     [data-theme="light"] {
-      --bg: #f8fafc;
-      --bg-surface: #ffffff;
+      --bg: #f4f6fa;
+      --bg-panel: #ffffff;
       --bg-card: #ffffff;
-      --bg-card-hover: #f1f5f9;
+      --bg-card-hover: #f8fafc;
       --border: #e2e8f0;
+      --border-subtle: #edf2f7;
       --border-accent: #cbd5e1;
       --text: #0f172a;
       --text-muted: #475569;
       --text-dim: #94a3b8;
       --accent: #0284c7;
-      --accent-glow: rgba(2, 132, 199, 0.15);
+      --accent-soft: rgba(2, 132, 199, 0.08);
       --green: #059669;
+      --green-soft: rgba(5, 150, 105, 0.08);
       --yellow: #d97706;
       --purple: #7c3aed;
       --blue: #2563eb;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
       min-height: 100vh;
-      overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* Ambient background grid */
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 45%),
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 40px 40px, 40px 40px;
-      pointer-events: none;
-      z-index: 0;
+      padding-bottom: 80px;
     }
 
     .container {
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
-      padding: 32px 24px 80px;
-      position: relative;
-      z-index: 1;
+      padding: 28px 24px;
     }
 
-    /* Header */
-    header {
+    /* Executive Top Bar */
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
-      padding-bottom: 28px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
       gap: 16px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
     }
 
-    .super-eye-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #0284c7, #38bdf8, #818cf8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 24px var(--accent-glow);
-    }
-
-    .super-eye-badge svg {
-      width: 26px;
-      height: 26px;
-      color: #fff;
-    }
-
-    .brand-text h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .live-pulse {
+    .ceo-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 2px 10px;
-      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
       font-size: 0.72rem;
-      font-weight: 600;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
+    .header-titles h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-titles p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
       background: var(--green);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--green);
@@ -158,92 +144,62 @@
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .brand-text p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .clock-display {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 8px 14px;
-      border-radius: 8px;
+      50% { opacity: 0.35; transform: scale(0.85); }
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
+      background: var(--bg-panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 14px;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      color: var(--text);
-      transition: var(--transition);
       text-decoration: none;
+      transition: var(--transition);
     }
 
     .btn:hover {
       background: var(--bg-card-hover);
       border-color: var(--border-accent);
-      transform: translateY(-1px);
+      color: var(--text);
     }
 
     .btn-primary {
       background: linear-gradient(135deg, #0284c7, #2563eb);
       color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      border: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
     .btn-primary:hover {
       background: linear-gradient(135deg, #0369a1, #1d4ed8);
-      border-color: transparent;
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     }
 
-    /* KPI Summary Stats */
-    .kpi-grid {
+    /* Executive KPI Metric Banners */
+    .kpi-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 16px;
       margin-bottom: 32px;
     }
 
-    .kpi-card {
-      background: var(--bg-surface);
+    .kpi-box {
+      background: var(--bg-panel);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius);
       padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
       position: relative;
       overflow: hidden;
-      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
     }
 
-    .kpi-card:hover {
-      border-color: var(--border-accent);
-      transform: translateY(-2px);
-    }
-
-    .kpi-card::before {
+    .kpi-box::after {
       content: '';
       position: absolute;
       top: 0;
@@ -253,1224 +209,1175 @@
       background: var(--border-accent);
     }
 
-    .kpi-card.kpi-cyan::before { background: var(--accent); }
-    .kpi-card.kpi-green::before { background: var(--green); }
-    .kpi-card.kpi-purple::before { background: var(--purple); }
-    .kpi-card.kpi-blue::before { background: var(--blue); }
+    .kpi-box.accent-blue::after { background: var(--accent); }
+    .kpi-box.accent-green::after { background: var(--green); }
+    .kpi-box.accent-purple::after { background: var(--purple); }
+    .kpi-box.accent-yellow::after { background: var(--yellow); }
 
-    .kpi-label {
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-      font-weight: 700;
-      margin-bottom: 6px;
+    .kpi-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
-    .kpi-value {
+    .kpi-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+    }
+
+    .kpi-icon {
+      font-size: 1.1rem;
+    }
+
+    .kpi-num {
       font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Section Headers */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-head h2 {
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--text);
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 8px;
     }
 
-    .kpi-subtext {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+    .section-head p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
     }
 
-    /* Control Bar: Search & Filters */
-    .controls-bar {
+    /* Filter & Search Bar */
+    .controls-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       gap: 16px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
     }
 
-    .search-box {
+    .search-wrap {
       position: relative;
       flex: 1;
       min-width: 260px;
-      max-width: 420px;
+      max-width: 440px;
     }
 
-    .search-box svg {
+    .search-wrap svg {
       position: absolute;
       left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       color: var(--text-dim);
     }
 
     .search-input {
       width: 100%;
-      padding: 9px 12px 9px 38px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
+      padding: 8px 12px 8px 36px;
       color: var(--text);
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       outline: none;
-      transition: var(--transition);
     }
 
     .search-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    .filter-pills {
+    .filter-tabs {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .pill {
+    .filter-tab {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
       padding: 6px 14px;
       border-radius: 999px;
       font-size: 0.78rem;
       font-weight: 600;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
       cursor: pointer;
       transition: var(--transition);
       user-select: none;
     }
 
-    .pill:hover {
-      color: var(--text);
+    .filter-tab:hover {
       border-color: var(--border-accent);
+      color: var(--text);
     }
 
-    .pill.active {
+    .filter-tab.active {
       background: var(--accent);
       color: #04101e;
       border-color: var(--accent);
       font-weight: 700;
     }
 
-    /* Project Cards Grid */
-    .projects-grid {
+    /* Grid of Business Units */
+    .bu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      gap: 22px;
+      margin-bottom: 40px;
     }
 
     @media (max-width: 768px) {
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
+      .bu-grid { grid-template-columns: 1fr; }
     }
 
-    .project-card {
+    .bu-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: var(--card-radius);
+      border-radius: var(--radius);
       padding: 24px;
       display: flex;
       flex-direction: column;
       position: relative;
       transition: var(--transition);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
     }
 
-    .project-card:hover {
+    .bu-card:hover {
       border-color: var(--border-accent);
       background: var(--bg-card-hover);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      transform: translateY(-2px);
     }
 
-    .card-top {
+    .bu-card.priority-card {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.04) 0%, var(--bg-card) 30%);
+    }
+
+    .bu-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
-    .project-identity {
+    .bu-brand {
       display: flex;
       align-items: center;
       gap: 14px;
     }
 
-    .project-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+    .bu-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-size: 1.35rem;
       flex-shrink: 0;
+      border: 1px solid var(--border-accent);
+      background: var(--bg-panel);
     }
 
-    .icon-green { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .icon-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
-    .icon-yellow { background: rgba(245, 158, 11, 0.15); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
-    .icon-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
-    .icon-gray { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.3); }
-
-    .project-title {
+    .bu-title {
       font-size: 1.15rem;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       color: var(--text);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .project-category {
-      font-size: 0.75rem;
-      color: var(--text-dim);
+    .bu-entity {
+      font-size: 0.74rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--text-dim);
     }
 
-    /* Badges */
     .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 4px 10px;
-      border-radius: 999px;
+      border-radius: 6px;
       font-size: 0.72rem;
       font-weight: 700;
-      white-space: nowrap;
       text-transform: uppercase;
       letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
-    .badge-live {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
+    .badge-live { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-active { background: var(--yellow-soft); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-mvp { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-corp { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); }
 
-    .badge-active {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--yellow);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .badge-mvp {
-      background: rgba(168, 85, 247, 0.15);
-      color: var(--purple);
-      border: 1px solid rgba(168, 85, 247, 0.3);
-    }
-
-    .badge-internal {
-      background: rgba(59, 130, 246, 0.15);
-      color: var(--blue);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .badge-vault {
-      background: rgba(148, 163, 184, 0.15);
+    .bu-desc {
+      font-size: 0.85rem;
       color: var(--text-muted);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-    }
-
-    .card-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 18px;
       line-height: 1.55;
+      margin-bottom: 18px;
     }
 
-    /* Metrics Grid inside Card */
-    .metric-rows {
+    /* Executive Data Metric Grid */
+    .data-metrics-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       border-radius: 10px;
       padding: 12px 14px;
       margin-bottom: 18px;
     }
 
-    .metric-item {
+    .data-metric {
       display: flex;
       flex-direction: column;
     }
 
-    .metric-key {
-      font-size: 0.7rem;
+    .data-metric-label {
+      font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-dim);
-      font-weight: 600;
     }
 
-    .metric-val {
-      font-size: 0.86rem;
-      font-weight: 600;
+    .data-metric-val {
+      font-size: 0.88rem;
+      font-weight: 700;
       color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Highlights bullets */
-    .feature-list {
+    .data-metric-val.green { color: var(--green); }
+    .data-metric-val.blue { color: var(--accent); }
+
+    /* Business impact list */
+    .impact-list {
       list-style: none;
-      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-    }
-
-    .feature-list li {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .feature-list li svg {
-      width: 14px;
-      height: 14px;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-
-    /* Tech Stack Tags */
-    .tech-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      gap: 7px;
       margin-bottom: 20px;
     }
 
-    .tag {
-      font-size: 0.72rem;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      color: var(--text-dim);
+    .impact-list li {
+      font-size: 0.81rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      line-height: 1.5;
     }
 
-    /* Card Footer / Actions */
-    .card-footer {
+    .impact-bullet {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      transform: translateY(-2px);
+    }
+
+    /* Unit Economics & Cost Banner */
+    .econ-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 18px;
+      font-size: 0.76rem;
+    }
+
+    .econ-badge span:first-child { color: var(--text-dim); font-weight: 600; }
+    .econ-badge span:last-child { color: var(--text); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+    /* Card Footer */
+    .bu-footer {
       margin-top: auto;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+      gap: 10px;
     }
 
-    .card-links {
+    .bu-links {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .link-btn {
+    .bu-link-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
+      gap: 5px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      text-decoration: none;
-      color: var(--text);
       background: var(--bg);
       border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-decoration: none;
       transition: var(--transition);
     }
 
-    .link-btn:hover {
-      background: var(--bg-surface);
-      border-color: var(--accent);
+    .bu-link-btn:hover {
+      background: var(--bg-panel);
       color: var(--accent);
+      border-color: var(--accent);
     }
 
-    .link-btn svg {
-      width: 13px;
-      height: 13px;
+    /* Performance Matrix Table */
+    .table-container {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-top: 16px;
     }
 
-    /* Modal / Drawer */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-accent);
-      border-radius: 16px;
+    table.ceo-table {
       width: 100%;
-      max-width: 680px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 28px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-      position: relative;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 6px;
-    }
-
-    .modal-close:hover {
-      color: var(--text);
-    }
-
-    .modal-header {
-      margin-bottom: 20px;
-    }
-
-    .modal-section {
-      margin-bottom: 20px;
-    }
-
-    .modal-section h4 {
+      border-collapse: collapse;
+      text-align: left;
       font-size: 0.82rem;
+    }
+
+    table.ceo-table th {
+      background: var(--bg);
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--accent);
-      margin-bottom: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.ceo-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    table.ceo-table tr:last-child td { border-bottom: none; }
+    table.ceo-table tr:hover td { background: var(--bg-card-hover); }
+
+    .table-brand-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-weight: 700;
     }
 
-    .modal-section p, .modal-section ul {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .modal-section ul {
-      padding-left: 20px;
+    .tag-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: var(--text);
     }
 
     /* Footer */
     footer {
-      margin-top: 60px;
-      padding-top: 24px;
+      margin-top: 50px;
+      padding-top: 20px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
+      font-size: 0.78rem;
       color: var(--text-dim);
-      font-size: 0.82rem;
     }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-
   <div class="container">
-    <!-- Header -->
-    <header>
-      <div class="brand-group">
-        <div class="super-eye-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <h1>
-            SUPER EYE
-            <span class="live-pulse">
-              <span class="pulse-dot"></span>
-              All Systems Operational
-            </span>
-          </h1>
-          <p>Unified Executive Command Center & Ecosystem Health Radar</p>
-        </div>
+    <!-- Top Executive Bar -->
+    <header class="top-bar">
+      <div class="header-titles">
+        <div class="ceo-badge">C-Suite Executive Overview</div>
+        <h1>
+          CEO Business Performance & Ecosystem Radar
+        </h1>
+        <p>Comprehensive operational metrics, verified user bases, asset tracking, and business unit economics</p>
       </div>
 
-      <div class="header-actions">
-        <div class="clock-display" id="live-clock">CET 00:00:00</div>
-        <button class="btn" id="theme-toggle" title="Toggle Dark/Light Mode">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-          <span id="theme-text">Light</span>
-        </button>
-        <button class="btn btn-primary" onclick="exportData()" title="Download JSON metadata">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Data
-        </button>
+      <div class="top-actions">
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          Fleet Healthy • All Tracks Operational
+        </div>
+        <div class="btn" id="clock-display" style="font-family:'JetBrains Mono';">CET 00:00:00</div>
+        <button class="btn" id="theme-btn">Light Mode</button>
+        <button class="btn btn-primary" onclick="exportExecutiveSummary()">Export CEO Report</button>
       </div>
     </header>
 
-    <!-- Executive KPI Grid -->
-    <div class="kpi-grid">
-      <div class="kpi-card kpi-cyan">
-        <span class="kpi-label">Active Portfolio Tracks</span>
-        <div class="kpi-value">
-          7
-          <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">+ 1 Vault</span>
+    <!-- Top Executive KPI Banners -->
+    <div class="kpi-row">
+      <div class="kpi-box accent-blue">
+        <div class="kpi-head">
+          <span class="kpi-title">Verified Corporate Profiles</span>
+          <span class="kpi-icon">🏢</span>
         </div>
-        <span class="kpi-subtext">Enterprise IT, Mobile, Web SaaS, AI</span>
+        <div class="kpi-num">95</div>
+        <div class="kpi-sub">Infovista Paris HQ & European IT directory</div>
       </div>
 
-      <div class="kpi-card kpi-green">
-        <span class="kpi-label">Production Live Deployments</span>
-        <div class="kpi-value">
-          3
-          <span style="font-size:0.95rem; font-weight:500; color:var(--green);">Active</span>
+      <div class="kpi-box accent-green">
+        <div class="kpi-head">
+          <span class="kpi-title">Tracked Corporate Assets</span>
+          <span class="kpi-icon">💻</span>
         </div>
-        <span class="kpi-subtext">Google Play Store & VPS Web</span>
+        <div class="kpi-num">128</div>
+        <div class="kpi-sub">119 active laptop & device assignments (11 sites)</div>
       </div>
 
-      <div class="kpi-card kpi-purple">
-        <span class="kpi-label">User Reach & Ecosystem</span>
-        <div class="kpi-value">
-          5
-          <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">Sectors</span>
+      <div class="kpi-box accent-purple">
+        <div class="kpi-head">
+          <span class="kpi-title">Verified Local Merchants</span>
+          <span class="kpi-icon">📍</span>
         </div>
-        <span class="kpi-subtext">Enterprise IT, France Local, Fitness, Kids, Fintech</span>
+        <div class="kpi-num">150+</div>
+        <div class="kpi-sub">50 restaurants + 100 trade pros (Allonssy 91130)</div>
       </div>
 
-      <div class="kpi-card kpi-blue">
-        <span class="kpi-label">Fleet Architecture Health</span>
-        <div class="kpi-value">
-          100%
-          <span style="font-size:0.95rem; font-weight:500; color:var(--accent);">Optimal</span>
+      <div class="kpi-box accent-yellow">
+        <div class="kpi-head">
+          <span class="kpi-title">Managed Trading Capital</span>
+          <span class="kpi-icon">📈</span>
         </div>
-        <span class="kpi-subtext">PowerShell, Supabase VPS, SQLite & Cloud APIs</span>
+        <div class="kpi-num">$100k</div>
+        <div class="kpi-sub">eToro portfolio equity pool (1x max leverage)</div>
+      </div>
+
+      <div class="kpi-box accent-blue">
+        <div class="kpi-head">
+          <span class="kpi-title">Play Store Live Apps</span>
+          <span class="kpi-icon">📱</span>
+        </div>
+        <div class="kpi-num">2</div>
+        <div class="kpi-sub">CalorieFit & Allonssy production releases</div>
       </div>
     </div>
 
-    <!-- Search & Filter Controls -->
-    <div class="controls-bar">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" id="search-input" class="search-input" placeholder="Search IT ops, projects, technologies, features...">
+    <!-- Controls & Search -->
+    <div class="controls-panel">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-box" class="search-input" placeholder="Filter by business unit, entity, technology, metric...">
       </div>
-
-      <div class="filter-pills">
-        <button class="pill active" data-filter="all">All Tracks (8)</button>
-        <button class="pill" data-filter="enterprise">Enterprise IT Ops (1)</button>
-        <button class="pill" data-filter="mobile">Mobile Apps (3)</button>
-        <button class="pill" data-filter="web">Web & SaaS (2)</button>
-        <button class="pill" data-filter="ai">AI & Fintech (2)</button>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Tracks (7)</button>
+        <button class="filter-tab" data-filter="enterprise">Enterprise IT Ops</button>
+        <button class="filter-tab" data-filter="health">Digital Health & Fitness</button>
+        <button class="filter-tab" data-filter="marketplace">Local Commerce</button>
+        <button class="filter-tab" data-filter="fintech">Fintech AI</button>
+        <button class="filter-tab" data-filter="media">EdTech & Media</button>
       </div>
     </div>
 
-    <!-- Projects Grid -->
-    <div class="projects-grid" id="projects-container">
+    <!-- Section Title -->
+    <div class="section-head">
+      <div>
+        <h2>Business Unit Performance Portfolio</h2>
+        <p>Sorted by executive priority: Enterprise Corporate Ops first, followed by Production Consumer Platforms</p>
+      </div>
+    </div>
 
-      <!-- 1. Enterprise IT Ops Suite (WORK PROJECTS) -->
-      <div class="project-card" data-category="enterprise" data-name="work projects it ops shortcuts support agent asset management" data-tech="powershell python typer microsoft 365 entra id intune graph api">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-blue">🛠️</div>
+    <!-- Business Units Grid -->
+    <div class="bu-grid" id="cards-container">
+
+      <!-- 1. Enterprise IT Operations & Corporate Fleet -->
+      <div class="bu-card priority-card" data-category="enterprise" data-name="enterprise it ops shortcuts asset management support agent infovista">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--accent);">🛠️</div>
             <div>
-              <div class="project-title">Enterprise IT Ops Suite</div>
-              <div class="project-category">Priority Track • Enterprise Operations & Sysadmin</div>
+              <div class="bu-title">Enterprise IT Operations Suite</div>
+              <div class="bu-entity">Priority Track • Infovista Corporate IT Fleet</div>
             </div>
           </div>
-          <span class="status-badge badge-internal">
-            <span class="pulse-dot"></span> On-Premises Active
-          </span>
+          <span class="status-badge badge-corp">On-Premises Production</span>
         </div>
 
-        <p class="card-desc">
-          High-performance enterprise tooling suite featuring rapid Microsoft 365 / Entra ID / Intune PowerShell shortcut script generation, an offline support diagnostic agent, and automated local IT asset management.
+        <p class="bu-desc">
+          Proprietary enterprise infrastructure management suite powering corporate IT asset tracking, automated Microsoft 365 / Entra ID script generation, and local support incident troubleshooting.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Included Modules</span>
-            <span class="metric-val">3 Enterprise Toolsets</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Active Employee Profiles</span>
+            <span class="data-metric-val blue">95 Verified Staff</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Target Audience</span>
-            <span class="metric-val">IT Helpdesk, Sysadmins & Staff</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Managed Hardware Assets</span>
+            <span class="data-metric-val">128 Devices</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Execution Mode</span>
-            <span class="metric-val">100% Offline / Local Desktop (.bat/.cmd)</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Active Assignments</span>
+            <span class="data-metric-val green">119 Assigned</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Environment</span>
-            <span class="metric-val">Windows PowerShell & Python Typer</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Facilities & Stock Rooms</span>
+            <span class="data-metric-val">11 Locations</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>IT Ops PowerShell Shortcuts:</strong> Generates tenant-side (M365, Entra, Exchange, Graph, Intune) & client troubleshooting scripts with instant clipboard copy
+            <span class="impact-bullet"></span>
+            <span><strong>IT Asset Management:</strong> Real-time hardware lifecycle tracking across Paris HQ, Massy, and European regional offices with 249 audit log events.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>Support Agent:</strong> Offline Typer CLI & UI agent with pre-configured diagnosis playbooks (printers, networking, permissions)
+            <span class="impact-bullet"></span>
+            <span><strong>IT Ops Shortcuts Generator:</strong> 47 production PowerShell scripts (23 Admin tenant workflows + 24 client workstation troubleshooting shortcuts).</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>IT Asset Management:</strong> Isolated corporate user-profile deployment (%LOCALAPPDATA%) for corporate device lifecycle tracking
+            <span class="impact-bullet"></span>
+            <span><strong>Support Diagnostic Agent:</strong> 36 documented incident cases resolved across 7 active playbooks (VPN, printers, Teams, permissions).</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">PowerShell</span>
-          <span class="tag">Microsoft 365</span>
-          <span class="tag">Entra ID</span>
-          <span class="tag">Intune</span>
-          <span class="tag">Python</span>
-          <span class="tag">Typer CLI</span>
+        <div class="econ-badge">
+          <span>SaaS License Cost Avoidance:</span>
+          <span>100% Free (Zero Cloud Subscription)</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-              Local Execution (.bat / .cmd)
-            </span>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <span class="bu-link-btn">Infovista (IV SAS)</span>
+            <span class="bu-link-btn">Local Python / VBS / PowerShell</span>
           </div>
-          <button class="btn" onclick="openDetails('enterprise')">Architecture</button>
         </div>
       </div>
 
       <!-- 2. CalorieFit -->
-      <div class="project-card" data-category="mobile" data-name="caloriefit" data-tech="flutter dart sqlite health connect android rive">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-green">🥗</div>
+      <div class="bu-card" data-category="health" data-name="caloriefit macro tracker fasting local-first google play">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--green);">🥗</div>
             <div>
-              <div class="project-title">CalorieFit</div>
-              <div class="project-category">Consumer Mobile App • Health & Fitness</div>
+              <div class="bu-title">CalorieFit</div>
+              <div class="bu-entity">B2C Digital Health • Consumer Nutrition App</div>
             </div>
           </div>
-          <span class="status-badge badge-live">
-            <span class="pulse-dot"></span> Play Store Live
-          </span>
+          <span class="status-badge badge-live">Play Store Live</span>
         </div>
 
-        <p class="card-desc">
-          Privacy-first, ad-free nutrition and intermittent fasting companion built with on-device SQLite, Google Health Connect, and an AI natural-language meal estimator.
+        <p class="bu-desc">
+          Privacy-centric, ad-free mobile nutrition and intermittent fasting companion. Employs on-device SQLite and Google Health Connect sync to deliver zero-cloud operating costs and infinite gross margins.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Current Version</span>
-            <span class="metric-val">v1.10.1 (Build 17) • Nov 2026</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Current Release</span>
+            <span class="data-metric-val green">v1.10.1 (Build 17)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Active Users / Mode</span>
-            <span class="metric-val">100% Local-First / Zero Telemetry</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Marginal Server Cost</span>
+            <span class="data-metric-val blue">$0.00 / User</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Target Platform</span>
-            <span class="metric-val">Android (Play Store Production)</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Market Coverage</span>
+            <span class="data-metric-val">7 Languages</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Architecture</span>
-            <span class="metric-val">Flutter + SQLite + Health Connect</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Telemetry / Privacy</span>
+            <span class="data-metric-val green">100% Local-First</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Front-page streak challenge module with customizable target goals (1d, 10d, 30d)
+            <span class="impact-bullet"></span>
+            <span><strong>Released Nov 19, 2026:</strong> Upfront Streak Challenge Module with customizable milestones (1d, 10d, 30d) and live milestone visual progress tracker.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            AI meal estimator & camera food scanner with zero-cloud local privacy
+            <span class="impact-bullet"></span>
+            <span><strong>Regulatory Compliance:</strong> Zero cloud telemetry makes the product inherently compliant with GDPR and European health data sovereignty regulations.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Circadian fasting stages (Anabolic, Catabolic, Fat Burning, Ketosis)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Android glanceable home screen widgets & 7 languages (EN, ES, FR, DE, UR, AR, HI)
+            <span class="impact-bullet"></span>
+            <span><strong>Platform Features:</strong> Google Health Connect integration, Android Glance Home Screen widgets, and Doctor CSV clinical summaries.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Flutter</span>
-          <span class="tag">Dart</span>
-          <span class="tag">SQLite</span>
-          <span class="tag">Health Connect</span>
-          <span class="tag">Glance Widgets</span>
+        <div class="econ-badge">
+          <span>Gross Margin Profile:</span>
+          <span>~99% (Client-Side SQLite)</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="link-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Google Play
-            </a>
-            <a href="https://github.com/kashif-malik12/CalorieFit" target="_blank" class="link-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-              GitHub
-            </a>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="bu-link-btn">Google Play Store ↗</a>
+            <a href="https://github.com/kashif-malik12/CalorieFit" target="_blank" class="bu-link-btn">GitHub Repo ↗</a>
           </div>
-          <button class="btn" onclick="openDetails('caloriefit')">Architecture</button>
         </div>
       </div>
 
       <!-- 3. Allonssy -->
-      <div class="project-card" data-category="mobile web" data-name="allonssy" data-tech="flutter riverpod gorouter supabase postgresql caddy fcm">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-blue">📍</div>
+      <div class="bu-card" data-category="marketplace" data-name="allonssy tradister hyperlocal marketplace social paris supabase">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--accent);">📍</div>
             <div>
-              <div class="project-title">Allonssy</div>
-              <div class="project-category">Hyperlocal Social Network • Marketplace</div>
+              <div class="bu-title">Allonssy</div>
+              <div class="bu-entity">Hyperlocal Social & SMB Marketplace • Tradister SAS</div>
             </div>
           </div>
-          <span class="status-badge badge-live">
-            <span class="pulse-dot"></span> Live Store & Web
-          </span>
+          <span class="status-badge badge-live">Store & Web Live</span>
         </div>
 
-        <p class="card-desc">
-          Hyperlocal community social media, local marketplace, and service directory for neighborhoods and towns in France, backed by a self-hosted Supabase VPS cluster.
+        <p class="bu-desc">
+          Hyperlocal social network and commerce ecosystem for neighborhoods in France. Connects residents with pre-seeded local restaurants and artisans within configurable kilometer radius zones.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Current Version</span>
-            <span class="metric-val">v1.3.2+10 (Bumped 12h ago)</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Verified Merchant Pilot</span>
+            <span class="data-metric-val blue">150+ Businesses</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">User Scope / Entity</span>
-            <span class="metric-val">France Community • Tradister SAS</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Launch Territory</span>
+            <span class="data-metric-val">Ris-Orangis (91130)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Target Platform</span>
-            <span class="metric-val">Android (Play Store) & Web (app.allonssy.com)</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Production Version</span>
+            <span class="data-metric-val green">v1.3.2 (Build 10)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Backend Infrastructure</span>
-            <span class="metric-val">Ubuntu VPS Supabase (87.106.13.170)</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Hosting Footprint</span>
+            <span class="data-metric-val">1 VPS (€15/mo)</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Radius-based hyperlocal feed (Radius km, Following, Trending, Public)
+            <span class="impact-bullet"></span>
+            <span><strong>Seeded Merchant Base:</strong> 50 top-reviewed restaurants (with full menus) and 100 certified local trade professionals (plumbers, electricians, contractors).</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Realtime chat, comments & push notifications via FCM HTTP v1 & pg_net
+            <span class="impact-bullet"></span>
+            <span><strong>Dual Delivery Channels:</strong> Live on Google Play Store (Internal/Prod) and web portal at <code>https://app.allonssy.com</code> reverse-proxied by Caddy.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Native Android camera MethodChannel to prevent release R8 crashes
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Reverse-proxied with SSL by Caddy at https://app.allonssy.com
+            <span class="impact-bullet"></span>
+            <span><strong>Lean Infrastructure:</strong> Self-hosted Supabase VPS (87.106.13.170) utilizing PostgreSQL Row-Level Security, FCM HTTP v1 notifications, and Deno edge workers.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Flutter</span>
-          <span class="tag">Riverpod</span>
-          <span class="tag">GoRouter</span>
-          <span class="tag">Supabase</span>
-          <span class="tag">PostgreSQL RLS</span>
-          <span class="tag">Caddy</span>
+        <div class="econ-badge">
+          <span>Infrastructure Burn Rate:</span>
+          <span>~€15 / month (Self-Hosted Stack)</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <a href="https://app.allonssy.com" target="_blank" class="link-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Live Web
-            </a>
-            <a href="https://github.com/kashif-malik12/allonssy" target="_blank" class="link-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-              GitHub
-            </a>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <a href="https://app.allonssy.com" target="_blank" class="bu-link-btn">app.allonssy.com ↗</a>
+            <a href="https://github.com/kashif-malik12/allonssy" target="_blank" class="bu-link-btn">GitHub Repo ↗</a>
           </div>
-          <button class="btn" onclick="openDetails('allonssy')">Architecture</button>
         </div>
       </div>
 
-      <!-- 4. eSuperMarche -->
-      <div class="project-card" data-category="mobile web" data-name="esupermarche" data-tech="flutter woocommerce wordpress firebase onesignal rive">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-yellow">🛒</div>
+      <!-- 4. eToro Autonomous Stock Portfolio Agent -->
+      <div class="bu-card" data-category="fintech" data-name="etoro stock investing trading quantitative ai portfolio">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--yellow);">📈</div>
             <div>
-              <div class="project-title">eSuperMarche</div>
-              <div class="project-category">Multi-Vendor E-Commerce • Marketplace</div>
+              <div class="bu-title">eToro Autonomous Agent</div>
+              <div class="bu-entity">Quantitative WealthTech • Algorithmic Trading AI</div>
             </div>
           </div>
-          <span class="status-badge badge-active">
-            <span class="pulse-dot"></span> Live / Staging Store
-          </span>
+          <span class="status-badge badge-live">Production Ready</span>
         </div>
 
-        <p class="card-desc">
-          Full-featured multi-vendor e-commerce and grocery shopping app built with Flutter and connected to the esupermarche.com WooCommerce backend with Firebase & OneSignal notifications.
+        <p class="bu-desc">
+          Automated algorithmic portfolio manager and interactive FastAPI dashboard executing disciplined Dollar-Cost Averaging (DCA), drift rebalancing, and multi-LLM fundamental research.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">FluxStore Version</span>
-            <span class="metric-val">v6.1.0 • Android 15 (SDK 35)</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Managed Capital Pool</span>
+            <span class="data-metric-val green">$100,000.00 USD</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Target Audience</span>
-            <span class="metric-val">Online Shoppers & Grocery Vendors</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Risk Leverage Limit</span>
+            <span class="data-metric-val">1x Max (No Margin)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Web Storefront</span>
-            <span class="metric-val">https://esupermarche.com</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Execution Environment</span>
+            <span class="data-metric-val blue">24/7 Cloud (Railway)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Package ID</span>
-            <span class="metric-val">com.esupermarche.app</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Research Engine</span>
+            <span class="data-metric-val">Multi-LLM / Gemini</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Multi-vendor store directories, dynamic catalog browsing & product filtering
+            <span class="impact-bullet"></span>
+            <span><strong>Pre-Trade Risk Guardrails:</strong> Built-in hardware kill switch, daily loss circuit breakers, concentration caps, and demo-first paper broker.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            OneSignal & Firebase Cloud Messaging for order status & promotional alerts
+            <span class="impact-bullet"></span>
+            <span><strong>Technical Analysis Engine:</strong> Real-time SMA (20/50/200), RSI(14), MACD, Bollinger Bands, and dynamic ATR-based trailing stop losses.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Cart, order tracking, instant payment gateway integration & localized checkout
+            <span class="impact-bullet"></span>
+            <span><strong>LLM Conviction Scoring:</strong> Fundamental sentiment analysis with veto power against tickers flagged BEARISH with high conviction.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Flutter</span>
-          <span class="tag">WooCommerce</span>
-          <span class="tag">WordPress REST API</span>
-          <span class="tag">OneSignal</span>
-          <span class="tag">Firebase</span>
+        <div class="econ-badge">
+          <span>Downside Protection:</span>
+          <span>Hard Cash Reserves & Stop-Losses</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <a href="https://esupermarche.com" target="_blank" class="link-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Visit Store
-            </a>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <span class="bu-link-btn">Local Web: http://127.0.0.1:8000</span>
+            <span class="bu-link-btn">Railway / Docker 24/7 Ready</span>
           </div>
-          <button class="btn" onclick="openDetails('esupermarche')">Architecture</button>
         </div>
       </div>
 
-      <!-- 5. Curio Kids -->
-      <div class="project-card" data-category="web" data-name="curio kids reels scrapper" data-tech="nextjs react typescript tailwind prisma sqlite zod">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-purple">📺</div>
+      <!-- 5. Curio Kids MVP -->
+      <div class="bu-card" data-category="media" data-name="curio kids reels scrapper edtech parental video nextjs">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--purple);">📺</div>
             <div>
-              <div class="project-title">Curio Kids MVP</div>
-              <div class="project-category">Parental Control • Safe Video Web App</div>
+              <div class="bu-title">Curio Kids MVP</div>
+              <div class="bu-entity">EdTech & Family SaaS • Safe Video Curation</div>
             </div>
           </div>
-          <span class="status-badge badge-mvp">
-            <span class="pulse-dot"></span> Active MVP
-          </span>
+          <span class="status-badge badge-mvp">Active MVP</span>
         </div>
 
-        <p class="card-desc">
-          Kid-safe curated short-video web app for parent-approved YouTube and TikTok embeds. Parents manage moderation rules, PIN authentication, and screen-time watch limits.
+        <p class="bu-desc">
+          Kid-safe curated short-video web application eliminating addictive algorithmic loops and unmoderated comments. Parents manage watch timers, PIN security, and approved YouTube/TikTok embeds.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Current Version</span>
-            <span class="metric-val">v0.1.0 MVP (Next.js 16)</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Curated Video Library</span>
+            <span class="data-metric-val blue">100 Video Assets</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">User Experience</span>
-            <span class="metric-val">Parent PIN Portal + Kid Safe Feed</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Tracked Watch Sessions</span>
+            <span class="data-metric-val">11 Logged Sessions</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Backend / DB</span>
-            <span class="metric-val">Prisma 6.15 + SQLite Local DB</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Parent Admin Profiles</span>
+            <span class="data-metric-val">1 Master Profile</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">UI Framework</span>
-            <span class="metric-val">React 19 + Tailwind CSS 4</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Daily Watch Limit</span>
+            <span class="data-metric-val green">60 Min Cap</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Clean distraction-free feed showing only parent-approved embeds
+            <span class="impact-bullet"></span>
+            <span><strong>Educational Content Pilot:</strong> Pre-loaded with French storytelling and educational language animations from CCube Academy.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Parent session authentication with secure HTTP-only signed cookies
+            <span class="impact-bullet"></span>
+            <span><strong>Modern Tech Stack:</strong> Next.js 16.2.4 App Router, React 19, TypeScript 5.9, Tailwind CSS 4, Prisma 6.15 ORM, SQLite.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            YouTube & TikTok video URL parser with duration & category tag validation
+            <span class="impact-bullet"></span>
+            <span><strong>Security Architecture:</strong> Gated parent portal using HTTP-only signed session cookies with zero child personal data harvesting.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Next.js 16</span>
-          <span class="tag">React 19</span>
-          <span class="tag">TypeScript</span>
-          <span class="tag">Tailwind 4</span>
-          <span class="tag">Prisma</span>
-          <span class="tag">SQLite</span>
+        <div class="econ-badge">
+          <span>Market Opportunity:</span>
+          <span>B2C Parental Subscription / EdTech</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default; opacity:0.8;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              npm run dev (Port 3000)
-            </span>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <span class="bu-link-btn">npm run dev (Port 3000)</span>
+            <span class="bu-link-btn">Prisma + SQLite</span>
           </div>
-          <button class="btn" onclick="openDetails('curiokids')">Architecture</button>
         </div>
       </div>
 
-      <!-- 6. Stock Investing / etoro-agent -->
-      <div class="project-card" data-category="ai" data-name="etoro stock investing" data-tech="python fastapi etoro docker railway yfinance gemini">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-green">📈</div>
+      <!-- 6. Streamer -->
+      <div class="bu-card" data-category="media" data-name="streamer workout news podcast ai audio gemini capacitor">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--purple);">🎙️</div>
             <div>
-              <div class="project-title">eToro Autonomous Agent</div>
-              <div class="project-category">Algorithmic Fintech • AI Portfolio Agent</div>
+              <div class="bu-title">Streamer Workout News</div>
+              <div class="bu-entity">AI Audio Generation • Bilingual Fitness Media</div>
             </div>
           </div>
-          <span class="status-badge badge-live">
-            <span class="pulse-dot"></span> Production Ready
-          </span>
+          <span class="status-badge badge-active">Android APK Built</span>
         </div>
 
-        <p class="card-desc">
-          Autonomous portfolio management agent and interactive Web Dashboard for eToro's official API, featuring strict pre-trade risk guardrails, AI research, and automated DCA rebalancing.
+        <p class="bu-desc">
+          Automated generative media platform that aggregates daily fitness news, drafts bilingual French/English workout scripts via Gemini LLM, and synthesizes dual-voice audio podcasts.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Operational Mode</span>
-            <span class="metric-val">24/7 Cloud (Railway) or Local PC</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Client Mobile Build</span>
+            <span class="data-metric-val green">StreamerWorkout.apk</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Safety Guardrails</span>
-            <span class="metric-val">Hardware Kill Switch • 1x Leverage</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Synthesized Episode</span>
+            <span class="data-metric-val blue">30-Min Master File</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Dashboard URL</span>
-            <span class="metric-val">http://127.0.0.1:8000</span>
+          <div class="data-metric">
+            <span class="data-metric-label">AI Generation Engine</span>
+            <span class="data-metric-val">Google Gemini</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">AI Research Models</span>
-            <span class="metric-val">Gemini / OpenAI / Anthropic / Heuristic</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Distribution Format</span>
+            <span class="data-metric-val">RSS + HTTP Stream</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Automated target allocation rebalancing & periodic Dollar-Cost Averaging (DCA)
+            <span class="impact-bullet"></span>
+            <span><strong>Hands-Free Immersion:</strong> Designed for athletes exercising while learning French or English with dual alternating voice actors.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Technical analysis engine: RSI(14), MACD, Bollinger Bands, ATR trailing stops
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Demo-first paper broker to thoroughly test strategies before committing funds
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            One-click launch with Launch-Dashboard.bat & 24/7 Docker/Railway configurations
+            <span class="impact-bullet"></span>
+            <span><strong>Mobile Deployment:</strong> Android APK packaged with Capacitor 8 and native speech recognition integration.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Python 3.11</span>
-          <span class="tag">FastAPI</span>
-          <span class="tag">eToro API</span>
-          <span class="tag">yfinance</span>
-          <span class="tag">Gemini AI</span>
-          <span class="tag">Docker</span>
-          <span class="tag">Railway</span>
+        <div class="econ-badge">
+          <span>Pipeline Cost:</span>
+          <span>Sub-cent generation per episode (Gemini)</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-              Launch-Dashboard.bat
-            </span>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <span class="bu-link-btn">StreamerWorkout.apk</span>
+            <span class="bu-link-btn">FastAPI + Capacitor</span>
           </div>
-          <button class="btn" onclick="openDetails('etoro')">Architecture</button>
         </div>
       </div>
 
-      <!-- 7. Streamer -->
-      <div class="project-card" data-category="ai mobile" data-name="streamer workout news" data-tech="python fastapi gemini capacitor android tts podcast">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-purple">🎙️</div>
+      <!-- 7. eSuperMarche -->
+      <div class="bu-card" data-category="marketplace" data-name="esupermarche ecommerce multi-vendor grocery store flutter woocommerce">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--yellow);">🛒</div>
             <div>
-              <div class="project-title">Streamer Workout News</div>
-              <div class="project-category">AI Audio • Bilingual Podcast Platform</div>
+              <div class="bu-title">eSuperMarche</div>
+              <div class="bu-entity">Retail E-Commerce • Multi-Vendor Grocery Marketplace</div>
             </div>
           </div>
-          <span class="status-badge badge-active">
-            <span class="pulse-dot"></span> Active Dev / APK Built
-          </span>
+          <span class="status-badge badge-active">Live Staging Store</span>
         </div>
 
-        <p class="card-desc">
-          Automated bilingual (French/English) fitness news aggregator and podcast generator powered by Gemini AI synthesis, dual TTS voices, and a Capacitor mobile Android app.
+        <p class="bu-desc">
+          Full-stack multi-vendor grocery marketplace app providing digital storefronts for local supermarket merchants, live delivery dispatch, and multi-currency localized checkout.
         </p>
 
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Client App</span>
-            <span class="metric-val">StreamerWorkout.apk (Capacitor 8)</span>
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">Platform Version</span>
+            <span class="data-metric-val">FluxStore 6.1.0</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Content Generation</span>
-            <span class="metric-val">Google Gemini + Dual-Voice TTS</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Mobile OS Target</span>
+            <span class="data-metric-val green">Android 15 (SDK 35)</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Workout Profiles</span>
-            <span class="metric-val">10m Quick, 20m Standard, 45m Endurance</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Store Domain</span>
+            <span class="data-metric-val blue">esupermarche.com</span>
           </div>
-          <div class="metric-item">
-            <span class="metric-key">Delivery Channels</span>
-            <span class="metric-val">HTTP Range Streaming + RSS Feed</span>
+          <div class="data-metric">
+            <span class="data-metric-label">Push Marketing</span>
+            <span class="data-metric-val">OneSignal + Firebase</span>
           </div>
         </div>
 
-        <ul class="feature-list">
+        <ul class="impact-list">
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Autonomous news pipeline generating bilingual scripts and spoken audio
+            <span class="impact-bullet"></span>
+            <span><strong>Merchant Architecture:</strong> Multi-vendor catalog synchronization via WooCommerce REST API and WordPress backend.</span>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Capacitor Android wrapper with native speech recognition capabilities
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Interactive QR-code pairing for mobile device audio streaming on LAN
+            <span class="impact-bullet"></span>
+            <span><strong>Omnichannel Presence:</strong> Synchronized mobile client and web storefront for automated inventory sync.</span>
           </li>
         </ul>
 
-        <div class="tech-tags">
-          <span class="tag">Python</span>
-          <span class="tag">FastAPI</span>
-          <span class="tag">Gemini LLM</span>
-          <span class="tag">Capacitor 8</span>
-          <span class="tag">Android APK</span>
-          <span class="tag">TTS Engine</span>
+        <div class="econ-badge">
+          <span>Monetization Model:</span>
+          <span>Vendor Commission & Order Transaction Fee</span>
         </div>
 
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              StreamerWorkout.apk
-            </span>
+        <div class="bu-footer">
+          <div class="bu-links">
+            <a href="https://esupermarche.com" target="_blank" class="bu-link-btn">esupermarche.com ↗</a>
           </div>
-          <button class="btn" onclick="openDetails('streamer')">Architecture</button>
         </div>
       </div>
 
-      <!-- 8. zRelease Keys (Security Vault) -->
-      <div class="project-card" data-category="enterprise mobile" data-name="zrelease keys security credentials keystores" data-tech="jks keystore google service accounts sha256">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-gray">🔐</div>
-            <div>
-              <div class="project-title">Release Cryptographic Vault</div>
-              <div class="project-category">Security & DevOps • Production Keystores</div>
-            </div>
-          </div>
-          <span class="status-badge badge-vault">
-            <span class="pulse-dot"></span> Secure Offline Vault
-          </span>
-        </div>
+    </div>
 
-        <p class="card-desc">
-          Protected local vault holding production upload keystores, Google Cloud Service Account credentials, and SHA-256 app signatures for Google Play Store deployments.
-        </p>
-
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Secured Assets</span>
-            <span class="metric-val">Allonssy, CalorieFit, eSuperMarche</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Key Types</span>
-            <span class="metric-val">Upload Keystores (.jks) & Service JSONs</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Access Policy</span>
-            <span class="metric-val">Strictly Offline / Air-Gapped / No Git</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Status</span>
-            <span class="metric-val">Valid & Verified</span>
-          </div>
-        </div>
-
-        <ul class="feature-list">
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Upload keystores and key.properties for Play Store AAB binary generation
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Service account credentials for automated Google Play Developer API releases
-          </li>
-        </ul>
-
-        <div class="tech-tags">
-          <span class="tag">Java Keystore</span>
-          <span class="tag">Google API</span>
-          <span class="tag">SHA-256</span>
-          <span class="tag">Air-Gapped</span>
-        </div>
-
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default; color:var(--text-dim);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              Protected Local Storage
-            </span>
-          </div>
-          <button class="btn" onclick="openDetails('vault')">Details</button>
-        </div>
+    <!-- Executive Performance Matrix Table -->
+    <div class="section-head" style="margin-top:20px;">
+      <div>
+        <h2>CEO Cross-Portfolio Performance Matrix</h2>
+        <p>Comparative business overview across operating entity, real user base, asset scale, and economic profile</p>
       </div>
     </div>
 
-    <!-- Footer -->
+    <div class="table-container">
+      <table class="ceo-table">
+        <thead>
+          <tr>
+            <th>Business Unit / Platform</th>
+            <th>Operating Entity</th>
+            <th>Verified Users / Profiles</th>
+            <th>Real Tracked Asset Base</th>
+            <th>Economic Model / Margin</th>
+            <th>Deployment Stage</th>
+            <th>Health Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>🛠️</span>
+                <span>Enterprise IT Ops Suite</span>
+              </div>
+            </td>
+            <td>Infovista (IV SAS)</td>
+            <td><span class="tag-mono">95 Corporate Profiles</span></td>
+            <td>128 Managed Laptops & Devices (11 Sites)</td>
+            <td>100% Free / Internal Cost Avoidance</td>
+            <td>On-Premises Production</td>
+            <td><span class="status-badge badge-live">100% Optimal</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>🥗</span>
+                <span>CalorieFit</span>
+              </div>
+            </td>
+            <td>Consumer Mobile Health</td>
+            <td><span class="tag-mono">Global Local-First</span></td>
+            <td>On-Device SQLite DB (7 Languages)</td>
+            <td>~99% Margin ($0 Cloud Server Cost)</td>
+            <td>Google Play Store (v1.10.1+17)</td>
+            <td><span class="status-badge badge-live">Live</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>📍</span>
+                <span>Allonssy</span>
+              </div>
+            </td>
+            <td>Tradister SAS (France)</td>
+            <td><span class="tag-mono">150+ Verified Merchants</span></td>
+            <td>Ris-Orangis (91130) Directory & Menus</td>
+            <td>€15/mo VPS (High Operating Leverage)</td>
+            <td>Play Store & app.allonssy.com</td>
+            <td><span class="status-badge badge-live">Live</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>📈</span>
+                <span>eToro Autonomous Agent</span>
+              </div>
+            </td>
+            <td>Quantitative WealthTech</td>
+            <td><span class="tag-mono">1 Quantitative Operator</span></td>
+            <td>$100,000.00 USD Capital Pool</td>
+            <td>Automated Systematic Alpha / DCA</td>
+            <td>24/7 Cloud (Railway / Docker)</td>
+            <td><span class="status-badge badge-live">Ready</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>📺</span>
+                <span>Curio Kids MVP</span>
+              </div>
+            </td>
+            <td>Family EdTech Media</td>
+            <td><span class="tag-mono">1 Parent / 11 Watch Logs</span></td>
+            <td>100 Curated Educational Videos</td>
+            <td>Subscription Potential ($4.99/mo)</td>
+            <td>Private Alpha / Local Web</td>
+            <td><span class="status-badge badge-mvp">Active MVP</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>🎙️</span>
+                <span>Streamer Workout News</span>
+              </div>
+            </td>
+            <td>AI Audio & Podcasts</td>
+            <td><span class="tag-mono">Fitness Athletes / Learners</span></td>
+            <td>30-min Master Episode & Android APK</td>
+            <td>Sub-cent LLM Generation Cost</td>
+            <td>Capacitor Android APK</td>
+            <td><span class="status-badge badge-active">Active Dev</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>🛒</span>
+                <span>eSuperMarche</span>
+              </div>
+            </td>
+            <td>Multi-Vendor Retail</td>
+            <td><span class="tag-mono">Supermarket Shoppers</span></td>
+            <td>WooCommerce Multi-Store Catalog</td>
+            <td>Vendor Take-Rate / Transaction Fee</td>
+            <td>Staging Store (esupermarche.com)</td>
+            <td><span class="status-badge badge-active">Live Staging</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Executive Footer -->
     <footer>
       <div>
-        <span>Portfolio Command Center • Super Eye</span>
+        <span>Executive Command Center • <strong>CEO Business Performance Radar</strong></span>
         <span style="margin:0 8px;">•</span>
-        <span>Developer: <strong>Kashif Ali</strong></span>
+        <span>Lead Architect & Owner: <strong>Kashif Ali</strong></span>
       </div>
       <div>
-        Last Audit: <span style="font-family:'JetBrains Mono';">November 19, 2026</span>
+        Audit Timestamp: <span style="font-family:'JetBrains Mono';">November 19, 2026</span>
       </div>
     </footer>
   </div>
 
-  <!-- Modal Details Drawer -->
-  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <div id="modal-content">
-        <!-- Injected via JavaScript -->
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Real-time Clock
+    // Live Clock
     function updateClock() {
       const now = new Date();
       const options = { timeZone: 'Europe/Paris', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      document.getElementById('live-clock').innerText = 'CET ' + now.toLocaleTimeString('en-GB', options);
+      document.getElementById('clock-display').innerText = 'CET ' + now.toLocaleTimeString('en-GB', options);
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Theme toggle
-    const themeBtn = document.getElementById('theme-toggle');
-    const themeText = document.getElementById('theme-text');
-    let currentTheme = localStorage.getItem('super_eye_theme') || 'dark';
+    // Theme Toggle
+    const themeBtn = document.getElementById('theme-btn');
+    let isDark = localStorage.getItem('ceo_dashboard_theme') !== 'light';
 
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      themeText.textContent = theme === 'dark' ? 'Light' : 'Dark';
-      localStorage.setItem('super_eye_theme', theme);
+    function setDashboardTheme(dark) {
+      if (dark) {
+        document.documentElement.removeAttribute('data-theme');
+        themeBtn.innerText = 'Light Mode';
+        localStorage.setItem('ceo_dashboard_theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeBtn.innerText = 'Dark Mode';
+        localStorage.setItem('ceo_dashboard_theme', 'light');
+      }
     }
-    applyTheme(currentTheme);
+    setDashboardTheme(isDark);
 
     themeBtn.addEventListener('click', () => {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      applyTheme(currentTheme);
+      isDark = !isDark;
+      setDashboardTheme(isDark);
     });
 
     // Search & Filter
-    const searchInput = document.getElementById('search-input');
-    const filterPills = document.querySelectorAll('.pill');
-    const cards = document.querySelectorAll('.project-card');
-
-    let currentFilter = 'all';
+    const searchBox = document.getElementById('search-box');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('.bu-card');
+    let activeFilter = 'all';
 
     function filterCards() {
-      const query = searchInput.value.toLowerCase().trim();
+      const q = searchBox.value.toLowerCase().trim();
 
       cards.forEach(card => {
-        const category = card.getAttribute('data-category') || '';
+        const cat = card.getAttribute('data-category') || '';
         const name = card.getAttribute('data-name') || '';
-        const tech = card.getAttribute('data-tech') || '';
-        const text = card.innerText.toLowerCase();
+        const bodyText = card.innerText.toLowerCase();
 
-        const matchesFilter = (currentFilter === 'all') || category.includes(currentFilter);
-        const matchesQuery = !query || name.includes(query) || tech.includes(query) || text.includes(query);
+        const matchTab = (activeFilter === 'all') || cat.includes(activeFilter);
+        const matchQuery = !q || name.includes(q) || bodyText.includes(q);
 
-        if (matchesFilter && matchesQuery) {
+        if (matchTab && matchQuery) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
@@ -1478,204 +1385,48 @@
       });
     }
 
-    searchInput.addEventListener('input', filterCards);
+    searchBox.addEventListener('input', filterCards);
 
-    filterPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        filterPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        currentFilter = pill.getAttribute('data-filter');
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.getAttribute('data-filter');
         filterCards();
       });
     });
 
-    // Detailed Architecture Modal Content
-    const projectDetails = {
-      enterprise: {
-        title: "Enterprise IT Operations & Support Suite",
-        category: "Enterprise Operations • Sysadmin Automation",
-        version: "On-Premises Production Suite",
-        overview: "A specialized collection of self-contained, offline-capable corporate IT automation tools for enterprise helpdesk staff, system engineers, and client device management.",
-        stack: ["PowerShell 5.1/7+", "Microsoft 365 Graph", "Entra ID", "Intune", "Python", "Typer CLI"],
-        architecture: [
-          "IT Ops PowerShell Shortcuts: Instant generation of tenant administrative scripts (M365, Entra, Intune) with 1-click clipboard transfer.",
-          "Support Agent: Typer-based CLI & GUI troubleshooting agent executing step-by-step diagnostic playbooks for printers, network, and permissions.",
-          "IT Asset Management: Desktop application deployed directly into user profile (%LOCALAPPDATA%) for offline device tracking."
-        ],
-        urls: []
-      },
-      caloriefit: {
-        title: "CalorieFit — Smart Macro Tracker & Fasting Diary",
-        category: "Consumer Mobile App (Android Play Store)",
-        version: "v1.10.1 (Build 17) — Released Nov 19, 2026",
-        overview: "CalorieFit is a local-first, zero-telemetry mobile nutrition companion designed for individuals who value their data privacy. It operates completely offline with no mandatory accounts, storing all logs, food metrics, and fasting cycles inside an encrypted on-device SQLite database.",
-        stack: ["Flutter 3.x", "Dart SDK 3.10+", "SQLite (sqflite)", "Google Health Connect API", "Android Glance Widgets", "Rive Animations"],
-        architecture: [
-          "100% Local-First Data Flow: No external server communication for core logging. Meals, timestamps, and macros stay strictly on device.",
-          "Health Connect Sync: Bi-directional Android Health Connect integration reading active energy burned and steps for true net calorie math.",
-          "AI Meal Estimator: Parses natural-language inputs (e.g. '2 boiled eggs and 1 avocado toast') to compute nutritional breakdowns.",
-          "Circadian Fasting Progression: Tracks fasting metabolic stages (Anabolic, Catabolic, Fat Burning, Ketosis) with automated stage push alerts.",
-          "Home Screen Glance Widgets: Live Kotlin Glance widgets showing remaining calorie budget and fasting countdowns."
-        ],
-        urls: [
-          { label: "Google Play Store", url: "https://play.google.com/store/apps/details?id=com.caloriefit.app" },
-          { label: "GitHub Repository", url: "https://github.com/kashif-malik12/CalorieFit" }
+    // Export Executive Summary
+    function exportExecutiveSummary() {
+      const summary = {
+        executiveTitle: "CEO Overall Business Success & Ecosystem Report",
+        auditDate: new Date().toISOString(),
+        kpiTotals: {
+          verifiedCorporateProfiles: 95,
+          managedHardwareAssets: 128,
+          activeAssignments: 119,
+          corporateLocations: 11,
+          verifiedLocalMerchants: 150,
+          managedTradingCapitalUSD: 100000,
+          curatedMediaAssets: 100,
+          playStoreLiveApps: 2
+        },
+        businessUnits: [
+          { name: "Enterprise IT Operations Suite", entity: "Infovista (IV SAS)", stage: "On-Premises Production", staffProfiles: 95, assets: 128 },
+          { name: "CalorieFit", entity: "Consumer Mobile Health", stage: "Play Store Live (v1.10.1+17)", margin: "~99%", telemetry: "100% Local-First" },
+          { name: "Allonssy", entity: "Tradister SAS", stage: "Live Play Store & Web", pilotMerchants: 150, pilotCity: "Ris-Orangis (91130)" },
+          { name: "eToro Autonomous Agent", entity: "Quantitative WealthTech", stage: "Production Ready", capitalUSD: 100000 },
+          { name: "Curio Kids MVP", entity: "Family EdTech Media", stage: "Active MVP", curatedVideos: 100, watchSessions: 11 },
+          { name: "Streamer Workout News", entity: "AI Fitness Audio", stage: "Android APK Built" },
+          { name: "eSuperMarche", entity: "Multi-Vendor Retail", stage: "Live Staging Store" }
         ]
-      },
-      allonssy: {
-        title: "Allonssy — Hyperlocal Social Network & Marketplace",
-        category: "Mobile & Web SaaS (Android Play Store + Web App)",
-        version: "v1.3.2+10 — Bumped Nov 19, 2026",
-        overview: "Allonssy (local_social) is a hyperlocal community platform operating under Tradister SAS (France). It enables residents, neighborhood artisans, and local businesses to share news, trade in an integrated marketplace, and organize local events within configurable radius boundaries.",
-        stack: ["Flutter 3.x", "Riverpod 2.5", "GoRouter 14", "Self-Hosted Supabase VPS", "PostgreSQL with RLS", "FCM HTTP v1", "Caddy Web Server"],
-        architecture: [
-          "Self-Hosted Supabase: Deployed on Ubuntu VPS (87.106.13.170) with PostgreSQL Row Level Security (RLS) guaranteeing tenant data protection.",
-          "Realtime WebSockets: Instant chat messaging, comments, and live notifications.",
-          "Push Notification Dispatch: PostgreSQL pg_net triggers invoking Deno Edge Functions (push-dispatch) delivering HTTP v1 Firebase notifications.",
-          "Caddy Reverse Proxy: Automated SSL and high-performance reverse proxy routing for app.allonssy.com.",
-          "Native MethodChannel Camera: Custom Kotlin camera implementation in MainActivity.kt preventing R8 release crashes."
-        ],
-        urls: [
-          { label: "Live Web Application", url: "https://app.allonssy.com" },
-          { label: "GitHub Repository", url: "https://github.com/kashif-malik12/allonssy" }
-        ]
-      },
-      esupermarche: {
-        title: "eSuperMarche — Multi-Vendor Grocery Marketplace",
-        category: "Cross-Platform E-Commerce (Mobile & Web)",
-        version: "FluxStore 6.1.0 • Android 15 SDK 35",
-        overview: "eSuperMarche connects local grocery stores, supermarket vendors, and online consumers onto a unified multi-vendor storefront platform with live delivery tracking and inventory management.",
-        stack: ["Flutter", "WooCommerce REST API", "WordPress", "OneSignal Push", "Firebase Notification Service"],
-        architecture: [
-          "WooCommerce & Mstore Backend: RESTful synchronization of vendors, catalog taxonomies, coupons, and orders.",
-          "Push Campaigns: Multi-channel notifications via OneSignal and Firebase.",
-          "Localized Multi-Store Geolocation: Delivers store-specific catalogs based on user location."
-        ],
-        urls: [
-          { label: "Live Storefront", url: "https://esupermarche.com" }
-        ]
-      },
-      curiokids: {
-        title: "Curio Kids MVP — Safe Curated Video Platform",
-        category: "Web Application (Parental Controls & EdTech)",
-        version: "v0.1.0 MVP",
-        overview: "Curio Kids is a distraction-free, algorithm-free web application where parents curate safe educational short-videos (YouTube & TikTok embeds) for their children with PIN security and watch timers.",
-        stack: ["Next.js 16.2.4 App Router", "React 19", "TypeScript", "Tailwind CSS 4", "Prisma 6.15", "SQLite", "Zod"],
-        architecture: [
-          "Parent Gateway Auth: Protected admin portal gated by PIN authentication using HTTP-only signed session cookies.",
-          "Strict Embed Sanitation: Parses YouTube & TikTok identifiers without exposing third-party recommended algorithms or comments.",
-          "Local-First DB: Backed by Prisma ORM and SQLite for lightweight, instant deployment."
-        ],
-        urls: []
-      },
-      etoro: {
-        title: "eToro Autonomous Stock Portfolio Agent (etoro-agent)",
-        category: "Algorithmic Fintech & Autonomous AI Agent",
-        version: "v0.1.0 • 24/7 Cloud or Local PC",
-        overview: "A standalone Python portfolio management agent featuring an interactive FastAPI Web Dashboard and scheduled trading worker designed for eToro's official API with demo-first paper broker safeguards.",
-        stack: ["Python 3.11+", "FastAPI", "yfinance", "eToro Public API", "Google Gemini AI", "Docker", "Railway / Render"],
-        architecture: [
-          "Multi-Tiered Safety Locks: Hardware kill switch, real-money double lock, daily loss circuit breaker, and 1x max leverage restriction.",
-          "Target-Allocation Rebalancer: Maintains user-defined ETF/equity target weights with automated drift rebalancing and DCA deployment.",
-          "Multi-LLM Research Engine: Pulls fundamental metrics and headlines, analyzing sentiment with Google Gemini, OpenAI, or local heuristics with bearish veto power."
-        ],
-        urls: []
-      },
-      streamer: {
-        title: "Streamer — Bilingual Workout News & Audio Podcast",
-        category: "AI Audio Generation & Mobile Client",
-        version: "v1.0.0 APK",
-        overview: "Automated media engine that aggregates daily fitness news, generates engaging bilingual scripts using Google Gemini, synthesizes spoken audio via TTS, and streams it to a Capacitor mobile app.",
-        stack: ["Python", "FastAPI", "Google Gemini API", "Capacitor 8", "Android APK", "TTS Engines"],
-        architecture: [
-          "Background Audio Pipeline: News Aggregator -> Gemini Script Writer -> Audio Producer -> MP3 synthesis.",
-          "Podcast RSS Feed: Standard podcast RSS feed generation allowing any podcatcher to subscribe.",
-          "Mobile Streaming: HTTP byte-range request audio streaming with local LAN QR pairing."
-        ],
-        urls: []
-      },
-      vault: {
-        title: "Production Release Cryptographic Vault",
-        category: "Security & DevOps Infrastructure",
-        version: "Secure Offline Vault",
-        overview: "Strictly offline repository containing signing keystores, developer service account credentials, and deployment fingerprints for Google Play Store releases.",
-        stack: ["Java Keystore (.jks)", "Google Cloud Service Accounts", "SHA-256 Signatures", "Air-Gapped Storage"],
-        architecture: [
-          "Play Store Upload Keystores: Secures upload-keystore.jks and key.properties for Allonssy, CalorieFit, and eSuperMarche.",
-          "CI/CD Integration: Enables headless APK/AAB build automation and Play Developer Console API deployment."
-        ],
-        urls: []
-      }
-    };
+      };
 
-    function openDetails(key) {
-      const data = projectDetails[key];
-      if (!data) return;
-
-      let urlsHtml = '';
-      if (data.urls && data.urls.length > 0) {
-        urlsHtml = `
-          <div class="modal-section">
-            <h4>Live Links & Repositories</h4>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
-              ${data.urls.map(u => `<a href="${u.url}" target="_blank" class="link-btn" style="color:var(--accent);">${u.label} ↗</a>`).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      const html = `
-        <div class="modal-header">
-          <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; font-weight:700;">${data.category}</div>
-          <h2 style="font-size:1.35rem; font-weight:800; margin:4px 0 6px;">${data.title}</h2>
-          <div style="font-size:0.82rem; color:var(--accent); font-family:'JetBrains Mono';">${data.version}</div>
-        </div>
-
-        <div class="modal-section">
-          <h4>Executive Overview</h4>
-          <p>${data.overview}</p>
-        </div>
-
-        <div class="modal-section">
-          <h4>Architecture & Technical Design</h4>
-          <ul>
-            ${data.architecture.map(item => `<li style="margin-bottom:6px;">${item}</li>`).join('')}
-          </ul>
-        </div>
-
-        <div class="modal-section">
-          <h4>Core Tech Stack</h4>
-          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
-            ${data.stack.map(s => `<span class="tag" style="background:var(--bg); border-color:var(--border-accent);">${s}</span>`).join('')}
-          </div>
-        </div>
-
-        ${urlsHtml}
-      `;
-
-      document.getElementById('modal-content').innerHTML = html;
-      document.getElementById('modal-overlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      document.getElementById('modal-overlay').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    function closeModalOnOverlay(e) {
-      if (e.target.id === 'modal-overlay') {
-        closeModal();
-      }
-    }
-
-    // Export Portfolio Metadata
-    function exportData() {
-      const exportBlob = new Blob([JSON.stringify(projectDetails, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(exportBlob);
+      const blob = new Blob([JSON.stringify(summary, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `SuperEye_Portfolio_Summary_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `CEO_Executive_Portfolio_Report_${new Date().toISOString().split('T')[0]}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
