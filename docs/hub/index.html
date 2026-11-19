@@ -390,6 +390,11 @@
       background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 30%);
     }
 
+    .bu-card.finops-card {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, var(--bg-card) 30%);
+    }
+
     .bu-head {
       display: flex;
       justify-content: space-between;
@@ -660,7 +665,7 @@
         <h1>
           CEO Business Performance & Ventures Radar
         </h1>
-        <p>Operational health, verified customer bases, managed capital, and unit economics across commercial products</p>
+        <p>Operational health, verified customer bases, managed capital, and B2B pipelines across commercial products</p>
       </div>
 
       <div class="top-actions">
@@ -685,6 +690,15 @@
         <div class="kpi-sub">CalorieFit (v1.10.1) & Allonssy (v1.3.2) live</div>
       </div>
 
+      <div class="kpi-box accent-blue">
+        <div class="kpi-head">
+          <span class="kpi-title">B2B SaaS Sales Pipeline</span>
+          <span class="kpi-icon">💼</span>
+        </div>
+        <div class="kpi-num">€93.9k</div>
+        <div class="kpi-sub">Tradister FinOps: 62 enterprise & MSP target leads</div>
+      </div>
+
       <div class="kpi-box accent-purple">
         <div class="kpi-head">
           <span class="kpi-title">Verified Local Merchants</span>
@@ -703,22 +717,13 @@
         <div class="kpi-sub">eToro portfolio equity pool (1x max leverage)</div>
       </div>
 
-      <div class="kpi-box accent-blue">
-        <div class="kpi-head">
-          <span class="kpi-title">Curated Educational Media</span>
-          <span class="kpi-icon">📺</span>
-        </div>
-        <div class="kpi-num">100</div>
-        <div class="kpi-sub">Curio Kids video library & 11 watch logs</div>
-      </div>
-
       <div class="kpi-box accent-green">
         <div class="kpi-head">
           <span class="kpi-title">Fleet Operating Margin</span>
           <span class="kpi-icon">⚡</span>
         </div>
         <div class="kpi-num">~99%</div>
-        <div class="kpi-sub">Client-side SQLite & €15/mo lean VPS footprint</div>
+        <div class="kpi-sub">Client-side SQLite, Vercel & lean €15/mo VPS footprint</div>
       </div>
     </div>
 
@@ -729,7 +734,8 @@
         <input type="text" id="search-box" class="search-input" placeholder="Filter by product, market, technology, metric...">
       </div>
       <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">All Ventures (6)</button>
+        <button class="filter-tab active" data-filter="all">All Ventures (7)</button>
+        <button class="filter-tab" data-filter="saas">B2B Cloud & FinOps (1)</button>
         <button class="filter-tab" data-filter="mobile">Mobile Apps (3)</button>
         <button class="filter-tab" data-filter="marketplace">Commerce & Marketplace (2)</button>
         <button class="filter-tab" data-filter="fintech">Fintech AI (1)</button>
@@ -741,7 +747,7 @@
     <div class="section-head">
       <div>
         <h2>Active Commercial Product Ventures</h2>
-        <p>Prioritized by market readiness: Live Google Play Store apps first, followed by active growth platforms</p>
+        <p>Prioritized by market readiness: Live Google Play Store apps & B2B Cloud SaaS platforms first</p>
       </div>
     </div>
 
@@ -812,7 +818,71 @@
         </div>
       </div>
 
-      <!-- 2. Allonssy -->
+      <!-- 2. Tradister FinOps & Cloud L1/L2 -->
+      <div class="bu-card finops-card" data-category="saas" data-name="tradister finops cloud m365 license audit msp sasu srv vercel">
+        <div class="bu-head">
+          <div class="bu-brand">
+            <div class="bu-icon" style="color:var(--accent);">☁️</div>
+            <div>
+              <div class="bu-title">Tradister FinOps & Cloud</div>
+              <div class="bu-entity">B2B SaaS & Cloud Automation • Tradister SASU</div>
+            </div>
+          </div>
+          <span class="status-badge badge-live">Live SaaS Platform</span>
+        </div>
+
+        <p class="bu-desc">
+          Automated M365 cloud license waste & security scanner coupled with an autonomous L1/L2 support remediation engine. Built for Managed Service Providers (MSPs) and European/US mid-market SMEs.
+        </p>
+
+        <div class="data-metrics-grid">
+          <div class="data-metric">
+            <span class="data-metric-label">B2B Sales Pipeline</span>
+            <span class="data-metric-val green">€93,894 EUR</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Target Qualified Accounts</span>
+            <span class="data-metric-val blue">62 Leads</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Core SaaS Domain</span>
+            <span class="data-metric-val">audit.tradister.com</span>
+          </div>
+          <div class="data-metric">
+            <span class="data-metric-label">Legal Registration</span>
+            <span class="data-metric-val">RCS Évry 988 318 945</span>
+          </div>
+        </div>
+
+        <ul class="impact-list">
+          <li>
+            <span class="impact-bullet"></span>
+            <span><strong>M365 License Waste Scanner:</strong> 60-second read-only scan detecting dormant ex-employee accounts holding expensive E3/E5/Business Premium/Copilot licenses.</span>
+          </li>
+          <li>
+            <span class="impact-bullet"></span>
+            <span><strong>Zero-Trust Onboarding:</strong> Inspectable read-only PowerShell script (<code>Run-TradisterM365Audit.ps1</code>), read-only Entra ID OAuth, and synthetic 30-user sandbox.</span>
+          </li>
+          <li>
+            <span class="impact-bullet"></span>
+            <span><strong>Autonomous L1/L2 Remediation:</strong> 1-click safe offboarding bot, self-service BitLocker recovery, and MFA/password automated resolution.</span>
+          </li>
+        </ul>
+
+        <div class="econ-badge">
+          <span>Monetization Model:</span>
+          <span>$49/Audit Report or €99–€199/mo MSP Retainer</span>
+        </div>
+
+        <div class="bu-footer">
+          <div class="bu-links">
+            <a href="https://audit.tradister.com" target="_blank" class="bu-link-btn">audit.tradister.com ↗</a>
+            <a href="https://plan.tradister.com" target="_blank" class="bu-link-btn">plan.tradister.com ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Allonssy -->
       <div class="bu-card" data-category="mobile marketplace" data-name="allonssy tradister hyperlocal marketplace social paris supabase">
         <div class="bu-head">
           <div class="bu-brand">
@@ -876,7 +946,7 @@
         </div>
       </div>
 
-      <!-- 3. eToro Autonomous Stock Portfolio Agent -->
+      <!-- 4. eToro Autonomous Stock Portfolio Agent -->
       <div class="bu-card" data-category="fintech" data-name="etoro stock investing trading quantitative ai portfolio">
         <div class="bu-head">
           <div class="bu-brand">
@@ -940,7 +1010,7 @@
         </div>
       </div>
 
-      <!-- 4. eSuperMarche -->
+      <!-- 5. eSuperMarche -->
       <div class="bu-card" data-category="mobile marketplace" data-name="esupermarche ecommerce multi-vendor grocery store flutter woocommerce">
         <div class="bu-head">
           <div class="bu-brand">
@@ -999,7 +1069,7 @@
         </div>
       </div>
 
-      <!-- 5. Curio Kids MVP -->
+      <!-- 6. Curio Kids MVP -->
       <div class="bu-card" data-category="media" data-name="curio kids reels scrapper edtech parental video nextjs">
         <div class="bu-head">
           <div class="bu-brand">
@@ -1063,7 +1133,7 @@
         </div>
       </div>
 
-      <!-- 6. Streamer -->
+      <!-- 7. Streamer -->
       <div class="bu-card" data-category="mobile media" data-name="streamer workout news podcast ai audio gemini capacitor">
         <div class="bu-head">
           <div class="bu-brand">
@@ -1139,7 +1209,7 @@
           <tr>
             <th>Product Venture</th>
             <th>Operating Entity</th>
-            <th>Verified Customer Base</th>
+            <th>Verified Customer / Account Base</th>
             <th>Real Tracked Asset Base</th>
             <th>Economic Model / Margin</th>
             <th>Deployment Stage</th>
@@ -1160,6 +1230,20 @@
             <td>~99% Margin ($0 Cloud Server Cost)</td>
             <td>Google Play Store (v1.10.1+17)</td>
             <td><span class="status-badge badge-live">Live Production</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="table-brand-cell">
+                <span>☁️</span>
+                <span>Tradister FinOps & Cloud</span>
+              </div>
+            </td>
+            <td>Tradister SASU (RCS 988 318 945)</td>
+            <td><span class="tag-mono">62 B2B Leads (€93.9k Pipeline)</span></td>
+            <td>M365 Audit Engine & L1/L2 Sandbox</td>
+            <td>$49/Audit or €99–€199/mo MSP Retainer</td>
+            <td>Live Vercel SaaS (audit.tradister.com)</td>
+            <td><span class="status-badge badge-live">Live SaaS</span></td>
           </tr>
           <tr>
             <td>
@@ -1323,6 +1407,8 @@
         auditDate: new Date().toISOString(),
         kpiTotals: {
           googlePlayProductionApps: 2,
+          b2bSalesPipelineEUR: 93894,
+          qualifiedB2BAccounts: 62,
           verifiedLocalMerchants: 150,
           managedTradingCapitalUSD: 100000,
           curatedEducationalMedia: 100,
@@ -1330,6 +1416,7 @@
         },
         ventures: [
           { name: "CalorieFit", entity: "Consumer Mobile Health", stage: "Play Store Live (v1.10.1+17)", margin: "~99%", telemetry: "100% Local-First" },
+          { name: "Tradister FinOps & Cloud", entity: "Tradister SASU (RCS 988 318 945)", stage: "Live Vercel SaaS", pipelineEUR: 93894, leads: 62, domains: ["audit.tradister.com", "plan.tradister.com"] },
           { name: "Allonssy", entity: "Tradister SAS", stage: "Live Play Store & Web", pilotMerchants: 150, pilotCity: "Ris-Orangis (91130)" },
           { name: "eToro Autonomous Agent", entity: "Quantitative WealthTech", stage: "Production Ready", capitalUSD: 100000 },
           { name: "eSuperMarche", entity: "Multi-Vendor Retail", stage: "Live Staging Store (esupermarche.com)" },
