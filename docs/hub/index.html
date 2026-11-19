@@ -748,7 +748,7 @@
           7
           <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">+ 1 Vault</span>
         </div>
-        <span class="kpi-subtext">Mobile, Web SaaS, AI, Enterprise</span>
+        <span class="kpi-subtext">Enterprise IT, Mobile, Web SaaS, AI</span>
       </div>
 
       <div class="kpi-card kpi-green">
@@ -766,7 +766,7 @@
           5
           <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">Sectors</span>
         </div>
-        <span class="kpi-subtext">France Hyperlocal, Fitness, Kids, Fintech, IT</span>
+        <span class="kpi-subtext">Enterprise IT, France Local, Fitness, Kids, Fintech</span>
       </div>
 
       <div class="kpi-card kpi-blue">
@@ -775,7 +775,7 @@
           100%
           <span style="font-size:0.95rem; font-weight:500; color:var(--accent);">Optimal</span>
         </div>
-        <span class="kpi-subtext">Supabase VPS, SQLite & Cloud APIs</span>
+        <span class="kpi-subtext">PowerShell, Supabase VPS, SQLite & Cloud APIs</span>
       </div>
     </div>
 
@@ -786,21 +786,95 @@
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" id="search-input" class="search-input" placeholder="Search projects, technologies, features...">
+        <input type="text" id="search-input" class="search-input" placeholder="Search IT ops, projects, technologies, features...">
       </div>
 
       <div class="filter-pills">
         <button class="pill active" data-filter="all">All Tracks (8)</button>
+        <button class="pill" data-filter="enterprise">Enterprise IT Ops (1)</button>
         <button class="pill" data-filter="mobile">Mobile Apps (3)</button>
         <button class="pill" data-filter="web">Web & SaaS (2)</button>
         <button class="pill" data-filter="ai">AI & Fintech (2)</button>
-        <button class="pill" data-filter="enterprise">Enterprise IT (1)</button>
       </div>
     </div>
 
     <!-- Projects Grid -->
     <div class="projects-grid" id="projects-container">
-      <!-- 1. CalorieFit -->
+
+      <!-- 1. Enterprise IT Ops Suite (WORK PROJECTS) -->
+      <div class="project-card" data-category="enterprise" data-name="work projects it ops shortcuts support agent asset management" data-tech="powershell python typer microsoft 365 entra id intune graph api">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-blue">🛠️</div>
+            <div>
+              <div class="project-title">Enterprise IT Ops Suite</div>
+              <div class="project-category">Priority Track • Enterprise Operations & Sysadmin</div>
+            </div>
+          </div>
+          <span class="status-badge badge-internal">
+            <span class="pulse-dot"></span> On-Premises Active
+          </span>
+        </div>
+
+        <p class="card-desc">
+          High-performance enterprise tooling suite featuring rapid Microsoft 365 / Entra ID / Intune PowerShell shortcut script generation, an offline support diagnostic agent, and automated local IT asset management.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Included Modules</span>
+            <span class="metric-val">3 Enterprise Toolsets</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Target Audience</span>
+            <span class="metric-val">IT Helpdesk, Sysadmins & Staff</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Execution Mode</span>
+            <span class="metric-val">100% Offline / Local Desktop (.bat/.cmd)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Environment</span>
+            <span class="metric-val">Windows PowerShell & Python Typer</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>IT Ops PowerShell Shortcuts:</strong> Generates tenant-side (M365, Entra, Exchange, Graph, Intune) & client troubleshooting scripts with instant clipboard copy
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>Support Agent:</strong> Offline Typer CLI & UI agent with pre-configured diagnosis playbooks (printers, networking, permissions)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>IT Asset Management:</strong> Isolated corporate user-profile deployment (%LOCALAPPDATA%) for corporate device lifecycle tracking
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">PowerShell</span>
+          <span class="tag">Microsoft 365</span>
+          <span class="tag">Entra ID</span>
+          <span class="tag">Intune</span>
+          <span class="tag">Python</span>
+          <span class="tag">Typer CLI</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              Local Execution (.bat / .cmd)
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('enterprise')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 2. CalorieFit -->
       <div class="project-card" data-category="mobile" data-name="caloriefit" data-tech="flutter dart sqlite health connect android rive">
         <div class="card-top">
           <div class="project-identity">
@@ -880,7 +954,7 @@
         </div>
       </div>
 
-      <!-- 2. Allonssy -->
+      <!-- 3. Allonssy -->
       <div class="project-card" data-category="mobile web" data-name="allonssy" data-tech="flutter riverpod gorouter supabase postgresql caddy fcm">
         <div class="card-top">
           <div class="project-identity">
@@ -961,7 +1035,7 @@
         </div>
       </div>
 
-      <!-- 3. eSuperMarche -->
+      <!-- 4. eSuperMarche -->
       <div class="project-card" data-category="mobile web" data-name="esupermarche" data-tech="flutter woocommerce wordpress firebase onesignal rive">
         <div class="card-top">
           <div class="project-identity">
@@ -1033,7 +1107,7 @@
         </div>
       </div>
 
-      <!-- 4. Curio Kids -->
+      <!-- 5. Curio Kids -->
       <div class="project-card" data-category="web" data-name="curio kids reels scrapper" data-tech="nextjs react typescript tailwind prisma sqlite zod">
         <div class="card-top">
           <div class="project-identity">
@@ -1106,7 +1180,7 @@
         </div>
       </div>
 
-      <!-- 5. Stock Investing / etoro-agent -->
+      <!-- 6. Stock Investing / etoro-agent -->
       <div class="project-card" data-category="ai" data-name="etoro stock investing" data-tech="python fastapi etoro docker railway yfinance gemini">
         <div class="card-top">
           <div class="project-identity">
@@ -1184,7 +1258,7 @@
         </div>
       </div>
 
-      <!-- 6. Streamer -->
+      <!-- 7. Streamer -->
       <div class="project-card" data-category="ai mobile" data-name="streamer workout news" data-tech="python fastapi gemini capacitor android tts podcast">
         <div class="card-top">
           <div class="project-identity">
@@ -1254,79 +1328,6 @@
             </span>
           </div>
           <button class="btn" onclick="openDetails('streamer')">Architecture</button>
-        </div>
-      </div>
-
-      <!-- 7. Work Projects / Enterprise IT -->
-      <div class="project-card" data-category="enterprise" data-name="work projects it asset shortcuts support agent" data-tech="powershell python typer microsoft 365 entra id intune">
-        <div class="card-top">
-          <div class="project-identity">
-            <div class="project-icon icon-blue">🛠️</div>
-            <div>
-              <div class="project-title">Enterprise IT Ops Suite</div>
-              <div class="project-category">Enterprise Operations • Sysadmin Automation</div>
-            </div>
-          </div>
-          <span class="status-badge badge-internal">
-            <span class="pulse-dot"></span> On-Premises Active
-          </span>
-        </div>
-
-        <p class="card-desc">
-          Local enterprise tooling suite comprising automated IT asset tracking, a fast Microsoft 365 / Entra ID / Intune PowerShell shortcut generator, and an offline support diagnostic agent.
-        </p>
-
-        <div class="metric-rows">
-          <div class="metric-item">
-            <span class="metric-key">Included Modules</span>
-            <span class="metric-val">3 Specialized Toolsets</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Target Audience</span>
-            <span class="metric-val">IT Helpdesk, Sysadmins & Enterprise Staff</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Execution Mode</span>
-            <span class="metric-val">100% Offline / Local Desktop (.bat/.cmd)</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-key">Environment</span>
-            <span class="metric-val">Windows PowerShell & Python Typer</span>
-          </div>
-        </div>
-
-        <ul class="feature-list">
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>IT Ops Shortcuts App:</strong> Fast generation of Admin (M365, Graph, Intune) & User troubleshooting scripts
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>Support Agent:</strong> Offline Typer CLI & UI agent with pre-built diagnosis playbooks (printers, networking, permissions)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>IT Asset Management:</strong> Isolated user-profile deployment for corporate hardware & software tracking
-          </li>
-        </ul>
-
-        <div class="tech-tags">
-          <span class="tag">PowerShell</span>
-          <span class="tag">Microsoft 365</span>
-          <span class="tag">Entra ID</span>
-          <span class="tag">Intune</span>
-          <span class="tag">Python</span>
-          <span class="tag">Typer CLI</span>
-        </div>
-
-        <div class="card-footer">
-          <div class="card-links">
-            <span class="link-btn" style="cursor:default;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-              Local Execution (.bat / .cmd)
-            </span>
-          </div>
-          <button class="btn" onclick="openDetails('enterprise')">Architecture</button>
         </div>
       </div>
 
@@ -1490,6 +1491,19 @@
 
     // Detailed Architecture Modal Content
     const projectDetails = {
+      enterprise: {
+        title: "Enterprise IT Operations & Support Suite",
+        category: "Enterprise Operations • Sysadmin Automation",
+        version: "On-Premises Production Suite",
+        overview: "A specialized collection of self-contained, offline-capable corporate IT automation tools for enterprise helpdesk staff, system engineers, and client device management.",
+        stack: ["PowerShell 5.1/7+", "Microsoft 365 Graph", "Entra ID", "Intune", "Python", "Typer CLI"],
+        architecture: [
+          "IT Ops PowerShell Shortcuts: Instant generation of tenant administrative scripts (M365, Entra, Intune) with 1-click clipboard transfer.",
+          "Support Agent: Typer-based CLI & GUI troubleshooting agent executing step-by-step diagnostic playbooks for printers, network, and permissions.",
+          "IT Asset Management: Desktop application deployed directly into user profile (%LOCALAPPDATA%) for offline device tracking."
+        ],
+        urls: []
+      },
       caloriefit: {
         title: "CalorieFit — Smart Macro Tracker & Fasting Diary",
         category: "Consumer Mobile App (Android Play Store)",
@@ -1577,19 +1591,6 @@
           "Background Audio Pipeline: News Aggregator -> Gemini Script Writer -> Audio Producer -> MP3 synthesis.",
           "Podcast RSS Feed: Standard podcast RSS feed generation allowing any podcatcher to subscribe.",
           "Mobile Streaming: HTTP byte-range request audio streaming with local LAN QR pairing."
-        ],
-        urls: []
-      },
-      enterprise: {
-        title: "Enterprise IT Operations & Support Suite",
-        category: "Enterprise Automation & Corporate IT Tooling",
-        version: "On-Premises Production Suite",
-        overview: "A collection of self-contained, offline-capable corporate IT automation tools for enterprise helpdesk staff, system engineers, and client device management.",
-        stack: ["PowerShell 5.1/7+", "Microsoft 365 Graph", "Entra ID", "Intune", "Python", "Typer CLI"],
-        architecture: [
-          "IT Ops PowerShell Shortcuts: Instant generation of tenant administrative scripts (M365, Entra, Intune) with 1-click clipboard transfer.",
-          "Support Agent: Typer-based CLI & GUI troubleshooting agent executing step-by-step diagnostic playbooks for printers, network, and permissions.",
-          "IT Asset Management: Desktop application deployed directly into user profile (%LOCALAPPDATA%) for offline device tracking."
         ],
         urls: []
       },
