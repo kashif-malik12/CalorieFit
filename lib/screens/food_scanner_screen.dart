@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../data/db.dart';
 import '../data/models.dart';
 import '../services/ai_nutrition_estimator.dart';
+import '../services/food_vision_service.dart';
 
 class FoodScannerScreen extends StatefulWidget {
   final String date;
@@ -33,7 +34,15 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
   bool _isSaving = false;
   String _selectedMeal = 'Lunch';
   double _portionMultiplier = 1.0;
-  String _detectedDishName = 'Grilled Chicken Salad';
+
+  // Vision detection states
+  bool _hasScanned = false;
+  bool _isFoodDetected = false;
+  String? _nonFoodCategory;
+  String? _nonFoodMessage;
+  double _detectionConfidence = 0.0;
+  List<String> _detectedLabels = [];
+
   AiEstimatedMeal? _estimatedMeal;
   final TextEditingController _dishNameController = TextEditingController();
 
@@ -113,9 +122,6 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
         _selectedMeal = 'Snack';
       }
     }
-
-    _dishNameController.text = _detectedDishName;
-    _runEstimation(_quickDishPresets.first['query'] as String);
   }
 
   @override
@@ -138,29 +144,43 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
         setState(() {
           _capturedImage = picked;
           _isAnalyzing = true;
+          _hasScanned = true;
+          _isFoodDetected = false;
+          _nonFoodCategory = null;
+          _nonFoodMessage = null;
+          _estimatedMeal = null;
         });
 
-        // Run analysis on captured food photo
-        await Future.delayed(const Duration(milliseconds: 600));
+        // Run ML Vision on the captured photo
+        final visionResult = await FoodVisionService.instance.analyzeImageFile(
+          File(picked.path),
+        );
 
-        // Predict dish based on user context or meal category
-        String detected = _dishNameController.text.trim();
-        if (detected.isEmpty) {
-          detected = _selectedMeal == 'Breakfast'
-              ? 'Scrambled Eggs & Toast'
-              : (_selectedMeal == 'Dinner' ? 'Salmon, Rice & Veggies' : 'Grilled Chicken Salad');
-          _dishNameController.text = detected;
-        }
+        if (!mounted) return;
 
-        await _runEstimation(detected);
-        if (mounted) {
-          setState(() {
-            _isAnalyzing = false;
-          });
+        setState(() {
+          _isAnalyzing = false;
+          _detectedLabels = visionResult.allLabels;
+          _detectionConfidence = visionResult.confidence;
+
+          if (visionResult.isFood) {
+            _isFoodDetected = true;
+            _dishNameController.text = visionResult.detectedFoodName ?? 'Food Item';
+          } else {
+            _isFoodDetected = false;
+            _nonFoodCategory = visionResult.nonFoodCategory ?? 'Non-Food Item';
+            _nonFoodMessage = visionResult.message;
+            _dishNameController.text = '';
+          }
+        });
+
+        if (visionResult.isFood && visionResult.detectedFoodName != null) {
+          await _runEstimation(visionResult.suggestedQuery ?? visionResult.detectedFoodName!);
         }
       }
     } catch (e) {
       if (mounted) {
+        setState(() => _isAnalyzing = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Camera error: $e')),
         );
@@ -169,9 +189,12 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
   }
 
   Future<void> _runEstimation(String query) async {
+    final clean = query.trim();
+    if (clean.isEmpty) return;
+
     setState(() => _isAnalyzing = true);
     try {
-      final meal = await AiNutritionEstimator.instance.estimateMeal(query);
+      final meal = await AiNutritionEstimator.instance.estimateMeal(clean);
       if (!mounted) return;
       setState(() {
         _estimatedMeal = meal;
@@ -185,15 +208,21 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
 
   Future<void> _logFoodEntry() async {
     final meal = _estimatedMeal;
+    final dishName = _dishNameController.text.trim();
+
+    if (dishName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please specify a meal name to log')),
+      );
+      return;
+    }
+
     if (meal == null) return;
 
     setState(() => _isSaving = true);
 
     try {
       final mult = _portionMultiplier;
-      final dishName = _dishNameController.text.trim().isNotEmpty
-          ? _dishNameController.text.trim()
-          : (meal.items.isNotEmpty ? meal.items.first.name : 'Scanned Meal');
 
       final totalKcal = meal.totalCalories * mult;
       final totalP = meal.totalProtein * mult;
@@ -246,7 +275,7 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
           fat100: f100,
           fiber100: fiber100,
           imagePath: _capturedImage?.path,
-          notes: 'Scanned via Camera Food Scanner',
+          notes: 'Scanned via AI Vision Scanner',
         ),
       );
 
@@ -260,12 +289,7 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
               children: [
                 const Icon(Icons.check_circle, color: Colors.white),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Logged "${dishName}" (${totalKcal.round()} kcal) to $_selectedMeal!',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+                Expanded(child: Text('Logged $dishName (${totalKcal.round()} kcal) to $_selectedMeal!')),
               ],
             ),
           ),
@@ -276,7 +300,7 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
       if (mounted) {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to log scanned food: $e')),
+          SnackBar(content: Text('Failed to log meal: $e')),
         );
       }
     }
@@ -292,9 +316,9 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
       appBar: AppBar(
         title: const Row(
           children: [
-            Icon(Icons.camera_alt, color: Colors.teal),
+            Icon(Icons.camera_alt_outlined, size: 22),
             SizedBox(width: 8),
-            Text('Scan Food for Calories'),
+            Text('AI Food Scanner'),
           ],
         ),
         actions: [
@@ -305,7 +329,7 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
           ),
           IconButton(
             icon: const Icon(Icons.camera_alt_outlined),
-            tooltip: 'Retake Photo',
+            tooltip: 'Take Food Photo',
             onPressed: () => _pickImage(ImageSource.camera),
           ),
         ],
@@ -323,34 +347,61 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Dish Name & Auto Suggestion Bar
+                  // State 1: Non-food alert card
+                  if (_hasScanned && !_isAnalyzing && !_isFoodDetected) ...[
+                    _buildNonFoodAlertCard(theme),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // State 2: Food detected banner
+                  if (_hasScanned && !_isAnalyzing && _isFoodDetected) ...[
+                    _buildFoodVerifiedBanner(theme),
+                    const SizedBox(height: 14),
+                  ],
+
+                  // Dish Name & Manual Edit Bar
                   Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: _dishNameController,
                           decoration: InputDecoration(
-                            labelText: 'Detected Dish / Meal Name',
-                            hintText: 'e.g. Chicken Caesar Salad, Pizza, Steak...',
-                            prefixIcon: const Icon(Icons.restaurant, color: Colors.teal),
+                            labelText: _isFoodDetected ? 'Identified Food / Dish' : 'Enter or Refine Food Name',
+                            hintText: 'e.g. Chicken Caesar Salad, Pizza, Apple...',
+                            prefixIcon: Icon(
+                              _isFoodDetected ? Icons.restaurant : Icons.search,
+                              color: _isFoodDetected ? Colors.teal : Colors.grey,
+                            ),
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.auto_awesome, color: Colors.purple),
-                              tooltip: 'Re-analyze nutrition',
-                              onPressed: () => _runEstimation(_dishNameController.text),
+                              tooltip: 'Analyze nutrition',
+                              onPressed: () {
+                                if (_dishNameController.text.trim().isNotEmpty) {
+                                  setState(() {
+                                    _isFoodDetected = true;
+                                  });
+                                  _runEstimation(_dishNameController.text);
+                                }
+                              },
                             ),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                           ),
-                          onSubmitted: (val) => _runEstimation(val),
+                          onSubmitted: (val) {
+                            if (val.trim().isNotEmpty) {
+                              setState(() => _isFoodDetected = true);
+                              _runEstimation(val);
+                            }
+                          },
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
 
-                  // Quick Dish Presets Carousel
+                  // Quick Food Presets Carousel
                   const Text(
-                    'Quick Food Presets:',
+                    'Or choose a preset dish:',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54),
                   ),
                   const SizedBox(height: 6),
@@ -366,7 +417,10 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                             label: Text(preset['name'] as String),
                             selected: isSelected,
                             onSelected: (_) {
-                              _dishNameController.text = preset['name'] as String;
+                              setState(() {
+                                _isFoodDetected = true;
+                                _dishNameController.text = preset['name'] as String;
+                              });
                               _runEstimation(preset['query'] as String);
                             },
                           ),
@@ -376,55 +430,57 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                   ),
                   const SizedBox(height: 16),
 
-                  // Portion Multiplier Controls
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.5)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Portion Size:',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.teal.withOpacity(0.15),
-                                borderRadius: BorderRadius.circular(8),
+                  // Portion Multiplier Controls (only visible when food is present)
+                  if (_isFoodDetected || meal != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.5)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Portion Size:',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                               ),
-                              child: Text(
-                                '${(_portionMultiplier * 100).round()}% Serving',
-                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal, fontSize: 12),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.teal.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '${(_portionMultiplier * 100).round()}% Serving',
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal, fontSize: 12),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            _buildPortionChip('0.5x', 0.5, 'Light'),
-                            const SizedBox(width: 6),
-                            _buildPortionChip('0.75x', 0.75, 'Small'),
-                            const SizedBox(width: 6),
-                            _buildPortionChip('1.0x', 1.0, 'Regular'),
-                            const SizedBox(width: 6),
-                            _buildPortionChip('1.25x', 1.25, 'Hearty'),
-                            const SizedBox(width: 6),
-                            _buildPortionChip('1.5x', 1.5, 'Large'),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              _buildPortionChip('0.5x', 0.5, 'Light'),
+                              const SizedBox(width: 6),
+                              _buildPortionChip('0.75x', 0.75, 'Small'),
+                              const SizedBox(width: 6),
+                              _buildPortionChip('1.0x', 1.0, 'Regular'),
+                              const SizedBox(width: 6),
+                              _buildPortionChip('1.25x', 1.25, 'Hearty'),
+                              const SizedBox(width: 6),
+                              _buildPortionChip('1.5x', 1.5, 'Large'),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
+                  ],
 
                   // Nutritional Breakdown Card
                   if (_isAnalyzing)
@@ -435,12 +491,12 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                           children: [
                             CircularProgressIndicator(),
                             SizedBox(height: 12),
-                            Text('Scanning dish and computing nutritional breakdown...'),
+                            Text('Scanning image with AI Vision & estimating calories...'),
                           ],
                         ),
                       ),
                     )
-                  else if (meal != null) ...[
+                  else if (meal != null && (_isFoodDetected || _dishNameController.text.isNotEmpty)) ...[
                     _buildNutritionSummaryCard(theme, meal, mult),
                     const SizedBox(height: 16),
 
@@ -452,44 +508,40 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        _buildMealCategoryChip('Breakfast', Icons.free_breakfast, Colors.orange),
-                        const SizedBox(width: 6),
-                        _buildMealCategoryChip('Lunch', Icons.lunch_dining, Colors.teal),
-                        const SizedBox(width: 6),
-                        _buildMealCategoryChip('Dinner', Icons.dinner_dining, Colors.indigo),
-                        const SizedBox(width: 6),
-                        _buildMealCategoryChip('Snack', Icons.cookie, Colors.purple),
+                        _buildMealCategoryChip('Breakfast', Icons.wb_sunny_outlined, Colors.amber.shade700),
+                        const SizedBox(width: 8),
+                        _buildMealCategoryChip('Lunch', Icons.restaurant_outlined, Colors.orange),
+                        const SizedBox(width: 8),
+                        _buildMealCategoryChip('Dinner', Icons.nights_stay_outlined, Colors.indigo),
+                        const SizedBox(width: 8),
+                        _buildMealCategoryChip('Snack', Icons.apple_outlined, Colors.teal),
                       ],
                     ),
                     const SizedBox(height: 20),
 
-                    // Primary Log Button
-                    SizedBox(
-                      height: 52,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal.shade700,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          elevation: 3,
-                        ),
-                        icon: _isSaving
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                              )
-                            : const Icon(Icons.check_circle_outline, size: 22),
-                        label: Text(
-                          _isSaving
-                              ? 'Logging Meal...'
-                              : 'Log ${(meal.totalCalories * mult).round()} kcal to $_selectedMeal',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: _isSaving ? null : _logFoodEntry,
+                    // 1-Tap Log Meal Button
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal.shade700,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        elevation: 2,
                       ),
+                      icon: _isSaving
+                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                          : const Icon(Icons.add_task),
+                      label: Text(
+                        _isSaving
+                            ? 'Saving Entry...'
+                            : 'Log to $_selectedMeal (${(meal.totalCalories * mult).round()} kcal)',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: _isSaving ? null : _logFoodEntry,
                     ),
-                    const SizedBox(height: 24),
+                  ] else if (!_hasScanned) ...[
+                    // Empty state before photo is captured
+                    _buildPreScanGuideCard(theme),
                   ],
                 ],
               ),
@@ -504,7 +556,7 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
     final hasPhoto = _capturedImage != null;
 
     return Container(
-      height: 260,
+      height: 270,
       width: double.infinity,
       color: Colors.black,
       child: Stack(
@@ -520,48 +572,73 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                  colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
               ),
-              child: const Center(
-                child: Icon(Icons.fastfood_outlined, size: 72, color: Colors.white24),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.fastfood_outlined,
+                      size: 64,
+                      color: Colors.white.withOpacity(0.3),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'AI Vision Scanner',
+                      style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Point camera at food to identify calories & macros',
+                      style: TextStyle(color: Colors.white38, fontSize: 12),
+                    ),
+                  ],
+                ),
               ),
             ),
 
-          // Scanning Reticle & Laser Beam
-          AnimatedBuilder(
-            animation: _scanAnimController,
-            builder: (context, child) {
-              return Positioned(
-                top: 30 + (_scanAnimController.value * 180),
-                left: 30,
-                right: 30,
-                child: Container(
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: Colors.tealAccent,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.tealAccent.withOpacity(0.8),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                      ),
-                    ],
+          // Scanning Reticle & Laser Beam (active when analyzing)
+          if (_isAnalyzing || !hasPhoto)
+            AnimatedBuilder(
+              animation: _scanAnimController,
+              builder: (context, child) {
+                return Positioned(
+                  top: 25 + (_scanAnimController.value * 190),
+                  left: 30,
+                  right: 30,
+                  child: Container(
+                    height: 2.5,
+                    decoration: BoxDecoration(
+                      color: Colors.tealAccent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.tealAccent.withOpacity(0.8),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
+                );
+              },
+            ),
 
           // Reticle Frame Boundary
           Center(
             child: Container(
-              width: 280,
+              width: 290,
               height: 200,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white.withOpacity(0.7), width: 2),
+                border: Border.all(
+                  color: _hasScanned && !_isFoodDetected
+                      ? Colors.redAccent.withOpacity(0.8)
+                      : Colors.white.withOpacity(0.6),
+                  width: 2,
+                ),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Stack(
@@ -569,22 +646,22 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                   Positioned(
                     top: 10,
                     left: 10,
-                    child: Container(width: 20, height: 20, decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.tealAccent, width: 3), left: BorderSide(color: Colors.tealAccent, width: 3)))),
+                    child: Container(width: 20, height: 20, decoration: BoxDecoration(border: Border(top: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3), left: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3)))),
                   ),
                   Positioned(
                     top: 10,
                     right: 10,
-                    child: Container(width: 20, height: 20, decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.tealAccent, width: 3), right: BorderSide(color: Colors.tealAccent, width: 3)))),
+                    child: Container(width: 20, height: 20, decoration: BoxDecoration(border: Border(top: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3), right: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3)))),
                   ),
                   Positioned(
                     bottom: 10,
                     left: 10,
-                    child: Container(width: 20, height: 20, decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.tealAccent, width: 3), left: BorderSide(color: Colors.tealAccent, width: 3)))),
+                    child: Container(width: 20, height: 20, decoration: BoxDecoration(border: Border(bottom: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3), left: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3)))),
                   ),
                   Positioned(
                     bottom: 10,
                     right: 10,
-                    child: Container(width: 20, height: 20, decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.tealAccent, width: 3), right: BorderSide(color: Colors.tealAccent, width: 3)))),
+                    child: Container(width: 20, height: 20, decoration: BoxDecoration(border: Border(bottom: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3), right: BorderSide(color: _hasScanned && !_isFoodDetected ? Colors.redAccent : Colors.tealAccent, width: 3)))),
                   ),
                 ],
               ),
@@ -593,9 +670,9 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
 
           // Bottom Action Floating Pill
           Positioned(
-            bottom: 14,
-            left: 20,
-            right: 20,
+            bottom: 12,
+            left: 16,
+            right: 16,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -604,13 +681,13 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                     backgroundColor: Colors.tealAccent.shade700,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   ),
-                  icon: const Icon(Icons.camera_alt, size: 20),
+                  icon: const Icon(Icons.camera_alt, size: 18),
                   label: Text(hasPhoto ? 'Retake Photo' : 'Capture Food Photo'),
                   onPressed: () => _pickImage(ImageSource.camera),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -618,12 +695,165 @@ class _FoodScannerScreenState extends State<FoodScannerScreen>
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   ),
-                  icon: const Icon(Icons.photo_library, size: 18),
+                  icon: const Icon(Icons.photo_library, size: 16),
                   label: const Text('Gallery'),
                   onPressed: () => _pickImage(ImageSource.gallery),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNonFoodAlertCard(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.red.shade200, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.no_meals_outlined, color: Colors.red.shade800, size: 24),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'No Food Detected in Photo',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.red.shade900,
+                      ),
+                    ),
+                    Text(
+                      'Camera detected: ${_nonFoodCategory ?? "Non-food item"}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            _nonFoodMessage ??
+                'CalorieFit AI Vision only analyzes food dishes, snacks, and beverages. Please retake the photo pointing at food.',
+            style: TextStyle(fontSize: 12, color: Colors.red.shade900),
+          ),
+          if (_detectedLabels.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Detected objects: ${_detectedLabels.take(4).join(", ")}',
+              style: TextStyle(fontSize: 11, color: Colors.red.shade700, fontStyle: FontStyle.italic),
+            ),
+          ],
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade700,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  icon: const Icon(Icons.camera_alt, size: 16),
+                  label: const Text('Retake Food Photo'),
+                  onPressed: () => _pickImage(ImageSource.camera),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFoodVerifiedBanner(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.green.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.green.shade200),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.check_circle, color: Colors.green.shade700, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Food Recognized: ${_dishNameController.text}',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.green.shade900),
+                ),
+                if (_detectedLabels.isNotEmpty)
+                  Text(
+                    'Visual tags: ${_detectedLabels.take(3).join(", ")}',
+                    style: TextStyle(fontSize: 11, color: Colors.green.shade700),
+                  ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.green.shade100,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              '${(_detectionConfidence * 100).round()}% match',
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.green.shade800),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPreScanGuideCard(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.4)),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.center_focus_strong, size: 36, color: Colors.teal.shade600),
+          const SizedBox(height: 10),
+          const Text(
+            'Ready to Scan Your Meal',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Capture a clear photo of your dish, snack, or drink. Our AI Vision will identify the food and calculate nutrition.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 12, color: Colors.black54),
           ),
         ],
       ),

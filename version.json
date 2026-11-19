@@ -1,9 +1,9 @@
 {
-  "version": "1.10.1",
-  "build_number": 17,
+  "version": "1.10.2",
+  "build_number": 18,
   "min_supported_build": 1,
   "force_update": false,
   "release_date": "2026-11-19",
-  "release_notes": "• Front-Page Streak Challenge Module: Pick your streak target upfront (1-Day Kickstart, 3-Day Habit, 7-Day Consistency, 10-Day Challenge, 14-Day Momentum, 30-Day Master, or custom)\n• Live Milestone Visual Tracker: Day-by-day checkmark bubbles and real-time streak protection status right on your Diary\n• Camera Food Scanner: Snap meal photos to instantly compute calories and macros\n• Enhanced achievements and gamification badges",
+  "release_notes": "• AI Vision Food Classifier: Integrated real-time on-device ML Vision to accurately distinguish food from non-food objects. Photos of carpets, floors, furniture, and electronics are now detected and prevented from false logging.\n• High-accuracy food recognition for meals, snacks, and beverages with instant calorie estimation\n• Front-Page Streak Challenge Module with customizable day targets (1d, 3d, 7d, 10d, 14d, 30d)\n• Visual meal photo journal & camera scanning directly from Diary",
   "play_store_url": "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 }

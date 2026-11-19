@@ -14,6 +14,8 @@ import 'package:calorie_fit/services/health_export_service.dart';
 import 'package:calorie_fit/services/privacy_lock_service.dart';
 import 'package:calorie_fit/services/gamification_service.dart';
 import 'package:calorie_fit/services/app_update_service.dart';
+import 'package:calorie_fit/services/food_vision_service.dart';
+import 'package:google_mlkit_image_labeling/google_mlkit_image_labeling.dart';
 import 'package:calorie_fit/widgets/interactive_charts.dart';
 
 void main() {
@@ -390,6 +392,74 @@ void main() {
       final eggsMeal = await estimator.estimateMeal('2 eggs with toast');
       expect(eggsMeal.totalCalories, greaterThan(150));
       expect(eggsMeal.totalProtein, greaterThan(12));
+    });
+
+    test('FoodVisionService rejects carpet and floor photos as non-food', () {
+      final vision = FoodVisionService.instance;
+      final labels = [
+        ImageLabel(confidence: 0.94, label: 'Carpet', index: 1),
+        ImageLabel(confidence: 0.89, label: 'Flooring', index: 2),
+        ImageLabel(confidence: 0.82, label: 'Textile', index: 3),
+        ImageLabel(confidence: 0.75, label: 'Interior design', index: 4),
+      ];
+
+      final result = vision.classifyLabels(labels);
+
+      expect(result.isFood, isFalse);
+      expect(result.nonFoodCategory, contains('Carpet'));
+      expect(result.detectedFoodName, isNull);
+      expect(result.message, contains('No food detected in photo'));
+    });
+
+    test('FoodVisionService rejects electronics and furniture as non-food', () {
+      final vision = FoodVisionService.instance;
+      final labels = [
+        ImageLabel(confidence: 0.96, label: 'Laptop', index: 1),
+        ImageLabel(confidence: 0.88, label: 'Computer keyboard', index: 2),
+        ImageLabel(confidence: 0.70, label: 'Desk', index: 3),
+      ];
+
+      final result = vision.classifyLabels(labels);
+
+      expect(result.isFood, isFalse);
+      expect(result.detectedFoodName, isNull);
+      expect(result.nonFoodCategory, contains('Electronics'));
+    });
+
+    test('FoodVisionService recognizes specific food dishes with high accuracy', () {
+      final vision = FoodVisionService.instance;
+
+      // Pizza
+      final pizzaLabels = [
+        ImageLabel(confidence: 0.93, label: 'Pizza', index: 1),
+        ImageLabel(confidence: 0.89, label: 'Food', index: 2),
+        ImageLabel(confidence: 0.85, label: 'Dish', index: 3),
+      ];
+      final pizzaResult = vision.classifyLabels(pizzaLabels);
+      expect(pizzaResult.isFood, isTrue);
+      expect(pizzaResult.detectedFoodName, contains('Pizza'));
+
+      // Salad
+      final saladLabels = [
+        ImageLabel(confidence: 0.91, label: 'Salad', index: 1),
+        ImageLabel(confidence: 0.87, label: 'Vegetable', index: 2),
+        ImageLabel(confidence: 0.84, label: 'Food', index: 3),
+      ];
+      final saladResult = vision.classifyLabels(saladLabels);
+      expect(saladResult.isFood, isTrue);
+      expect(saladResult.detectedFoodName, contains('Salad'));
+    });
+
+    test('FoodVisionService detects general meal plate when labels contain Dish and Food', () {
+      final vision = FoodVisionService.instance;
+      final dishLabels = [
+        ImageLabel(confidence: 0.88, label: 'Dish', index: 1),
+        ImageLabel(confidence: 0.84, label: 'Cuisine', index: 2),
+        ImageLabel(confidence: 0.81, label: 'Food', index: 3),
+      ];
+      final result = vision.classifyLabels(dishLabels);
+      expect(result.isFood, isTrue);
+      expect(result.detectedFoodName, contains('Meal'));
     });
   });
 }

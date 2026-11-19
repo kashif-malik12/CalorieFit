@@ -26,8 +26,8 @@ class AppUpdateService {
   AppUpdateService._();
   static final AppUpdateService instance = AppUpdateService._();
 
-  static const String currentVersion = '1.10.1';
-  static const int currentBuildNumber = 17;
+  static const String currentVersion = '1.10.2';
+  static const int currentBuildNumber = 18;
   static const String playStorePackage = 'com.caloriefit.app';
   static const String playStoreWebUrl = 'https://play.google.com/store/apps/details?id=$playStorePackage';
   static const String playStoreMarketUrl = 'market://details?id=$playStorePackage';
