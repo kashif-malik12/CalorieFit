@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../data/db.dart';
 import '../data/models.dart';
 
@@ -32,11 +33,64 @@ class UserStreakInfo {
   });
 }
 
+class StreakChallengeInfo {
+  final int currentStreakDays;
+  final int bestStreakDays;
+  final int targetGoalDays;
+  final bool loggedToday;
+  final double progressPercent;
+  final int daysRemaining;
+  final bool isCompleted;
+
+  const StreakChallengeInfo({
+    required this.currentStreakDays,
+    required this.bestStreakDays,
+    required this.targetGoalDays,
+    required this.loggedToday,
+    required this.progressPercent,
+    required this.daysRemaining,
+    required this.isCompleted,
+  });
+}
+
 class GamificationService {
   final AppDb db;
 
   GamificationService({AppDb? db}) : db = db ?? AppDb.instance;
   static final GamificationService instance = GamificationService();
+
+  static const String _kStreakTargetDaysKey = 'caloriefit_streak_target_days';
+
+  /// Gets the user's selected streak challenge goal (default: 10 days)
+  Future<int> getStreakTargetDays() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_kStreakTargetDaysKey) ?? 10;
+  }
+
+  /// Sets the user's selected streak challenge goal (e.g. 1, 3, 7, 10, 14, 30 days)
+  Future<void> setStreakTargetDays(int days) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_kStreakTargetDaysKey, days > 0 ? days : 1);
+  }
+
+  /// Returns aggregated streak and challenge target status
+  Future<StreakChallengeInfo> getStreakChallengeInfo({UserStreakInfo? streakOverride}) async {
+    final streak = streakOverride ?? await calculateStreak();
+    final target = await getStreakTargetDays();
+    final progress = target > 0 ? (streak.currentStreakDays / target).clamp(0.0, 1.0) : 0.0;
+    final remaining = (target - streak.currentStreakDays).clamp(0, 9999);
+    final completed = streak.currentStreakDays >= target;
+
+    return StreakChallengeInfo(
+      currentStreakDays: streak.currentStreakDays,
+      bestStreakDays: streak.bestStreakDays,
+      targetGoalDays: target,
+      loggedToday: streak.loggedToday,
+      progressPercent: progress,
+      daysRemaining: remaining,
+      isCompleted: completed,
+    );
+  }
 
   /// Calculates the current consecutive day logging streak.
   Future<UserStreakInfo> calculateStreak() async {
@@ -112,6 +166,22 @@ class GamificationService {
         iconEmoji: '🏆',
         isUnlocked: streak.currentStreakDays >= 7,
         progressPercent: (streak.currentStreakDays / 7.0).clamp(0.0, 1.0),
+      ),
+      AchievementBadge(
+        id: 'streak_10',
+        title: '10-Day Streak Master',
+        description: 'Complete the 10-day consistency challenge',
+        iconEmoji: '🚀',
+        isUnlocked: streak.currentStreakDays >= 10,
+        progressPercent: (streak.currentStreakDays / 10.0).clamp(0.0, 1.0),
+      ),
+      AchievementBadge(
+        id: 'streak_30',
+        title: '30-Day Legend',
+        description: 'Achieve a 1-month daily logging transformation',
+        iconEmoji: '👑',
+        isUnlocked: streak.currentStreakDays >= 30,
+        progressPercent: (streak.currentStreakDays / 30.0).clamp(0.0, 1.0),
       ),
       AchievementBadge(
         id: 'hydration_hero',

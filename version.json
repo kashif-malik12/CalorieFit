@@ -1,9 +1,9 @@
 {
-  "version": "1.10.0",
-  "build_number": 16,
+  "version": "1.10.1",
+  "build_number": 17,
   "min_supported_build": 1,
   "force_update": false,
   "release_date": "2026-11-19",
-  "release_notes": "• Camera Food Scanner: Snap a photo of your meal or plate to auto-calculate calories, macros, and portion sizes with AI\n• Visual Meal Journal integration with saved food photo previews\n• Direct Camera Scan action from Daily Diary meal cards (Breakfast, Lunch, Dinner, Snack)\n• Expanded nutrition database with 40+ dishes, ingredient breakdowns, and quick portion multiplier",
+  "release_notes": "• Front-Page Streak Challenge Module: Pick your streak target upfront (1-Day Kickstart, 3-Day Habit, 7-Day Consistency, 10-Day Challenge, 14-Day Momentum, 30-Day Master, or custom)\n• Live Milestone Visual Tracker: Day-by-day checkmark bubbles and real-time streak protection status right on your Diary\n• Camera Food Scanner: Snap meal photos to instantly compute calories and macros\n• Enhanced achievements and gamification badges",
   "play_store_url": "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 }

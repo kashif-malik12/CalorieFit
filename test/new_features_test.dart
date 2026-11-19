@@ -312,6 +312,31 @@ void main() {
       expect(badge.isUnlocked, isTrue);
       expect(badge.progressPercent, 1.0);
     });
+
+    test('Streak challenge target persistence and calculation', () async {
+      SharedPreferences.setMockInitialValues({});
+      final service = GamificationService.instance;
+
+      expect(await service.getStreakTargetDays(), 10);
+
+      await service.setStreakTargetDays(14);
+      expect(await service.getStreakTargetDays(), 14);
+
+      final challenge = await service.getStreakChallengeInfo(
+        streakOverride: const UserStreakInfo(
+          currentStreakDays: 5,
+          bestStreakDays: 12,
+          loggedToday: true,
+        ),
+      );
+      expect(challenge.targetGoalDays, 14);
+      expect(challenge.currentStreakDays, 5);
+      expect(challenge.bestStreakDays, 12);
+      expect(challenge.loggedToday, isTrue);
+      expect(challenge.daysRemaining, 9);
+      expect(challenge.isCompleted, isFalse);
+      expect(challenge.progressPercent, closeTo(5 / 14, 0.01));
+    });
   });
 
   group('App Update Service Tests', () {

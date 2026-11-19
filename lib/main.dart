@@ -51,6 +51,7 @@ import 'services/open_food_facts_service.dart';
 import 'screens/health_hub_screen.dart';
 import 'widgets/modern_calorie_dashboard.dart';
 import 'widgets/modern_meal_card.dart';
+import 'widgets/upfront_streak_card.dart';
 import 'services/app_update_service.dart';
 import 'settings/target_settings.dart';
 import 'settings/retention_settings.dart';
@@ -3779,35 +3780,14 @@ class _TodayPageState extends State<TodayPage> {
                     );
                   },
                 ),
-                FutureBuilder<int>(
-                  future: AppDb.instance.getStreakCount(),
-                  builder: (_, snap) {
-                    final streak = snap.data ?? 0;
-                    if (streak <= 0) return const SizedBox.shrink();
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
-                      ),
-                      child: Row(
-                        children: [
-                          const Text('🔥', style: TextStyle(fontSize: 18)),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '$streak Day${streak == 1 ? "" : "s"} Streak! Keep logging to crush your goals.',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                UpfrontStreakCard(
+                  onStreakUpdated: () {
+                    if (mounted) setState(() {});
+                  },
+                  onOpenAchievements: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const AchievementsScreen()),
                     );
                   },
                 ),

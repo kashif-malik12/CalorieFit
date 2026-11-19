@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/gamification_service.dart';
+import '../widgets/upfront_streak_card.dart';
 
 class AchievementsScreen extends StatefulWidget {
   const AchievementsScreen({super.key});
@@ -47,62 +48,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                // Streak Card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.orange.shade700, Colors.deepOrange.shade600],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.deepOrange.withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(child: Text('🔥', style: TextStyle(fontSize: 34))),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${_streak?.currentStreakDays ?? 0} Day Streak!',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _streak?.loggedToday == true
-                                  ? 'You logged today! Keep the flame burning.'
-                                  : 'Log a meal today to protect your streak!',
-                              style: const TextStyle(color: Colors.white70, fontSize: 13),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
+                // Upfront Interactive Streak Card
+                UpfrontStreakCard(onStreakUpdated: _loadData),
+                const SizedBox(height: 12),
 
                 // Badge Summary
                 Row(
