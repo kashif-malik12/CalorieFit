@@ -142,13 +142,194 @@ class AppDb {
     return info.any((r) => (r['name'] as String) == column);
   }
 
+  Future<void> _ensureAllTablesAndColumns(Database db) async {
+    await _createSchema(db);
+
+    // Idempotent creation of all extension tables
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS food_servings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        food_id INTEGER NOT NULL REFERENCES foods(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        grams REAL NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_food_servings_food ON food_servings(food_id);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        author_name TEXT NOT NULL,
+        is_random_name INTEGER NOT NULL DEFAULT 0,
+        question TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'open'
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_questions_created ON questions(created_at DESC);',
+    );
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS question_replies (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+        reply_text TEXT NOT NULL,
+        admin_name TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_question_replies_qid ON question_replies(question_id);',
+    );
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS question_notifications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        question_id INTEGER NOT NULL,
+        message TEXT NOT NULL,
+        is_read INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_question_notifs_user ON question_notifications(user_id, is_read);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS water_logs (
+        date TEXT PRIMARY KEY,
+        amount_ml INTEGER NOT NULL DEFAULT 0,
+        target_ml INTEGER NOT NULL DEFAULT 2000
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS weight_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL,
+        weight REAL NOT NULL,
+        unit TEXT NOT NULL DEFAULT 'kg',
+        notes TEXT,
+        created_at TEXT NOT NULL
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS fasting_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        protocol TEXT NOT NULL,
+        target_hours REAL NOT NULL,
+        start_time TEXT NOT NULL,
+        end_time TEXT,
+        is_completed INTEGER NOT NULL DEFAULT 0,
+        notes TEXT
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_fasting_sessions_start ON fasting_sessions(start_time DESC);',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS exercise_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL,
+        activity_name TEXT NOT NULL,
+        duration_minutes INTEGER NOT NULL,
+        calories_burned REAL NOT NULL,
+        steps INTEGER NOT NULL DEFAULT 0,
+        notes TEXT
+      );
+    ''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_exercise_logs_date ON exercise_logs(date DESC);',
+    );
+
+    Future<void> addCol(String table, String col, String def) async {
+      try {
+        if (!await _hasColumn(db, table, col)) {
+          await db.execute('ALTER TABLE $table ADD COLUMN $col $def;');
+        }
+      } catch (_) {}
+    }
+
+    await addCol('foods', 'unit', "TEXT NOT NULL DEFAULT 'g'");
+    await addCol('foods', 'base_amount', "REAL NOT NULL DEFAULT 100");
+    await addCol('foods', 'is_system', "INTEGER NOT NULL DEFAULT 0");
+    await addCol('foods', 'category', "TEXT");
+    await addCol('foods', 'system_key', "TEXT");
+    await addCol('foods', 'is_active', "INTEGER NOT NULL DEFAULT 1");
+    await addCol('foods', 'seed_version', "INTEGER NOT NULL DEFAULT 1");
+    await addCol('foods', 'cholesterol', "REAL NOT NULL DEFAULT 0");
+    await addCol('foods', 'saturated_fat', "REAL NOT NULL DEFAULT 0");
+    await addCol('foods', 'trans_fat', "REAL NOT NULL DEFAULT 0");
+    await addCol('foods', 'is_favorite', "INTEGER NOT NULL DEFAULT 0");
+
+    await addCol('log_entries', 'time', "TEXT");
+    await addCol('log_entries', 'label', "TEXT");
+    await addCol('log_entries', 'unit', "TEXT DEFAULT 'g'");
+    await addCol('log_entries', 'base_amount', "REAL DEFAULT 100");
+    await addCol('log_entries', 'food_name', "TEXT");
+    await addCol('log_entries', 'calories_100', "REAL");
+    await addCol('log_entries', 'protein_100', "REAL");
+    await addCol('log_entries', 'carbs_100', "REAL");
+    await addCol('log_entries', 'fat_100', "REAL");
+    await addCol('log_entries', 'fiber_100', "REAL");
+    await addCol('log_entries', 'sugar_100', "REAL");
+    await addCol('log_entries', 'sodium_100', "REAL");
+    await addCol('log_entries', 'cholesterol_100', "REAL");
+    await addCol('log_entries', 'saturated_fat_100', "REAL");
+    await addCol('log_entries', 'trans_fat_100', "REAL");
+    await addCol('log_entries', 'entry_type', "TEXT NOT NULL DEFAULT 'food'");
+    await addCol('log_entries', 'manual_name', "TEXT");
+    await addCol('log_entries', 'manual_kcal', "REAL");
+    await addCol('log_entries', 'manual_protein', "REAL");
+    await addCol('log_entries', 'manual_carbs', "REAL");
+    await addCol('log_entries', 'manual_fat', "REAL");
+    await addCol('log_entries', 'manual_fiber', "REAL");
+    await addCol('log_entries', 'manual_sugar', "REAL");
+    await addCol('log_entries', 'manual_sodium', "REAL");
+    await addCol('log_entries', 'manual_cholesterol', "REAL");
+    await addCol('log_entries', 'manual_saturated_fat', "REAL");
+    await addCol('log_entries', 'manual_trans_fat', "REAL");
+    await addCol('log_entries', 'notes', "TEXT");
+    await addCol('log_entries', 'image_path', "TEXT");
+
+    await addCol('day_targets', 'fiber_target', "INTEGER NOT NULL DEFAULT 30");
+    await addCol('day_targets', 'sugar_target', "INTEGER NOT NULL DEFAULT 50");
+    await addCol('day_targets', 'sodium_target', "INTEGER NOT NULL DEFAULT 2300");
+    await addCol('day_targets', 'cholesterol_target', "INTEGER NOT NULL DEFAULT 300");
+    await addCol('day_targets', 'saturated_fat_target', "INTEGER NOT NULL DEFAULT 20");
+    await addCol('day_targets', 'trans_fat_target', "INTEGER NOT NULL DEFAULT 0");
+    await addCol('day_targets', 'source', "TEXT DEFAULT 'manual'");
+    await addCol('day_targets', 'calculator_json', "TEXT");
+
+    await addCol('meal_templates', 'is_system', "INTEGER NOT NULL DEFAULT 0");
+    await addCol('meal_templates', 'system_key', "TEXT");
+    await addCol('meal_templates', 'is_active', "INTEGER NOT NULL DEFAULT 1");
+    await addCol('meal_templates', 'seed_version', "INTEGER NOT NULL DEFAULT 1");
+  }
+
+  Future<void> repairDatabase() async {
+    try {
+      final d = await db;
+      await _ensureAllTablesAndColumns(d);
+      await ensureSystemSeeded(d);
+    } catch (_) {}
+  }
+
   Future<Database> _open() async {
     final path = await _resolveDbPath();
 
     final d = await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 19,
+        version: 21,
         onConfigure: (db) async {
           if (!kIsWeb) {
             await db.execute('PRAGMA foreign_keys = ON;');
@@ -156,379 +337,16 @@ class AppDb {
         },
         onCreate: (db, version) async {
           await _createSchema(db);
+          await _ensureAllTablesAndColumns(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
-          await _createSchema(db);
-
-          if (!await _hasColumn(db, 'foods', 'unit')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN unit TEXT NOT NULL DEFAULT 'g';",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'base_amount')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN base_amount REAL NOT NULL DEFAULT 100;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'is_system')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN is_system INTEGER NOT NULL DEFAULT 0;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'category')) {
-            await db.execute("ALTER TABLE foods ADD COLUMN category TEXT;");
-          }
-          if (!await _hasColumn(db, 'foods', 'system_key')) {
-            await db.execute("ALTER TABLE foods ADD COLUMN system_key TEXT;");
-          }
-          if (!await _hasColumn(db, 'foods', 'is_active')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'seed_version')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN seed_version INTEGER NOT NULL DEFAULT 1;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'cholesterol')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN cholesterol REAL NOT NULL DEFAULT 0;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'saturated_fat')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN saturated_fat REAL NOT NULL DEFAULT 0;",
-            );
-          }
-          if (!await _hasColumn(db, 'foods', 'trans_fat')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN trans_fat REAL NOT NULL DEFAULT 0;",
-            );
-          }
-
-          if (!await _hasColumn(db, 'log_entries', 'time')) {
-            await db.execute("ALTER TABLE log_entries ADD COLUMN time TEXT;");
-          }
-          if (!await _hasColumn(db, 'log_entries', 'label')) {
-            await db.execute("ALTER TABLE log_entries ADD COLUMN label TEXT;");
-          }
-          if (!await _hasColumn(db, 'log_entries', 'unit')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN unit TEXT DEFAULT 'g';",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'base_amount')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN base_amount REAL DEFAULT 100;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'food_name')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN food_name TEXT;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'calories_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN calories_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'protein_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN protein_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'carbs_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN carbs_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'fat_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN fat_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'fiber_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN fiber_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'sugar_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN sugar_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'sodium_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN sodium_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'cholesterol_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN cholesterol_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'saturated_fat_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN saturated_fat_100 REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'trans_fat_100')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN trans_fat_100 REAL;",
-            );
-          }
-
-          if (!await _hasColumn(db, 'log_entries', 'entry_type')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN entry_type TEXT NOT NULL DEFAULT 'food';",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_name')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_name TEXT;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_kcal')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_kcal REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_protein')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_protein REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_carbs')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_carbs REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_fat')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_fat REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_fiber')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_fiber REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_sugar')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_sugar REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_sodium')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_sodium REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_cholesterol')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_cholesterol REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_saturated_fat')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_saturated_fat REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'manual_trans_fat')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN manual_trans_fat REAL;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'cholesterol_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN cholesterol_target INTEGER NOT NULL DEFAULT 300;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'saturated_fat_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN saturated_fat_target INTEGER NOT NULL DEFAULT 20;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'trans_fat_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN trans_fat_target INTEGER NOT NULL DEFAULT 0;",
-            );
-          }
-
-          if (!await _hasColumn(db, 'day_targets', 'source')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN source TEXT DEFAULT 'manual';",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'calculator_json')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN calculator_json TEXT;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'fiber_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN fiber_target INTEGER NOT NULL DEFAULT 30;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'sugar_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN sugar_target INTEGER NOT NULL DEFAULT 50;",
-            );
-          }
-          if (!await _hasColumn(db, 'day_targets', 'sodium_target')) {
-            await db.execute(
-              "ALTER TABLE day_targets ADD COLUMN sodium_target INTEGER NOT NULL DEFAULT 2300;",
-            );
-          }
-
-          if (!await _hasColumn(db, 'meal_templates', 'is_system')) {
-            await db.execute(
-              "ALTER TABLE meal_templates ADD COLUMN is_system INTEGER NOT NULL DEFAULT 0;",
-            );
-          }
-          if (!await _hasColumn(db, 'meal_templates', 'system_key')) {
-            await db.execute(
-              "ALTER TABLE meal_templates ADD COLUMN system_key TEXT;",
-            );
-          }
-          if (!await _hasColumn(db, 'meal_templates', 'is_active')) {
-            await db.execute(
-              "ALTER TABLE meal_templates ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1;",
-            );
-          }
-          if (!await _hasColumn(db, 'meal_templates', 'seed_version')) {
-            await db.execute(
-              "ALTER TABLE meal_templates ADD COLUMN seed_version INTEGER NOT NULL DEFAULT 1;",
-            );
-          }
-
-          // v14: serving size presets
-          final servingsExists = await db.rawQuery(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='food_servings';",
-          );
-          if (servingsExists.isEmpty) {
-            await db.execute('''
-              CREATE TABLE IF NOT EXISTS food_servings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                food_id INTEGER NOT NULL REFERENCES foods(id) ON DELETE CASCADE,
-                name TEXT NOT NULL,
-                grams REAL NOT NULL
-              );
-            ''');
-            await db.execute(
-              'CREATE INDEX IF NOT EXISTS idx_food_servings_food ON food_servings(food_id);',
-            );
-          }
-
-          // Q&A and notifications
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS questions (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              user_id TEXT NOT NULL,
-              author_name TEXT NOT NULL,
-              is_random_name INTEGER NOT NULL DEFAULT 0,
-              question TEXT NOT NULL,
-              created_at TEXT NOT NULL,
-              status TEXT NOT NULL DEFAULT 'open'
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_questions_created ON questions(created_at DESC);',
-          );
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS question_replies (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
-              reply_text TEXT NOT NULL,
-              admin_name TEXT NOT NULL,
-              created_at TEXT NOT NULL
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_question_replies_qid ON question_replies(question_id);',
-          );
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS question_notifications (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              user_id TEXT NOT NULL,
-              question_id INTEGER NOT NULL,
-              message TEXT NOT NULL,
-              is_read INTEGER NOT NULL DEFAULT 0,
-              created_at TEXT NOT NULL
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_question_notifs_user ON question_notifications(user_id, is_read);',
-          );
-
-          // v19: Favorites, Notes, Water, and Weight logs
-          if (!await _hasColumn(db, 'foods', 'is_favorite')) {
-            await db.execute(
-              "ALTER TABLE foods ADD COLUMN is_favorite INTEGER NOT NULL DEFAULT 0;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'notes')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN notes TEXT;",
-            );
-          }
-          if (!await _hasColumn(db, 'log_entries', 'image_path')) {
-            await db.execute(
-              "ALTER TABLE log_entries ADD COLUMN image_path TEXT;",
-            );
-          }
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS water_logs (
-              date TEXT PRIMARY KEY,
-              amount_ml INTEGER NOT NULL DEFAULT 0,
-              target_ml INTEGER NOT NULL DEFAULT 2000
-            );
-          ''');
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS weight_logs (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              date TEXT NOT NULL,
-              weight REAL NOT NULL,
-              unit TEXT NOT NULL DEFAULT 'kg',
-              notes TEXT,
-              created_at TEXT NOT NULL
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_weight_logs_date ON weight_logs(date DESC);',
-          );
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS fasting_sessions (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              protocol TEXT NOT NULL,
-              target_hours REAL NOT NULL,
-              start_time TEXT NOT NULL,
-              end_time TEXT,
-              is_completed INTEGER NOT NULL DEFAULT 0,
-              notes TEXT
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_fasting_sessions_start ON fasting_sessions(start_time DESC);',
-          );
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS exercise_logs (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              date TEXT NOT NULL,
-              activity_name TEXT NOT NULL,
-              duration_minutes INTEGER NOT NULL,
-              calories_burned REAL NOT NULL,
-              steps INTEGER NOT NULL DEFAULT 0,
-              notes TEXT
-            );
-          ''');
-          await db.execute(
-            'CREATE INDEX IF NOT EXISTS idx_exercise_logs_date ON exercise_logs(date DESC);',
-          );
+          await _ensureAllTablesAndColumns(db);
         },
       ),
     );
 
+    // Guaranteed self-healing check on every launch
+    await _ensureAllTablesAndColumns(d);
     await ensureSystemSeeded(d);
 
     return d;
@@ -1444,90 +1262,182 @@ class AppDb {
 
   Future<List<Map<String, Object?>>> getLogRowsForDate(String date) async {
     final d = await db;
-    return d.rawQuery(
-      '''
-      SELECT
-        le.id as log_id,
-        le.grams,
-        COALESCE(le.unit, f.unit, 'g') as unit,
-        COALESCE(le.base_amount, f.base_amount, 100) as base_amount,
-        le.date,
-        le.time,
-        le.label,
-        le.food_id as food_id,
+    try {
+      return await d.rawQuery(
+        '''
+        SELECT
+          le.id as log_id,
+          le.grams,
+          COALESCE(le.unit, f.unit, 'g') as unit,
+          COALESCE(le.base_amount, f.base_amount, 100) as base_amount,
+          le.date,
+          le.time,
+          le.label,
+          le.food_id as food_id,
 
-        le.entry_type as entry_type,
-        le.manual_name as manual_name,
-        le.manual_kcal as manual_kcal,
-        le.manual_protein as manual_protein,
-        le.manual_carbs as manual_carbs,
-        le.manual_fat as manual_fat,
+          le.entry_type as entry_type,
+          le.manual_name as manual_name,
+          le.manual_kcal as manual_kcal,
+          le.manual_protein as manual_protein,
+          le.manual_carbs as manual_carbs,
+          le.manual_fat as manual_fat,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_name, 'Manual item')
-          ELSE COALESCE(le.food_name, f.name)
-        END as name,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_name, 'Manual item')
+            ELSE COALESCE(le.food_name, f.name)
+          END as name,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_kcal, 0)
-          ELSE COALESCE(le.calories_100, f.calories)
-        END as calories,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_kcal, 0)
+            ELSE COALESCE(le.calories_100, f.calories)
+          END as calories,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_protein, 0)
-          ELSE COALESCE(le.protein_100, f.protein)
-        END as protein,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_protein, 0)
+            ELSE COALESCE(le.protein_100, f.protein)
+          END as protein,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_carbs, 0)
-          ELSE COALESCE(le.carbs_100, f.carbs)
-        END as carbs,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_carbs, 0)
+            ELSE COALESCE(le.carbs_100, f.carbs)
+          END as carbs,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fat, 0)
-          ELSE COALESCE(le.fat_100, f.fat)
-        END as fat,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fat, 0)
+            ELSE COALESCE(le.fat_100, f.fat)
+          END as fat,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fiber, 0)
-          ELSE COALESCE(le.fiber_100, f.fiber, 0)
-        END as fiber,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fiber, 0)
+            ELSE COALESCE(le.fiber_100, f.fiber, 0)
+          END as fiber,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sugar, 0)
-          ELSE COALESCE(le.sugar_100, f.sugar, 0)
-        END as sugar,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sugar, 0)
+            ELSE COALESCE(le.sugar_100, f.sugar, 0)
+          END as sugar,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sodium, 0)
-          ELSE COALESCE(le.sodium_100, f.sodium, 0)
-        END as sodium,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sodium, 0)
+            ELSE COALESCE(le.sodium_100, f.sodium, 0)
+          END as sodium,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_cholesterol, 0)
-          ELSE COALESCE(le.cholesterol_100, f.cholesterol, 0)
-        END as cholesterol,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_cholesterol, 0)
+            ELSE COALESCE(le.cholesterol_100, f.cholesterol, 0)
+          END as cholesterol,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_saturated_fat, 0)
-          ELSE COALESCE(le.saturated_fat_100, f.saturated_fat, 0)
-        END as saturated_fat,
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_saturated_fat, 0)
+            ELSE COALESCE(le.saturated_fat_100, f.saturated_fat, 0)
+          END as saturated_fat,
 
-        CASE
-          WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_trans_fat, 0)
-          ELSE COALESCE(le.trans_fat_100, f.trans_fat, 0)
-        END as trans_fat
+          CASE
+            WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_trans_fat, 0)
+            ELSE COALESCE(le.trans_fat_100, f.trans_fat, 0)
+          END as trans_fat
 
-      FROM log_entries le
-      LEFT JOIN foods f ON f.id = le.food_id
-      WHERE le.date = ?
-      ORDER BY
-        CASE WHEN le.time IS NULL OR le.time = '' THEN 1 ELSE 0 END,
-        le.time ASC,
-        le.id ASC
-    ''',
-      [date],
-    );
+        FROM log_entries le
+        LEFT JOIN foods f ON f.id = le.food_id
+        WHERE le.date = ?
+        ORDER BY
+          CASE WHEN le.time IS NULL OR le.time = '' THEN 1 ELSE 0 END,
+          le.time ASC,
+          le.id ASC
+      ''',
+        [date],
+      );
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        return await d.rawQuery(
+          '''
+          SELECT
+            le.id as log_id,
+            le.grams,
+            COALESCE(le.unit, f.unit, 'g') as unit,
+            COALESCE(le.base_amount, f.base_amount, 100) as base_amount,
+            le.date,
+            le.time,
+            le.label,
+            le.food_id as food_id,
+
+            le.entry_type as entry_type,
+            le.manual_name as manual_name,
+            le.manual_kcal as manual_kcal,
+            le.manual_protein as manual_protein,
+            le.manual_carbs as manual_carbs,
+            le.manual_fat as manual_fat,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_name, 'Manual item')
+              ELSE COALESCE(le.food_name, f.name)
+            END as name,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_kcal, 0)
+              ELSE COALESCE(le.calories_100, f.calories)
+            END as calories,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_protein, 0)
+              ELSE COALESCE(le.protein_100, f.protein)
+            END as protein,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_carbs, 0)
+              ELSE COALESCE(le.carbs_100, f.carbs)
+            END as carbs,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fat, 0)
+              ELSE COALESCE(le.fat_100, f.fat)
+            END as fat,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_fiber, 0)
+              ELSE COALESCE(le.fiber_100, f.fiber, 0)
+            END as fiber,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sugar, 0)
+              ELSE COALESCE(le.sugar_100, f.sugar, 0)
+            END as sugar,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_sodium, 0)
+              ELSE COALESCE(le.sodium_100, f.sodium, 0)
+            END as sodium,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_cholesterol, 0)
+              ELSE COALESCE(le.cholesterol_100, f.cholesterol, 0)
+            END as cholesterol,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_saturated_fat, 0)
+              ELSE COALESCE(le.saturated_fat_100, f.saturated_fat, 0)
+            END as saturated_fat,
+
+            CASE
+              WHEN le.entry_type = 'manual' THEN COALESCE(le.manual_trans_fat, 0)
+              ELSE COALESCE(le.trans_fat_100, f.trans_fat, 0)
+            END as trans_fat
+
+          FROM log_entries le
+          LEFT JOIN foods f ON f.id = le.food_id
+          WHERE le.date = ?
+          ORDER BY
+            CASE WHEN le.time IS NULL OR le.time = '' THEN 1 ELSE 0 END,
+            le.time ASC,
+            le.id ASC
+        ''',
+          [date],
+        );
+      } catch (_) {
+        return const [];
+      }
+    }
   }
 
   Future<DayTotals> getTotalsForDate(String date) async {
@@ -2682,11 +2592,24 @@ class AppDb {
 
   Future<WaterLog> getWaterLog(String date) async {
     final d = await db;
-    final rows = await d.query('water_logs', where: 'date = ?', whereArgs: [date]);
-    if (rows.isEmpty) {
-      return WaterLog(date: date, amountMl: 0, targetMl: 2000);
+    try {
+      final rows = await d.query('water_logs', where: 'date = ?', whereArgs: [date]);
+      if (rows.isEmpty) {
+        return WaterLog(date: date, amountMl: 0, targetMl: 2000);
+      }
+      return WaterLog.fromMap(rows.first);
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        final rows = await d.query('water_logs', where: 'date = ?', whereArgs: [date]);
+        if (rows.isEmpty) {
+          return WaterLog(date: date, amountMl: 0, targetMl: 2000);
+        }
+        return WaterLog.fromMap(rows.first);
+      } catch (_) {
+        return WaterLog(date: date, amountMl: 0, targetMl: 2000);
+      }
     }
-    return WaterLog.fromMap(rows.first);
   }
 
   Future<void> updateWaterAmount(String date, int deltaMl) async {
@@ -2714,8 +2637,18 @@ class AppDb {
 
   Future<List<WeightLog>> getWeightLogs({int limit = 50}) async {
     final d = await db;
-    final rows = await d.query('weight_logs', orderBy: 'date DESC, id DESC', limit: limit);
-    return rows.map(WeightLog.fromMap).toList();
+    try {
+      final rows = await d.query('weight_logs', orderBy: 'date DESC, id DESC', limit: limit);
+      return rows.map(WeightLog.fromMap).toList();
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        final rows = await d.query('weight_logs', orderBy: 'date DESC, id DESC', limit: limit);
+        return rows.map(WeightLog.fromMap).toList();
+      } catch (_) {
+        return const [];
+      }
+    }
   }
 
   Future<WeightLog?> getLatestWeightLog() async {
@@ -2768,35 +2701,39 @@ class AppDb {
   // ---------------- STREAKS & WEEKLY SUMMARY ----------------
 
   Future<int> getStreakCount() async {
-    final d = await db;
-    final rows = await d.rawQuery(
-      'SELECT DISTINCT date FROM log_entries ORDER BY date DESC',
-    );
-    if (rows.isEmpty) return 0;
-    final dates = rows.map((r) => r['date'] as String).toSet();
-    final now = DateTime.now();
-    String fmt(DateTime dt) =>
-        "${dt.year.toString().padLeft(4, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}";
-    final todayStr = fmt(now);
-    final yesterdayStr = fmt(now.subtract(const Duration(days: 1)));
+    try {
+      final d = await db;
+      final rows = await d.rawQuery(
+        'SELECT DISTINCT date FROM log_entries ORDER BY date DESC',
+      );
+      if (rows.isEmpty) return 0;
+      final dates = rows.map((r) => r['date'] as String).toSet();
+      final now = DateTime.now();
+      String fmt(DateTime dt) =>
+          "${dt.year.toString().padLeft(4, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}";
+      final todayStr = fmt(now);
+      final yesterdayStr = fmt(now.subtract(const Duration(days: 1)));
 
-    if (!dates.contains(todayStr) && !dates.contains(yesterdayStr)) {
+      if (!dates.contains(todayStr) && !dates.contains(yesterdayStr)) {
+        return 0;
+      }
+
+      var checkDate = dates.contains(todayStr) ? now : now.subtract(const Duration(days: 1));
+      int streak = 0;
+
+      while (true) {
+        final s = fmt(checkDate);
+        if (dates.contains(s)) {
+          streak++;
+          checkDate = checkDate.subtract(const Duration(days: 1));
+        } else {
+          break;
+        }
+      }
+      return streak;
+    } catch (_) {
       return 0;
     }
-
-    var checkDate = dates.contains(todayStr) ? now : now.subtract(const Duration(days: 1));
-    int streak = 0;
-
-    while (true) {
-      final s = fmt(checkDate);
-      if (dates.contains(s)) {
-        streak++;
-        checkDate = checkDate.subtract(const Duration(days: 1));
-      } else {
-        break;
-      }
-    }
-    return streak;
   }
 
   Future<List<Map<String, dynamic>>> getWeeklySummary(String endDateStr) async {
@@ -2826,24 +2763,54 @@ class AppDb {
 
   Future<FastingSession?> getActiveFastingSession() async {
     final d = await db;
-    final rows = await d.query(
-      'fasting_sessions',
-      where: 'end_time IS NULL AND is_completed = 0',
-      orderBy: 'start_time DESC',
-      limit: 1,
-    );
-    if (rows.isEmpty) return null;
-    return FastingSession.fromMap(rows.first);
+    try {
+      final rows = await d.query(
+        'fasting_sessions',
+        where: 'end_time IS NULL AND is_completed = 0',
+        orderBy: 'start_time DESC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return null;
+      return FastingSession.fromMap(rows.first);
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        final rows = await d.query(
+          'fasting_sessions',
+          where: 'end_time IS NULL AND is_completed = 0',
+          orderBy: 'start_time DESC',
+          limit: 1,
+        );
+        if (rows.isEmpty) return null;
+        return FastingSession.fromMap(rows.first);
+      } catch (_) {
+        return null;
+      }
+    }
   }
 
   Future<List<FastingSession>> getRecentFastingSessions({int limit = 20}) async {
     final d = await db;
-    final rows = await d.query(
-      'fasting_sessions',
-      orderBy: 'start_time DESC',
-      limit: limit,
-    );
-    return rows.map(FastingSession.fromMap).toList();
+    try {
+      final rows = await d.query(
+        'fasting_sessions',
+        orderBy: 'start_time DESC',
+        limit: limit,
+      );
+      return rows.map(FastingSession.fromMap).toList();
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        final rows = await d.query(
+          'fasting_sessions',
+          orderBy: 'start_time DESC',
+          limit: limit,
+        );
+        return rows.map(FastingSession.fromMap).toList();
+      } catch (_) {
+        return const [];
+      }
+    }
   }
 
   Future<int> startFastingSession({
@@ -2888,31 +2855,54 @@ class AppDb {
 
   Future<List<ExerciseLog>> getExerciseLogsForDate(String date) async {
     final d = await db;
-    final rows = await d.query(
-      'exercise_logs',
-      where: 'date = ?',
-      whereArgs: [date],
-      orderBy: 'id ASC',
-    );
-    return rows.map(ExerciseLog.fromMap).toList();
+    try {
+      final rows = await d.query(
+        'exercise_logs',
+        where: 'date = ?',
+        whereArgs: [date],
+        orderBy: 'id ASC',
+      );
+      return rows.map(ExerciseLog.fromMap).toList();
+    } catch (_) {
+      try {
+        await _ensureAllTablesAndColumns(d);
+        final rows = await d.query(
+          'exercise_logs',
+          where: 'date = ?',
+          whereArgs: [date],
+          orderBy: 'id ASC',
+        );
+        return rows.map(ExerciseLog.fromMap).toList();
+      } catch (_) {
+        return const [];
+      }
+    }
   }
 
   Future<double> getTotalExerciseCaloriesForDate(String date) async {
-    final logs = await getExerciseLogsForDate(date);
-    double sum = 0.0;
-    for (final l in logs) {
-      sum += l.caloriesBurned;
+    try {
+      final logs = await getExerciseLogsForDate(date);
+      double sum = 0.0;
+      for (final l in logs) {
+        sum += l.caloriesBurned;
+      }
+      return sum;
+    } catch (_) {
+      return 0.0;
     }
-    return sum;
   }
 
   Future<int> getTotalStepsForDate(String date) async {
-    final logs = await getExerciseLogsForDate(date);
-    int sum = 0;
-    for (final l in logs) {
-      sum += l.steps;
+    try {
+      final logs = await getExerciseLogsForDate(date);
+      int sum = 0;
+      for (final l in logs) {
+        sum += l.steps;
+      }
+      return sum;
+    } catch (_) {
+      return 0;
     }
-    return sum;
   }
 
   Future<int> insertExerciseLog(ExerciseLog log) async {

@@ -27,56 +27,63 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Future<void> _loadAnalytics() async {
     setState(() => _isLoading = true);
 
-    final now = DateTime.now();
-    final df = DateFormat('yyyy-MM-dd');
-    final dayFormat = DateFormat('E');
+    try {
+      final now = DateTime.now();
+      final df = DateFormat('yyyy-MM-dd');
+      final dayFormat = DateFormat('E');
 
-    // 1. Last 7 Days Caloric Intake
-    final bars = <DailyCalorieBarData>[];
-    double sumProtein = 0;
-    double sumCarbs = 0;
-    double sumFat = 0;
+      // 1. Last 7 Days Caloric Intake
+      final bars = <DailyCalorieBarData>[];
+      double sumProtein = 0;
+      double sumCarbs = 0;
+      double sumFat = 0;
 
-    for (int i = 6; i >= 0; i--) {
-      final date = now.subtract(Duration(days: i));
-      final dateStr = df.format(date);
-      final totals = await AppDb.instance.getTotalsForDate(dateStr);
-      final targets = await AppDb.instance.getTargetsForDate(dateStr);
+      for (int i = 6; i >= 0; i--) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr = df.format(date);
+        final totals = await AppDb.instance.getTotalsForDate(dateStr);
+        final targets = await AppDb.instance.getTargetsForDate(dateStr);
 
-      bars.add(DailyCalorieBarData(
-        dayLabel: dayFormat.format(date),
-        calories: totals.calories,
-        target: targets.calories.toDouble(),
-      ));
+        bars.add(DailyCalorieBarData(
+          dayLabel: dayFormat.format(date),
+          calories: totals.calories,
+          target: targets.calories.toDouble(),
+        ));
 
-      sumProtein += totals.protein;
-      sumCarbs += totals.carbs;
-      sumFat += totals.fat;
+        sumProtein += totals.protein;
+        sumCarbs += totals.carbs;
+        sumFat += totals.fat;
+      }
+
+      // 2. Weight logs (last 30)
+      final weights = await AppDb.instance.getWeightLogs(limit: 30);
+      final points = weights.reversed.map((w) {
+        return WeightPoint(date: w.date, weight: w.weight);
+      }).toList();
+
+      String unit = 'kg';
+      if (weights.isNotEmpty) {
+        unit = weights.first.unit;
+      }
+
+      if (!mounted) return;
+      setState(() {
+        _weeklyBars = bars;
+        _macroData = MacroChartData(
+          proteinGrams: sumProtein / 7,
+          carbsGrams: sumCarbs / 7,
+          fatGrams: sumFat / 7,
+        );
+        _weightPoints = points;
+        _weightUnit = unit;
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
     }
-
-    // 2. Weight logs (last 30)
-    final weights = await AppDb.instance.getWeightLogs(limit: 30);
-    final points = weights.reversed.map((w) {
-      return WeightPoint(date: w.date, weight: w.weight);
-    }).toList();
-
-    String unit = 'kg';
-    if (weights.isNotEmpty) {
-      unit = weights.first.unit;
-    }
-
-    if (!mounted) return;
-    setState(() {
-      _weeklyBars = bars;
-      _macroData = MacroChartData(
-        proteinGrams: sumProtein / 7,
-        carbsGrams: sumCarbs / 7,
-        fatGrams: sumFat / 7,
-      );
-      _weightPoints = points;
-      _weightUnit = unit;
-      _isLoading = false;
-    });
   }
 
   @override

@@ -3631,7 +3631,44 @@ class _TodayPageState extends State<TodayPage> {
             if (snap.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (snap.hasError) return Center(child: Text('Error: ${snap.error}'));
+            if (snap.hasError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.sync_problem, size: 48, color: Colors.orange),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Database Syncing',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Updating database tables: ${snap.error}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Repair & Reload'),
+                            onPressed: () async {
+                              await AppDb.instance.repairDatabase();
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
 
             final data = snap.data as List<Object?>?;
             final totals = (data?[0] as DayTotals?) ?? const DayTotals();
@@ -5905,7 +5942,44 @@ class _HistoryPageState extends State<HistoryPage> {
           ]),
           builder: (_, snap) {
             if (snap.connectionState != ConnectionState.done) return const Center(child: CircularProgressIndicator());
-            if (snap.hasError) return Center(child: Text('Error: ${snap.error}'));
+            if (snap.hasError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.sync_problem, size: 48, color: Colors.orange),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Database Syncing',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Updating database tables: ${snap.error}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Repair & Reload'),
+                            onPressed: () async {
+                              await AppDb.instance.repairDatabase();
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
 
             final data = snap.data as List<Object?>?;
             final totals = (data?[0] as DayTotals?) ?? const DayTotals();

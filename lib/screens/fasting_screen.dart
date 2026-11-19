@@ -47,14 +47,21 @@ class _FastingScreenState extends State<FastingScreen> {
 
   Future<void> _loadFastingData() async {
     setState(() => _isLoading = true);
-    final active = await AppDb.instance.getActiveFastingSession();
-    final hist = await AppDb.instance.getRecentFastingSessions(limit: 15);
-    if (!mounted) return;
-    setState(() {
-      _activeSession = active;
-      _history = hist;
-      _isLoading = false;
-    });
+    try {
+      final active = await AppDb.instance.getActiveFastingSession();
+      final hist = await AppDb.instance.getRecentFastingSessions(limit: 15);
+      if (!mounted) return;
+      setState(() {
+        _activeSession = active;
+        _history = hist;
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _startFast() async {

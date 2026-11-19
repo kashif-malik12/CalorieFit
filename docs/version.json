@@ -1,9 +1,9 @@
 {
-  "version": "1.9.1",
-  "build_number": 14,
+  "version": "1.9.2",
+  "build_number": 15,
   "min_supported_build": 1,
-  "force_update": false,
-  "release_date": "2026-11-18",
-  "release_notes": "• In-App Update Notifications: Automatically alerts you when a new CalorieFit update is live on Google Play\n• One-Tap Direct Store Update: Fast seamless launch to the Google Play Store\n• Manual Update Checker in Health Hub and Drawer menu\n• Modern 4-Tab Bottom Navigation with Hero Circular Energy Budget Dashboard\n• 100% offline, privacy-first local calorie tracking",
+  "force_update": true,
+  "release_date": "2026-11-19",
+  "release_notes": "• Critical Database Migration & Auto-Healing: Fully resolves table sync errors across all app screens (Diary, Fasting, Analytics, Hub)\n• Resilient self-repair mechanism on startup\n• In-app update notifications & 1-tap Google Play Store updater",
   "play_store_url": "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 }
