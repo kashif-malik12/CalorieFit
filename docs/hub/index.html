@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Eye | Unified Projects & Ecosystem Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-surface: #0f172a;
+      --bg-card: #141e33;
+      --bg-card-hover: #192640;
+      --border: #1e293b;
+      --border-accent: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.25);
+      --yellow: #f59e0b;
+      --yellow-glow: rgba(245, 158, 11, 0.25);
+      --purple: #a855f7;
+      --purple-glow: rgba(168, 85, 247, 0.25);
+      --blue: #3b82f6;
+      --blue-glow: rgba(59, 130, 246, 0.25);
+      --red: #ef4444;
+      --card-radius: 16px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.15);
+      --green: #059669;
+      --yellow: #d97706;
+      --purple: #7c3aed;
+      --blue: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Ambient background grid */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 45%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .super-eye-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8, #818cf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    .super-eye-badge svg {
+      width: 26px;
+      height: 26px;
+      color: #fff;
+    }
+
+    .brand-text h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .brand-text p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .clock-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+      border-color: transparent;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    /* KPI Summary Stats */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border-accent);
+    }
+
+    .kpi-card.kpi-cyan::before { background: var(--accent); }
+    .kpi-card.kpi-green::before { background: var(--green); }
+    .kpi-card.kpi-purple::before { background: var(--purple); }
+    .kpi-card.kpi-blue::before { background: var(--blue); }
+
+    .kpi-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .kpi-subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Control Bar: Search & Filters */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 28px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 420px;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-dim);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 12px 9px 38px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .pill:hover {
+      color: var(--text);
+      border-color: var(--border-accent);
+    }
+
+    .pill.active {
+      background: var(--accent);
+      color: #04101e;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Project Cards Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .project-identity {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .icon-green { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .icon-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .icon-yellow { background: rgba(245, 158, 11, 0.15); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .icon-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .icon-gray { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.3); }
+
+    .project-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-category {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    /* Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-live {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-active {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-mvp {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--purple);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .badge-internal {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--blue);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .badge-vault {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+
+    /* Metrics Grid inside Card */
+    .metric-rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-key {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .metric-val {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Highlights bullets */
+    .feature-list {
+      list-style: none;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .feature-list li {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-list li svg {
+      width: 14px;
+      height: 14px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Tech Stack Tags */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    /* Card Footer / Actions */
+    .card-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .link-btn:hover {
+      background: var(--bg-surface);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .link-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* Modal / Drawer */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
+
+    .modal-header {
+      margin-bottom: 20px;
+    }
+
+    .modal-section {
+      margin-bottom: 20px;
+    }
+
+    .modal-section h4 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .modal-section p, .modal-section ul {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .modal-section ul {
+      padding-left: 20px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand-group">
+        <div class="super-eye-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>
+            SUPER EYE
+            <span class="live-pulse">
+              <span class="pulse-dot"></span>
+              All Systems Operational
+            </span>
+          </h1>
+          <p>Unified Executive Command Center & Ecosystem Health Radar</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="clock-display" id="live-clock">CET 00:00:00</div>
+        <button class="btn" id="theme-toggle" title="Toggle Dark/Light Mode">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span id="theme-text">Light</span>
+        </button>
+        <button class="btn btn-primary" onclick="exportData()" title="Download JSON metadata">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Data
+        </button>
+      </div>
+    </header>
+
+    <!-- Executive KPI Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-cyan">
+        <span class="kpi-label">Active Portfolio Tracks</span>
+        <div class="kpi-value">
+          7
+          <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">+ 1 Vault</span>
+        </div>
+        <span class="kpi-subtext">Mobile, Web SaaS, AI, Enterprise</span>
+      </div>
+
+      <div class="kpi-card kpi-green">
+        <span class="kpi-label">Production Live Deployments</span>
+        <div class="kpi-value">
+          3
+          <span style="font-size:0.95rem; font-weight:500; color:var(--green);">Active</span>
+        </div>
+        <span class="kpi-subtext">Google Play Store & VPS Web</span>
+      </div>
+
+      <div class="kpi-card kpi-purple">
+        <span class="kpi-label">User Reach & Ecosystem</span>
+        <div class="kpi-value">
+          5
+          <span style="font-size:0.95rem; font-weight:500; color:var(--text-dim);">Sectors</span>
+        </div>
+        <span class="kpi-subtext">France Hyperlocal, Fitness, Kids, Fintech, IT</span>
+      </div>
+
+      <div class="kpi-card kpi-blue">
+        <span class="kpi-label">Fleet Architecture Health</span>
+        <div class="kpi-value">
+          100%
+          <span style="font-size:0.95rem; font-weight:500; color:var(--accent);">Optimal</span>
+        </div>
+        <span class="kpi-subtext">Supabase VPS, SQLite & Cloud APIs</span>
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" class="search-input" placeholder="Search projects, technologies, features...">
+      </div>
+
+      <div class="filter-pills">
+        <button class="pill active" data-filter="all">All Tracks (8)</button>
+        <button class="pill" data-filter="mobile">Mobile Apps (3)</button>
+        <button class="pill" data-filter="web">Web & SaaS (2)</button>
+        <button class="pill" data-filter="ai">AI & Fintech (2)</button>
+        <button class="pill" data-filter="enterprise">Enterprise IT (1)</button>
+      </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid" id="projects-container">
+      <!-- 1. CalorieFit -->
+      <div class="project-card" data-category="mobile" data-name="caloriefit" data-tech="flutter dart sqlite health connect android rive">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-green">🥗</div>
+            <div>
+              <div class="project-title">CalorieFit</div>
+              <div class="project-category">Consumer Mobile App • Health & Fitness</div>
+            </div>
+          </div>
+          <span class="status-badge badge-live">
+            <span class="pulse-dot"></span> Play Store Live
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Privacy-first, ad-free nutrition and intermittent fasting companion built with on-device SQLite, Google Health Connect, and an AI natural-language meal estimator.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Current Version</span>
+            <span class="metric-val">v1.10.1 (Build 17) • Nov 2026</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Active Users / Mode</span>
+            <span class="metric-val">100% Local-First / Zero Telemetry</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Target Platform</span>
+            <span class="metric-val">Android (Play Store Production)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Architecture</span>
+            <span class="metric-val">Flutter + SQLite + Health Connect</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Front-page streak challenge module with customizable target goals (1d, 10d, 30d)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            AI meal estimator & camera food scanner with zero-cloud local privacy
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Circadian fasting stages (Anabolic, Catabolic, Fat Burning, Ketosis)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Android glanceable home screen widgets & 7 languages (EN, ES, FR, DE, UR, AR, HI)
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">Dart</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Health Connect</span>
+          <span class="tag">Glance Widgets</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="link-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Google Play
+            </a>
+            <a href="https://github.com/kashif-malik12/CalorieFit" target="_blank" class="link-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+          <button class="btn" onclick="openDetails('caloriefit')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 2. Allonssy -->
+      <div class="project-card" data-category="mobile web" data-name="allonssy" data-tech="flutter riverpod gorouter supabase postgresql caddy fcm">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-blue">📍</div>
+            <div>
+              <div class="project-title">Allonssy</div>
+              <div class="project-category">Hyperlocal Social Network • Marketplace</div>
+            </div>
+          </div>
+          <span class="status-badge badge-live">
+            <span class="pulse-dot"></span> Live Store & Web
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Hyperlocal community social media, local marketplace, and service directory for neighborhoods and towns in France, backed by a self-hosted Supabase VPS cluster.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Current Version</span>
+            <span class="metric-val">v1.3.2+10 (Bumped 12h ago)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">User Scope / Entity</span>
+            <span class="metric-val">France Community • Tradister SAS</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Target Platform</span>
+            <span class="metric-val">Android (Play Store) & Web (app.allonssy.com)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Backend Infrastructure</span>
+            <span class="metric-val">Ubuntu VPS Supabase (87.106.13.170)</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Radius-based hyperlocal feed (Radius km, Following, Trending, Public)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Realtime chat, comments & push notifications via FCM HTTP v1 & pg_net
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Native Android camera MethodChannel to prevent release R8 crashes
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Reverse-proxied with SSL by Caddy at https://app.allonssy.com
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">Riverpod</span>
+          <span class="tag">GoRouter</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">PostgreSQL RLS</span>
+          <span class="tag">Caddy</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <a href="https://app.allonssy.com" target="_blank" class="link-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Web
+            </a>
+            <a href="https://github.com/kashif-malik12/allonssy" target="_blank" class="link-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+          <button class="btn" onclick="openDetails('allonssy')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 3. eSuperMarche -->
+      <div class="project-card" data-category="mobile web" data-name="esupermarche" data-tech="flutter woocommerce wordpress firebase onesignal rive">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-yellow">🛒</div>
+            <div>
+              <div class="project-title">eSuperMarche</div>
+              <div class="project-category">Multi-Vendor E-Commerce • Marketplace</div>
+            </div>
+          </div>
+          <span class="status-badge badge-active">
+            <span class="pulse-dot"></span> Live / Staging Store
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Full-featured multi-vendor e-commerce and grocery shopping app built with Flutter and connected to the esupermarche.com WooCommerce backend with Firebase & OneSignal notifications.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">FluxStore Version</span>
+            <span class="metric-val">v6.1.0 • Android 15 (SDK 35)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Target Audience</span>
+            <span class="metric-val">Online Shoppers & Grocery Vendors</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Web Storefront</span>
+            <span class="metric-val">https://esupermarche.com</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Package ID</span>
+            <span class="metric-val">com.esupermarche.app</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Multi-vendor store directories, dynamic catalog browsing & product filtering
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            OneSignal & Firebase Cloud Messaging for order status & promotional alerts
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Cart, order tracking, instant payment gateway integration & localized checkout
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">WooCommerce</span>
+          <span class="tag">WordPress REST API</span>
+          <span class="tag">OneSignal</span>
+          <span class="tag">Firebase</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <a href="https://esupermarche.com" target="_blank" class="link-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Store
+            </a>
+          </div>
+          <button class="btn" onclick="openDetails('esupermarche')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 4. Curio Kids -->
+      <div class="project-card" data-category="web" data-name="curio kids reels scrapper" data-tech="nextjs react typescript tailwind prisma sqlite zod">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-purple">📺</div>
+            <div>
+              <div class="project-title">Curio Kids MVP</div>
+              <div class="project-category">Parental Control • Safe Video Web App</div>
+            </div>
+          </div>
+          <span class="status-badge badge-mvp">
+            <span class="pulse-dot"></span> Active MVP
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Kid-safe curated short-video web app for parent-approved YouTube and TikTok embeds. Parents manage moderation rules, PIN authentication, and screen-time watch limits.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Current Version</span>
+            <span class="metric-val">v0.1.0 MVP (Next.js 16)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">User Experience</span>
+            <span class="metric-val">Parent PIN Portal + Kid Safe Feed</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Backend / DB</span>
+            <span class="metric-val">Prisma 6.15 + SQLite Local DB</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">UI Framework</span>
+            <span class="metric-val">React 19 + Tailwind CSS 4</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Clean distraction-free feed showing only parent-approved embeds
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Parent session authentication with secure HTTP-only signed cookies
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            YouTube & TikTok video URL parser with duration & category tag validation
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Next.js 16</span>
+          <span class="tag">React 19</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Tailwind 4</span>
+          <span class="tag">Prisma</span>
+          <span class="tag">SQLite</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default; opacity:0.8;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              npm run dev (Port 3000)
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('curiokids')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 5. Stock Investing / etoro-agent -->
+      <div class="project-card" data-category="ai" data-name="etoro stock investing" data-tech="python fastapi etoro docker railway yfinance gemini">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-green">📈</div>
+            <div>
+              <div class="project-title">eToro Autonomous Agent</div>
+              <div class="project-category">Algorithmic Fintech • AI Portfolio Agent</div>
+            </div>
+          </div>
+          <span class="status-badge badge-live">
+            <span class="pulse-dot"></span> Production Ready
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Autonomous portfolio management agent and interactive Web Dashboard for eToro's official API, featuring strict pre-trade risk guardrails, AI research, and automated DCA rebalancing.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Operational Mode</span>
+            <span class="metric-val">24/7 Cloud (Railway) or Local PC</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Safety Guardrails</span>
+            <span class="metric-val">Hardware Kill Switch • 1x Leverage</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Dashboard URL</span>
+            <span class="metric-val">http://127.0.0.1:8000</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">AI Research Models</span>
+            <span class="metric-val">Gemini / OpenAI / Anthropic / Heuristic</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Automated target allocation rebalancing & periodic Dollar-Cost Averaging (DCA)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Technical analysis engine: RSI(14), MACD, Bollinger Bands, ATR trailing stops
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Demo-first paper broker to thoroughly test strategies before committing funds
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            One-click launch with Launch-Dashboard.bat & 24/7 Docker/Railway configurations
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Python 3.11</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">eToro API</span>
+          <span class="tag">yfinance</span>
+          <span class="tag">Gemini AI</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Railway</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              Launch-Dashboard.bat
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('etoro')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 6. Streamer -->
+      <div class="project-card" data-category="ai mobile" data-name="streamer workout news" data-tech="python fastapi gemini capacitor android tts podcast">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-purple">🎙️</div>
+            <div>
+              <div class="project-title">Streamer Workout News</div>
+              <div class="project-category">AI Audio • Bilingual Podcast Platform</div>
+            </div>
+          </div>
+          <span class="status-badge badge-active">
+            <span class="pulse-dot"></span> Active Dev / APK Built
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Automated bilingual (French/English) fitness news aggregator and podcast generator powered by Gemini AI synthesis, dual TTS voices, and a Capacitor mobile Android app.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Client App</span>
+            <span class="metric-val">StreamerWorkout.apk (Capacitor 8)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Content Generation</span>
+            <span class="metric-val">Google Gemini + Dual-Voice TTS</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Workout Profiles</span>
+            <span class="metric-val">10m Quick, 20m Standard, 45m Endurance</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Delivery Channels</span>
+            <span class="metric-val">HTTP Range Streaming + RSS Feed</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Autonomous news pipeline generating bilingual scripts and spoken audio
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Capacitor Android wrapper with native speech recognition capabilities
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Interactive QR-code pairing for mobile device audio streaming on LAN
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">Gemini LLM</span>
+          <span class="tag">Capacitor 8</span>
+          <span class="tag">Android APK</span>
+          <span class="tag">TTS Engine</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              StreamerWorkout.apk
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('streamer')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 7. Work Projects / Enterprise IT -->
+      <div class="project-card" data-category="enterprise" data-name="work projects it asset shortcuts support agent" data-tech="powershell python typer microsoft 365 entra id intune">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-blue">🛠️</div>
+            <div>
+              <div class="project-title">Enterprise IT Ops Suite</div>
+              <div class="project-category">Enterprise Operations • Sysadmin Automation</div>
+            </div>
+          </div>
+          <span class="status-badge badge-internal">
+            <span class="pulse-dot"></span> On-Premises Active
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Local enterprise tooling suite comprising automated IT asset tracking, a fast Microsoft 365 / Entra ID / Intune PowerShell shortcut generator, and an offline support diagnostic agent.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Included Modules</span>
+            <span class="metric-val">3 Specialized Toolsets</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Target Audience</span>
+            <span class="metric-val">IT Helpdesk, Sysadmins & Enterprise Staff</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Execution Mode</span>
+            <span class="metric-val">100% Offline / Local Desktop (.bat/.cmd)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Environment</span>
+            <span class="metric-val">Windows PowerShell & Python Typer</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>IT Ops Shortcuts App:</strong> Fast generation of Admin (M365, Graph, Intune) & User troubleshooting scripts
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>Support Agent:</strong> Offline Typer CLI & UI agent with pre-built diagnosis playbooks (printers, networking, permissions)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>IT Asset Management:</strong> Isolated user-profile deployment for corporate hardware & software tracking
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">PowerShell</span>
+          <span class="tag">Microsoft 365</span>
+          <span class="tag">Entra ID</span>
+          <span class="tag">Intune</span>
+          <span class="tag">Python</span>
+          <span class="tag">Typer CLI</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              Local Execution (.bat / .cmd)
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('enterprise')">Architecture</button>
+        </div>
+      </div>
+
+      <!-- 8. zRelease Keys (Security Vault) -->
+      <div class="project-card" data-category="enterprise mobile" data-name="zrelease keys security credentials keystores" data-tech="jks keystore google service accounts sha256">
+        <div class="card-top">
+          <div class="project-identity">
+            <div class="project-icon icon-gray">🔐</div>
+            <div>
+              <div class="project-title">Release Cryptographic Vault</div>
+              <div class="project-category">Security & DevOps • Production Keystores</div>
+            </div>
+          </div>
+          <span class="status-badge badge-vault">
+            <span class="pulse-dot"></span> Secure Offline Vault
+          </span>
+        </div>
+
+        <p class="card-desc">
+          Protected local vault holding production upload keystores, Google Cloud Service Account credentials, and SHA-256 app signatures for Google Play Store deployments.
+        </p>
+
+        <div class="metric-rows">
+          <div class="metric-item">
+            <span class="metric-key">Secured Assets</span>
+            <span class="metric-val">Allonssy, CalorieFit, eSuperMarche</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Key Types</span>
+            <span class="metric-val">Upload Keystores (.jks) & Service JSONs</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Access Policy</span>
+            <span class="metric-val">Strictly Offline / Air-Gapped / No Git</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-key">Status</span>
+            <span class="metric-val">Valid & Verified</span>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Upload keystores and key.properties for Play Store AAB binary generation
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Service account credentials for automated Google Play Developer API releases
+          </li>
+        </ul>
+
+        <div class="tech-tags">
+          <span class="tag">Java Keystore</span>
+          <span class="tag">Google API</span>
+          <span class="tag">SHA-256</span>
+          <span class="tag">Air-Gapped</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-links">
+            <span class="link-btn" style="cursor:default; color:var(--text-dim);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Protected Local Storage
+            </span>
+          </div>
+          <button class="btn" onclick="openDetails('vault')">Details</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <span>Portfolio Command Center • Super Eye</span>
+        <span style="margin:0 8px;">•</span>
+        <span>Developer: <strong>Kashif Ali</strong></span>
+      </div>
+      <div>
+        Last Audit: <span style="font-family:'JetBrains Mono';">November 19, 2026</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal Details Drawer -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Real-time Clock
+    function updateClock() {
+      const now = new Date();
+      const options = { timeZone: 'Europe/Paris', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      document.getElementById('live-clock').innerText = 'CET ' + now.toLocaleTimeString('en-GB', options);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeText = document.getElementById('theme-text');
+    let currentTheme = localStorage.getItem('super_eye_theme') || 'dark';
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeText.textContent = theme === 'dark' ? 'Light' : 'Dark';
+      localStorage.setItem('super_eye_theme', theme);
+    }
+    applyTheme(currentTheme);
+
+    themeBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(currentTheme);
+    });
+
+    // Search & Filter
+    const searchInput = document.getElementById('search-input');
+    const filterPills = document.querySelectorAll('.pill');
+    const cards = document.querySelectorAll('.project-card');
+
+    let currentFilter = 'all';
+
+    function filterCards() {
+      const query = searchInput.value.toLowerCase().trim();
+
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category') || '';
+        const name = card.getAttribute('data-name') || '';
+        const tech = card.getAttribute('data-tech') || '';
+        const text = card.innerText.toLowerCase();
+
+        const matchesFilter = (currentFilter === 'all') || category.includes(currentFilter);
+        const matchesQuery = !query || name.includes(query) || tech.includes(query) || text.includes(query);
+
+        if (matchesFilter && matchesQuery) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', filterCards);
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.getAttribute('data-filter');
+        filterCards();
+      });
+    });
+
+    // Detailed Architecture Modal Content
+    const projectDetails = {
+      caloriefit: {
+        title: "CalorieFit — Smart Macro Tracker & Fasting Diary",
+        category: "Consumer Mobile App (Android Play Store)",
+        version: "v1.10.1 (Build 17) — Released Nov 19, 2026",
+        overview: "CalorieFit is a local-first, zero-telemetry mobile nutrition companion designed for individuals who value their data privacy. It operates completely offline with no mandatory accounts, storing all logs, food metrics, and fasting cycles inside an encrypted on-device SQLite database.",
+        stack: ["Flutter 3.x", "Dart SDK 3.10+", "SQLite (sqflite)", "Google Health Connect API", "Android Glance Widgets", "Rive Animations"],
+        architecture: [
+          "100% Local-First Data Flow: No external server communication for core logging. Meals, timestamps, and macros stay strictly on device.",
+          "Health Connect Sync: Bi-directional Android Health Connect integration reading active energy burned and steps for true net calorie math.",
+          "AI Meal Estimator: Parses natural-language inputs (e.g. '2 boiled eggs and 1 avocado toast') to compute nutritional breakdowns.",
+          "Circadian Fasting Progression: Tracks fasting metabolic stages (Anabolic, Catabolic, Fat Burning, Ketosis) with automated stage push alerts.",
+          "Home Screen Glance Widgets: Live Kotlin Glance widgets showing remaining calorie budget and fasting countdowns."
+        ],
+        urls: [
+          { label: "Google Play Store", url: "https://play.google.com/store/apps/details?id=com.caloriefit.app" },
+          { label: "GitHub Repository", url: "https://github.com/kashif-malik12/CalorieFit" }
+        ]
+      },
+      allonssy: {
+        title: "Allonssy — Hyperlocal Social Network & Marketplace",
+        category: "Mobile & Web SaaS (Android Play Store + Web App)",
+        version: "v1.3.2+10 — Bumped Nov 19, 2026",
+        overview: "Allonssy (local_social) is a hyperlocal community platform operating under Tradister SAS (France). It enables residents, neighborhood artisans, and local businesses to share news, trade in an integrated marketplace, and organize local events within configurable radius boundaries.",
+        stack: ["Flutter 3.x", "Riverpod 2.5", "GoRouter 14", "Self-Hosted Supabase VPS", "PostgreSQL with RLS", "FCM HTTP v1", "Caddy Web Server"],
+        architecture: [
+          "Self-Hosted Supabase: Deployed on Ubuntu VPS (87.106.13.170) with PostgreSQL Row Level Security (RLS) guaranteeing tenant data protection.",
+          "Realtime WebSockets: Instant chat messaging, comments, and live notifications.",
+          "Push Notification Dispatch: PostgreSQL pg_net triggers invoking Deno Edge Functions (push-dispatch) delivering HTTP v1 Firebase notifications.",
+          "Caddy Reverse Proxy: Automated SSL and high-performance reverse proxy routing for app.allonssy.com.",
+          "Native MethodChannel Camera: Custom Kotlin camera implementation in MainActivity.kt preventing R8 release crashes."
+        ],
+        urls: [
+          { label: "Live Web Application", url: "https://app.allonssy.com" },
+          { label: "GitHub Repository", url: "https://github.com/kashif-malik12/allonssy" }
+        ]
+      },
+      esupermarche: {
+        title: "eSuperMarche — Multi-Vendor Grocery Marketplace",
+        category: "Cross-Platform E-Commerce (Mobile & Web)",
+        version: "FluxStore 6.1.0 • Android 15 SDK 35",
+        overview: "eSuperMarche connects local grocery stores, supermarket vendors, and online consumers onto a unified multi-vendor storefront platform with live delivery tracking and inventory management.",
+        stack: ["Flutter", "WooCommerce REST API", "WordPress", "OneSignal Push", "Firebase Notification Service"],
+        architecture: [
+          "WooCommerce & Mstore Backend: RESTful synchronization of vendors, catalog taxonomies, coupons, and orders.",
+          "Push Campaigns: Multi-channel notifications via OneSignal and Firebase.",
+          "Localized Multi-Store Geolocation: Delivers store-specific catalogs based on user location."
+        ],
+        urls: [
+          { label: "Live Storefront", url: "https://esupermarche.com" }
+        ]
+      },
+      curiokids: {
+        title: "Curio Kids MVP — Safe Curated Video Platform",
+        category: "Web Application (Parental Controls & EdTech)",
+        version: "v0.1.0 MVP",
+        overview: "Curio Kids is a distraction-free, algorithm-free web application where parents curate safe educational short-videos (YouTube & TikTok embeds) for their children with PIN security and watch timers.",
+        stack: ["Next.js 16.2.4 App Router", "React 19", "TypeScript", "Tailwind CSS 4", "Prisma 6.15", "SQLite", "Zod"],
+        architecture: [
+          "Parent Gateway Auth: Protected admin portal gated by PIN authentication using HTTP-only signed session cookies.",
+          "Strict Embed Sanitation: Parses YouTube & TikTok identifiers without exposing third-party recommended algorithms or comments.",
+          "Local-First DB: Backed by Prisma ORM and SQLite for lightweight, instant deployment."
+        ],
+        urls: []
+      },
+      etoro: {
+        title: "eToro Autonomous Stock Portfolio Agent (etoro-agent)",
+        category: "Algorithmic Fintech & Autonomous AI Agent",
+        version: "v0.1.0 • 24/7 Cloud or Local PC",
+        overview: "A standalone Python portfolio management agent featuring an interactive FastAPI Web Dashboard and scheduled trading worker designed for eToro's official API with demo-first paper broker safeguards.",
+        stack: ["Python 3.11+", "FastAPI", "yfinance", "eToro Public API", "Google Gemini AI", "Docker", "Railway / Render"],
+        architecture: [
+          "Multi-Tiered Safety Locks: Hardware kill switch, real-money double lock, daily loss circuit breaker, and 1x max leverage restriction.",
+          "Target-Allocation Rebalancer: Maintains user-defined ETF/equity target weights with automated drift rebalancing and DCA deployment.",
+          "Multi-LLM Research Engine: Pulls fundamental metrics and headlines, analyzing sentiment with Google Gemini, OpenAI, or local heuristics with bearish veto power."
+        ],
+        urls: []
+      },
+      streamer: {
+        title: "Streamer — Bilingual Workout News & Audio Podcast",
+        category: "AI Audio Generation & Mobile Client",
+        version: "v1.0.0 APK",
+        overview: "Automated media engine that aggregates daily fitness news, generates engaging bilingual scripts using Google Gemini, synthesizes spoken audio via TTS, and streams it to a Capacitor mobile app.",
+        stack: ["Python", "FastAPI", "Google Gemini API", "Capacitor 8", "Android APK", "TTS Engines"],
+        architecture: [
+          "Background Audio Pipeline: News Aggregator -> Gemini Script Writer -> Audio Producer -> MP3 synthesis.",
+          "Podcast RSS Feed: Standard podcast RSS feed generation allowing any podcatcher to subscribe.",
+          "Mobile Streaming: HTTP byte-range request audio streaming with local LAN QR pairing."
+        ],
+        urls: []
+      },
+      enterprise: {
+        title: "Enterprise IT Operations & Support Suite",
+        category: "Enterprise Automation & Corporate IT Tooling",
+        version: "On-Premises Production Suite",
+        overview: "A collection of self-contained, offline-capable corporate IT automation tools for enterprise helpdesk staff, system engineers, and client device management.",
+        stack: ["PowerShell 5.1/7+", "Microsoft 365 Graph", "Entra ID", "Intune", "Python", "Typer CLI"],
+        architecture: [
+          "IT Ops PowerShell Shortcuts: Instant generation of tenant administrative scripts (M365, Entra, Intune) with 1-click clipboard transfer.",
+          "Support Agent: Typer-based CLI & GUI troubleshooting agent executing step-by-step diagnostic playbooks for printers, network, and permissions.",
+          "IT Asset Management: Desktop application deployed directly into user profile (%LOCALAPPDATA%) for offline device tracking."
+        ],
+        urls: []
+      },
+      vault: {
+        title: "Production Release Cryptographic Vault",
+        category: "Security & DevOps Infrastructure",
+        version: "Secure Offline Vault",
+        overview: "Strictly offline repository containing signing keystores, developer service account credentials, and deployment fingerprints for Google Play Store releases.",
+        stack: ["Java Keystore (.jks)", "Google Cloud Service Accounts", "SHA-256 Signatures", "Air-Gapped Storage"],
+        architecture: [
+          "Play Store Upload Keystores: Secures upload-keystore.jks and key.properties for Allonssy, CalorieFit, and eSuperMarche.",
+          "CI/CD Integration: Enables headless APK/AAB build automation and Play Developer Console API deployment."
+        ],
+        urls: []
+      }
+    };
+
+    function openDetails(key) {
+      const data = projectDetails[key];
+      if (!data) return;
+
+      let urlsHtml = '';
+      if (data.urls && data.urls.length > 0) {
+        urlsHtml = `
+          <div class="modal-section">
+            <h4>Live Links & Repositories</h4>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+              ${data.urls.map(u => `<a href="${u.url}" target="_blank" class="link-btn" style="color:var(--accent);">${u.label} ↗</a>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      const html = `
+        <div class="modal-header">
+          <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; font-weight:700;">${data.category}</div>
+          <h2 style="font-size:1.35rem; font-weight:800; margin:4px 0 6px;">${data.title}</h2>
+          <div style="font-size:0.82rem; color:var(--accent); font-family:'JetBrains Mono';">${data.version}</div>
+        </div>
+
+        <div class="modal-section">
+          <h4>Executive Overview</h4>
+          <p>${data.overview}</p>
+        </div>
+
+        <div class="modal-section">
+          <h4>Architecture & Technical Design</h4>
+          <ul>
+            ${data.architecture.map(item => `<li style="margin-bottom:6px;">${item}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="modal-section">
+          <h4>Core Tech Stack</h4>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+            ${data.stack.map(s => `<span class="tag" style="background:var(--bg); border-color:var(--border-accent);">${s}</span>`).join('')}
+          </div>
+        </div>
+
+        ${urlsHtml}
+      `;
+
+      document.getElementById('modal-content').innerHTML = html;
+      document.getElementById('modal-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'modal-overlay') {
+        closeModal();
+      }
+    }
+
+    // Export Portfolio Metadata
+    function exportData() {
+      const exportBlob = new Blob([JSON.stringify(projectDetails, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(exportBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SuperEye_Portfolio_Summary_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
