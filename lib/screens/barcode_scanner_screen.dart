@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../services/barcode_service.dart';
+import 'food_scanner_screen.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
   final Function(BarcodeProduct product, double grams, String mealCategory) onAddProduct;
@@ -98,6 +100,22 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
       appBar: AppBar(
         title: const Text('Barcode Scanner'),
         actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.camera_alt, size: 18, color: Colors.teal),
+            label: const Text('Scan Plate', style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
+            onPressed: () {
+              final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FoodScannerScreen(
+                    date: todayStr,
+                    onLogged: () {},
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(_isTorchOn ? Icons.flash_on : Icons.flash_off),
             tooltip: 'Flashlight Toggle',

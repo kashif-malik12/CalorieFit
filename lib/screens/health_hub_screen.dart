@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'food_scanner_screen.dart';
 import 'ai_meal_estimator_screen.dart';
 import 'barcode_scanner_screen.dart';
 import 'recipe_builder_screen.dart';
@@ -87,6 +88,27 @@ class HealthHubScreen extends StatelessWidget {
           // Section 1: Smart Nutrition
           Text('SMART NUTRITION & FOOD', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey.shade600, letterSpacing: 0.5)),
           const SizedBox(height: 10),
+
+          // Primary Camera Scanner Feature Card
+          _HubCard(
+            icon: Icons.camera_alt,
+            iconColor: Colors.teal,
+            title: 'Camera Food Scanner',
+            subtitle: 'Snap a photo of your plate to auto-calculate calories, macros, and portion sizes.',
+            badge: 'AI CAMERA',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FoodScannerScreen(
+                    date: todayStr,
+                    onLogged: () => onRefreshDiary?.call(),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
 
           Row(
             children: [

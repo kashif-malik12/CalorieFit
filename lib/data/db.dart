@@ -1276,6 +1276,7 @@ class AppDb {
           le.food_id as food_id,
 
           le.entry_type as entry_type,
+          le.image_path as image_path,
           le.manual_name as manual_name,
           le.manual_kcal as manual_kcal,
           le.manual_protein as manual_protein,

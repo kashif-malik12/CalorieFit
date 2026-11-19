@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../data/db.dart';
+import 'food_scanner_screen.dart';
 
 class MealJournalItem {
   final int id;
@@ -161,19 +164,30 @@ class _MealPhotoJournalScreenState extends State<MealPhotoJournalScreen> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Row(
                                   children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: _mealColor(item.mealLabel).withAlpha(25),
+                                    if (item.imagePath != null && item.imagePath!.isNotEmpty && !kIsWeb && File(item.imagePath!).existsSync())
+                                      ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
+                                        child: Image.file(
+                                          File(item.imagePath!),
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    else
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          color: _mealColor(item.mealLabel).withAlpha(25),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Icon(
+                                          _mealIcon(item.mealLabel),
+                                          color: _mealColor(item.mealLabel),
+                                          size: 28,
+                                        ),
                                       ),
-                                      child: Icon(
-                                        _mealIcon(item.mealLabel),
-                                        color: _mealColor(item.mealLabel),
-                                        size: 28,
-                                      ),
-                                    ),
                                     const SizedBox(width: 14),
                                     Expanded(
                                       child: Column(
@@ -241,6 +255,25 @@ class _MealPhotoJournalScreenState extends State<MealPhotoJournalScreen> {
                 ),
               ],
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.teal.shade700,
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.camera_alt),
+        label: const Text('Scan Food Photo'),
+        onPressed: () async {
+          final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FoodScannerScreen(
+                date: todayStr,
+                onLogged: _loadJournal,
+              ),
+            ),
+          );
+          _loadJournal();
+        },
+      ),
     );
   }
 

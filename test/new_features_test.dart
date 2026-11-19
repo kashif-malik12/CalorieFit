@@ -341,4 +341,30 @@ void main() {
       expect(prefs.getInt('caloriefit_last_dismissed_update_time'), isNotNull);
     });
   });
+
+  group('Camera Food Scanner Tests', () {
+    test('Expanded ingredient bank correctly parses complex meals with portions', () async {
+      final estimator = AiNutritionEstimator.instance;
+
+      // Test pizza slice
+      final pizzaMeal = await estimator.estimateMeal('2 slices pepperoni pizza');
+      expect(pizzaMeal.totalCalories, greaterThan(300));
+      expect(pizzaMeal.items.any((it) => it.name.contains('PIZZA')), isTrue);
+
+      // Test steak and roasted potatoes
+      final steakMeal = await estimator.estimateMeal('steak with roasted potatoes');
+      expect(steakMeal.totalCalories, greaterThan(350));
+      expect(steakMeal.totalProtein, greaterThan(20));
+
+      // Test salmon and rice
+      final salmonMeal = await estimator.estimateMeal('salmon with rice and broccoli');
+      expect(salmonMeal.totalCalories, greaterThan(300));
+      expect(salmonMeal.totalProtein, greaterThan(20));
+
+      // Test breakfast eggs and toast
+      final eggsMeal = await estimator.estimateMeal('2 eggs with toast');
+      expect(eggsMeal.totalCalories, greaterThan(150));
+      expect(eggsMeal.totalProtein, greaterThan(12));
+    });
+  });
 }

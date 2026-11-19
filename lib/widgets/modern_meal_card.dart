@@ -5,6 +5,7 @@ class ModernMealSectionCard extends StatelessWidget {
   final String emoji;
   final List<Map<String, Object?>> entries;
   final VoidCallback onAddMeal;
+  final VoidCallback? onScanMeal;
   final Function(int logId) onDeleteEntry;
   final Function(Map<String, Object?> entry)? onTapEntry;
 
@@ -14,6 +15,7 @@ class ModernMealSectionCard extends StatelessWidget {
     required this.emoji,
     required this.entries,
     required this.onAddMeal,
+    this.onScanMeal,
     required this.onDeleteEntry,
     this.onTapEntry,
   });
@@ -92,6 +94,13 @@ class ModernMealSectionCard extends StatelessWidget {
                     ),
                   ),
                 const Spacer(),
+                if (onScanMeal != null)
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt_outlined, size: 20),
+                    color: Colors.teal,
+                    tooltip: 'Scan food with camera for $categoryName',
+                    onPressed: onScanMeal,
+                  ),
                 IconButton(
                   icon: const Icon(Icons.add_circle_outline, size: 22),
                   color: theme.colorScheme.primary,
@@ -173,12 +182,17 @@ class ModernMealSectionCard extends StatelessWidget {
                   itemF = ((r['fat'] as num?) ?? 0).toDouble() * ratio;
                 }
 
+                final entryImagePath = r['image_path'] as String?;
                 return ListTile(
                   dense: true,
                   onTap: onTapEntry != null ? () => onTapEntry!(r) : null,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                   title: Row(
                     children: [
+                      if (entryImagePath != null && entryImagePath.isNotEmpty) ...[
+                        const Icon(Icons.photo_camera, size: 14, color: Colors.teal),
+                        const SizedBox(width: 4),
+                      ],
                       Expanded(
                         child: Text(
                           name,

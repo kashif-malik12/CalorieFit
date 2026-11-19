@@ -1,6 +1,7 @@
 // lib/main.dart
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ import 'screens/ai_meal_estimator_screen.dart';
 import 'screens/meal_photo_journal_screen.dart';
 import 'screens/health_sync_screen.dart';
 import 'screens/widget_settings_screen.dart';
+import 'screens/food_scanner_screen.dart';
 import 'screens/language_selection_dialog.dart';
 import 'screens/onboarding_wizard_screen.dart';
 import 'screens/health_export_dialog.dart';
@@ -1157,6 +1159,21 @@ Future<void> _showTodayEntryDetails(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          if (row['image_path'] != null &&
+                              (row['image_path'] as String).isNotEmpty &&
+                              !kIsWeb &&
+                              File(row['image_path'] as String).existsSync()) ...[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                File(row['image_path'] as String),
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                          ],
                           if ((time != null && time.isNotEmpty) ||
                               (label != null && label.isNotEmpty))
                             Text(
@@ -2330,6 +2347,22 @@ class _TodayPageState extends State<TodayPage> {
     if (picked != null) setState(() => _date = _fmtDate(picked));
   }
 
+  Future<void> _openFoodScanner(BuildContext context, {String? defaultMeal}) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FoodScannerScreen(
+          date: _date,
+          defaultMeal: defaultMeal,
+          onLogged: () {
+            if (mounted) setState(() {});
+          },
+        ),
+      ),
+    );
+    if (mounted) setState(() {});
+  }
+
   Future<void> _showAddMenu() async {
     final action = await showModalBottomSheet<String>(
       context: context,
@@ -2339,8 +2372,29 @@ class _TodayPageState extends State<TodayPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 8),
-            const Text('Add', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            const Text('Add Food & Activity', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.teal.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.camera_alt, color: Colors.teal),
+              ),
+              title: const Text('Scan Food with Camera', style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: const Text('Snap photo of food to calculate calories & macros'),
+              trailing: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.teal.shade700,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text('AI SCAN', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+              ),
+              onTap: () => Navigator.pop(ctx, 'camera_scan'),
+            ),
             ListTile(
               leading: const Icon(Icons.search),
               title: const Text('Add from My Foods'),
@@ -2412,6 +2466,9 @@ class _TodayPageState extends State<TodayPage> {
 
     if (!mounted || action == null) return;
     switch (action) {
+      case 'camera_scan':
+        await _openFoodScanner(context);
+        break;
       case 'foods':
         await _addLogEntryFromFoods();
         break;
@@ -3766,6 +3823,66 @@ class _TodayPageState extends State<TodayPage> {
                   },
                 ),
                 const SizedBox(height: 14),
+                // Quick Camera Food Scan Action Bar
+                InkWell(
+                  onTap: () => _openFoodScanner(context),
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.teal.shade700, Colors.teal.shade900],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.teal.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.camera_alt, color: Colors.white, size: 22),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Scan Food for Calories',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                              Text(
+                                'Snap food photo with camera for AI calorie estimation',
+                                style: TextStyle(color: Colors.white70, fontSize: 11),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.tealAccent.shade400,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text('SCAN', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black87)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
                 _buildWaterTrackerCard(context, _date, () => setState(() {})),
                 const SizedBox(height: 14),
                 _buildQuickFavoritesBar(),
@@ -3774,6 +3891,7 @@ class _TodayPageState extends State<TodayPage> {
                   emoji: '🍳',
                   entries: breakfastEntries,
                   onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Breakfast'),
+                  onScanMeal: () => _openFoodScanner(context, defaultMeal: 'Breakfast'),
                   onDeleteEntry: (logId) async {
                     await AppDb.instance.deleteLog(logId);
                     if (mounted) setState(() {});
@@ -3785,6 +3903,7 @@ class _TodayPageState extends State<TodayPage> {
                   emoji: '🥗',
                   entries: lunchEntries,
                   onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Lunch'),
+                  onScanMeal: () => _openFoodScanner(context, defaultMeal: 'Lunch'),
                   onDeleteEntry: (logId) async {
                     await AppDb.instance.deleteLog(logId);
                     if (mounted) setState(() {});
@@ -3796,6 +3915,7 @@ class _TodayPageState extends State<TodayPage> {
                   emoji: '🍲',
                   entries: dinnerEntries,
                   onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Dinner'),
+                  onScanMeal: () => _openFoodScanner(context, defaultMeal: 'Dinner'),
                   onDeleteEntry: (logId) async {
                     await AppDb.instance.deleteLog(logId);
                     if (mounted) setState(() {});
@@ -3807,6 +3927,7 @@ class _TodayPageState extends State<TodayPage> {
                   emoji: '🍎',
                   entries: snackEntries,
                   onAddMeal: () => _addLogEntryFromFoods(defaultMeal: 'Afternoon Snack'),
+                  onScanMeal: () => _openFoodScanner(context, defaultMeal: 'Snack'),
                   onDeleteEntry: (logId) async {
                     await AppDb.instance.deleteLog(logId);
                     if (mounted) setState(() {});
