@@ -2,1439 +2,563 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Portfolio Dashboard | CEO Business Success & Ventures Radar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Super Eye">
+  <meta name="theme-color" content="#090d16">
+  <title>Super Eye | Real Stats & Marketing Snapshot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070b12;
-      --bg-panel: #0d131f;
-      --bg-card: #121a2b;
-      --bg-card-hover: #18233a;
-      --border: #1e2b45;
-      --border-subtle: #162035;
-      --border-accent: #2c3e64;
-      --text: #f1f5f9;
-      --text-muted: #8e9db2;
-      --text-dim: #5c6b84;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --card-hover: #162035;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
       --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.12);
+      --accent-glow: rgba(56, 189, 248, 0.15);
       --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.12);
-      --yellow: #f59e0b;
-      --yellow-soft: rgba(245, 158, 11, 0.12);
+      --green-glow: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.15);
       --purple: #a855f7;
-      --purple-soft: rgba(168, 85, 247, 0.12);
-      --blue: #3b82f6;
-      --blue-soft: rgba(59, 130, 246, 0.12);
-      --radius: 12px;
-      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --purple-glow: rgba(168, 85, 247, 0.15);
+      --red: #ef4444;
     }
 
-    [data-theme="light"] {
-      --bg: #f4f6fa;
-      --bg-panel: #ffffff;
-      --bg-card: #ffffff;
-      --bg-card-hover: #f8fafc;
-      --border: #e2e8f0;
-      --border-subtle: #edf2f7;
-      --border-accent: #cbd5e1;
-      --text: #0f172a;
-      --text-muted: #475569;
-      --text-dim: #94a3b8;
-      --accent: #0284c7;
-      --accent-soft: rgba(2, 132, 199, 0.08);
-      --green: #059669;
-      --green-soft: rgba(5, 150, 105, 0.08);
-      --yellow: #d97706;
-      --purple: #7c3aed;
-      --blue: #2563eb;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-
-    .container {
-      max-width: 1480px;
+      color: var(--text-main);
+      padding: 16px 14px 60px 14px;
+      line-height: 1.45;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 28px 24px;
     }
 
-    /* Executive Top Bar */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 28px;
+    /* Header */
+    .header {
+      padding: 12px 4px 18px 4px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 18px;
     }
-
-    .ceo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 3px 10px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .header-titles h1 {
-      font-size: 1.65rem;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      color: var(--text);
-      margin-top: 4px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-titles p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .live-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green-soft);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-panel);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .btn:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-accent);
-      color: var(--text);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #ffffff;
-      border: none;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #0369a1, #1d4ed8);
-    }
-
-    /* Executive KPI Metric Banners */
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .kpi-box {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .kpi-box::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--border-accent);
-    }
-
-    .kpi-box.accent-green::after { background: var(--green); }
-    .kpi-box.accent-blue::after { background: var(--accent); }
-    .kpi-box.accent-purple::after { background: var(--purple); }
-    .kpi-box.accent-yellow::after { background: var(--yellow); }
-
-    .kpi-head {
+    .badge-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
     }
-
-    .kpi-title {
-      font-size: 0.72rem;
-      text-transform: uppercase;
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.05em;
-      color: var(--text-dim);
+      text-transform: uppercase;
     }
-
-    .kpi-icon {
-      font-size: 1.15rem;
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
     }
-
-    .kpi-num {
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
+    .sync-date {
+      font-size: 0.72rem;
+      color: var(--text-sub);
       font-family: 'JetBrains Mono', monospace;
     }
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tagline {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
-    .kpi-sub {
+    /* Executive KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-won::before { background: var(--amber); }
+    .kpi-pipeline::before { background: var(--accent); }
+    .kpi-users::before { background: var(--green); }
+    .kpi-clicks::before { background: var(--purple); }
+    
+    .kpi-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kpi-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      margin: 4px 0 2px 0;
+      color: var(--text-main);
+    }
+    .kpi-note {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      line-height: 1.3;
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 22px 4px 10px 4px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    /* Project Cards */
+    .proj-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      transition: border-color 0.15s ease;
+    }
+    .proj-card:hover {
+      border-color: #2e3e5c;
+    }
+    .proj-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .proj-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .proj-sub {
+      font-size: 0.74rem;
+      color: var(--text-sub);
+      margin-top: 1px;
+    }
+    .badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-live { background: var(--green-glow); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-outbound { background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-pilot { background: var(--purple-glow); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+
+    /* Stat Rows inside card */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+      padding: 8px 10px;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .stat-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-col-label {
+      font-size: 0.65rem;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .stat-col-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .proj-bullet {
       font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 4px;
       display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 5px;
+    }
+    .proj-bullet span.icon {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .proj-links {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--card-border);
+    }
+    .proj-link-btn {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      background: var(--accent-glow);
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
       align-items: center;
       gap: 4px;
     }
 
-    /* Section Headers */
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .section-head h2 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-head p {
-      font-size: 0.82rem;
-      color: var(--text-dim);
-    }
-
-    /* Filter & Search Bar */
-    .controls-panel {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .search-wrap {
-      position: relative;
-      flex: 1;
-      min-width: 260px;
-      max-width: 440px;
-    }
-
-    .search-wrap svg {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      color: var(--text-dim);
-    }
-
-    .search-input {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px 8px 36px;
-      color: var(--text);
-      font-size: 0.84rem;
-      outline: none;
-    }
-
-    .search-input:focus {
-      border-color: var(--accent);
-    }
-
-    .filter-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .filter-tab {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      user-select: none;
-    }
-
-    .filter-tab:hover {
-      border-color: var(--border-accent);
-      color: var(--text);
-    }
-
-    .filter-tab.active {
-      background: var(--accent);
-      color: #04101e;
-      border-color: var(--accent);
-      font-weight: 700;
-    }
-
-    /* Grid of Business Ventures */
-    .bu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-      gap: 22px;
-      margin-bottom: 40px;
-    }
-
-    @media (max-width: 768px) {
-      .bu-grid { grid-template-columns: 1fr; }
-    }
-
-    .bu-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: var(--transition);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-    }
-
-    .bu-card:hover {
-      border-color: var(--border-accent);
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
-    }
-
-    .bu-card.lead-card {
-      border-color: rgba(16, 185, 129, 0.4);
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 30%);
-    }
-
-    .bu-card.finops-card {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, var(--bg-card) 30%);
-    }
-
-    .bu-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
+    /* Summarized Marketing Plan Box */
+    .mktg-plan-card {
+      background: linear-gradient(145deg, #111827 0%, #0d1525 100%);
+      border: 1px solid #233352;
+      border-radius: 14px;
+      padding: 14px;
       margin-bottom: 14px;
     }
-
-    .bu-brand {
+    .mktg-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      margin-bottom: 12px;
     }
-
-    .bu-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      flex-shrink: 0;
-      border: 1px solid var(--border-accent);
-      background: var(--bg-panel);
-    }
-
-    .bu-title {
-      font-size: 1.15rem;
+    .mktg-title {
+      font-size: 0.92rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text);
+      color: var(--accent);
       display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .bu-entity {
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 700;
-      color: var(--text-dim);
-    }
-
-    .status-badge {
-      display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
     }
-
-    .badge-live { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-active { background: var(--yellow-soft); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
-    .badge-mvp { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
-
-    .bu-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 18px;
+    .mktg-pillar {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 8px 10px;
+      margin-bottom: 8px;
     }
-
-    /* Executive Data Metric Grid */
-    .data-metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      background: var(--bg);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 18px;
-    }
-
-    .data-metric {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .data-metric-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-    }
-
-    .data-metric-val {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text);
-      font-family: 'JetBrains Mono', monospace;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .data-metric-val.green { color: var(--green); }
-    .data-metric-val.blue { color: var(--accent); }
-
-    /* Business impact list */
-    .impact-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      margin-bottom: 20px;
-    }
-
-    .impact-list li {
-      font-size: 0.81rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      line-height: 1.5;
-    }
-
-    .impact-bullet {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
-      transform: translateY(-2px);
-    }
-
-    /* Unit Economics & Cost Banner */
-    .econ-badge {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-bottom: 18px;
-      font-size: 0.76rem;
-    }
-
-    .econ-badge span:first-child { color: var(--text-dim); font-weight: 600; }
-    .econ-badge span:last-child { color: var(--text); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-
-    /* Card Footer */
-    .bu-footer {
-      margin-top: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      border-top: 1px solid var(--border-subtle);
-      gap: 10px;
-    }
-
-    .bu-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .bu-link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .bu-link-btn:hover {
-      background: var(--bg-panel);
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    /* Performance Matrix Table */
-    .table-container {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow-x: auto;
-      margin-top: 16px;
-    }
-
-    table.ceo-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.82rem;
-    }
-
-    table.ceo-table th {
-      background: var(--bg);
-      color: var(--text-dim);
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
-    table.ceo-table td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      color: var(--text);
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    table.ceo-table tr:last-child td { border-bottom: none; }
-    table.ceo-table tr:hover td { background: var(--bg-card-hover); }
-
-    .table-brand-cell {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-    }
-
-    .tag-mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 2px 7px;
-      border-radius: 5px;
-      color: var(--text);
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+    .mktg-pillar.p2 { border-left-color: var(--green); }
+    .mktg-pillar.p3 { border-left-color: var(--purple); }
+    
+    .pillar-name {
       font-size: 0.78rem;
-      color: var(--text-dim);
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+    }
+    .pillar-tag {
+      font-size: 0.65rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+    .pillar-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .pillar-target {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* Mobile Quick Action Footer */
+    .footer-bar {
+      margin-top: 24px;
+      text-align: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.72rem;
+      color: var(--text-sub);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Top Executive Bar -->
-    <header class="top-bar">
-      <div class="header-titles">
-        <div class="ceo-badge">C-Suite Executive Overview</div>
-        <h1>
-          CEO Business Performance & Ventures Radar
-        </h1>
-        <p>Operational health, verified customer bases, managed capital, and B2B pipelines across commercial products</p>
-      </div>
 
-      <div class="top-actions">
-        <div class="live-status-pill">
-          <span class="status-dot"></span>
-          2 Live Play Store Deployments • All Ventures Operational
-        </div>
-        <div class="btn" id="clock-display" style="font-family:'JetBrains Mono';">CET 00:00:00</div>
-        <button class="btn" id="theme-btn">Light Mode</button>
-        <button class="btn btn-primary" onclick="exportExecutiveSummary()">Export CEO Report</button>
+  <!-- Top Executive Header -->
+  <div class="header">
+    <div class="badge-bar">
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span>SUPER EYE PULSE</span>
       </div>
-    </header>
-
-    <!-- Top Executive KPI Banners -->
-    <div class="kpi-row">
-      <div class="kpi-box accent-green">
-        <div class="kpi-head">
-          <span class="kpi-title">Google Play Production Apps</span>
-          <span class="kpi-icon">📱</span>
-        </div>
-        <div class="kpi-num">2</div>
-        <div class="kpi-sub">CalorieFit (v1.10.1) & Allonssy (v1.3.2) live</div>
-      </div>
-
-      <div class="kpi-box accent-blue">
-        <div class="kpi-head">
-          <span class="kpi-title">B2B SaaS Sales Pipeline</span>
-          <span class="kpi-icon">💼</span>
-        </div>
-        <div class="kpi-num">€93.9k</div>
-        <div class="kpi-sub">Tradister FinOps: 62 enterprise & MSP target leads</div>
-      </div>
-
-      <div class="kpi-box accent-purple">
-        <div class="kpi-head">
-          <span class="kpi-title">Verified Local Merchants</span>
-          <span class="kpi-icon">📍</span>
-        </div>
-        <div class="kpi-num">150+</div>
-        <div class="kpi-sub">50 restaurants + 100 trade pros (Allonssy 91130)</div>
-      </div>
-
-      <div class="kpi-box accent-yellow">
-        <div class="kpi-head">
-          <span class="kpi-title">Managed Trading Capital</span>
-          <span class="kpi-icon">📈</span>
-        </div>
-        <div class="kpi-num">$100k</div>
-        <div class="kpi-sub">eToro portfolio equity pool (1x max leverage)</div>
-      </div>
-
-      <div class="kpi-box accent-green">
-        <div class="kpi-head">
-          <span class="kpi-title">Fleet Operating Margin</span>
-          <span class="kpi-icon">⚡</span>
-        </div>
-        <div class="kpi-num">~99%</div>
-        <div class="kpi-sub">Client-side SQLite, Vercel & lean €15/mo VPS footprint</div>
-      </div>
+      <div class="sync-date">NOV 2026 • LIVE RADAR</div>
     </div>
-
-    <!-- Controls & Search -->
-    <div class="controls-panel">
-      <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-box" class="search-input" placeholder="Filter by product, market, technology, metric...">
-      </div>
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">All Ventures (7)</button>
-        <button class="filter-tab" data-filter="saas">B2B Cloud & FinOps (1)</button>
-        <button class="filter-tab" data-filter="mobile">Mobile Apps (3)</button>
-        <button class="filter-tab" data-filter="marketplace">Commerce & Marketplace (2)</button>
-        <button class="filter-tab" data-filter="fintech">Fintech AI (1)</button>
-        <button class="filter-tab" data-filter="media">EdTech & Media (2)</button>
-      </div>
-    </div>
-
-    <!-- Section Title -->
-    <div class="section-head">
-      <div>
-        <h2>Active Commercial Product Ventures</h2>
-        <p>Prioritized by market readiness: Live Google Play Store apps & B2B Cloud SaaS platforms first</p>
-      </div>
-    </div>
-
-    <!-- Business Units Grid -->
-    <div class="bu-grid" id="cards-container">
-
-      <!-- 1. CalorieFit -->
-      <div class="bu-card lead-card" data-category="mobile" data-name="caloriefit macro tracker fasting local-first google play health">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--green);">🥗</div>
-            <div>
-              <div class="bu-title">CalorieFit</div>
-              <div class="bu-entity">Lead Venture • B2C Digital Health & Nutrition</div>
-            </div>
-          </div>
-          <span class="status-badge badge-live">Play Store Live</span>
-        </div>
-
-        <p class="bu-desc">
-          Privacy-centric, ad-free mobile nutrition and intermittent fasting companion. Employs on-device SQLite and Google Health Connect sync to deliver zero-cloud operating costs and infinite gross margins.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Production Release</span>
-            <span class="data-metric-val green">v1.10.1 (Build 17)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Marginal Server Cost</span>
-            <span class="data-metric-val blue">$0.00 / User</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Market Coverage</span>
-            <span class="data-metric-val">7 Languages</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Telemetry / Privacy</span>
-            <span class="data-metric-val green">100% Local-First</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Released Nov 19, 2026:</strong> Upfront Streak Challenge Module with customizable milestones (1d, 10d, 30d) and live milestone visual progress tracker.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Regulatory Compliance:</strong> Zero cloud telemetry makes the product inherently compliant with GDPR and European health data sovereignty regulations.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Platform Features:</strong> Google Health Connect integration, Android Glance Home Screen widgets, and Doctor CSV clinical summaries.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Gross Margin Profile:</span>
-          <span>~99% (Client-Side SQLite)</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="bu-link-btn">Google Play Store ↗</a>
-            <a href="https://github.com/kashif-malik12/CalorieFit" target="_blank" class="bu-link-btn">GitHub Repo ↗</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Tradister FinOps & Cloud L1/L2 -->
-      <div class="bu-card finops-card" data-category="saas" data-name="tradister finops cloud m365 license audit msp sasu srv vercel">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--accent);">☁️</div>
-            <div>
-              <div class="bu-title">Tradister FinOps & Cloud</div>
-              <div class="bu-entity">B2B SaaS & Cloud Automation • Tradister SASU</div>
-            </div>
-          </div>
-          <span class="status-badge badge-live">Live SaaS Platform</span>
-        </div>
-
-        <p class="bu-desc">
-          Automated M365 cloud license waste & security scanner coupled with an autonomous L1/L2 support remediation engine. Built for Managed Service Providers (MSPs) and European/US mid-market SMEs.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">B2B Sales Pipeline</span>
-            <span class="data-metric-val green">€93,894 EUR</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Target Qualified Accounts</span>
-            <span class="data-metric-val blue">62 Leads</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Core SaaS Domain</span>
-            <span class="data-metric-val">audit.tradister.com</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Legal Registration</span>
-            <span class="data-metric-val">RCS Évry 988 318 945</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>M365 License Waste Scanner:</strong> 60-second read-only scan detecting dormant ex-employee accounts holding expensive E3/E5/Business Premium/Copilot licenses.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Zero-Trust Onboarding:</strong> Inspectable read-only PowerShell script (<code>Run-TradisterM365Audit.ps1</code>), read-only Entra ID OAuth, and synthetic 30-user sandbox.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Autonomous L1/L2 Remediation:</strong> 1-click safe offboarding bot, self-service BitLocker recovery, and MFA/password automated resolution.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Monetization Model:</span>
-          <span>$49/Audit Report or €99–€199/mo MSP Retainer</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <a href="https://audit.tradister.com" target="_blank" class="bu-link-btn">audit.tradister.com ↗</a>
-            <a href="https://plan.tradister.com" target="_blank" class="bu-link-btn">plan.tradister.com ↗</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Allonssy -->
-      <div class="bu-card" data-category="mobile marketplace" data-name="allonssy tradister hyperlocal marketplace social paris supabase">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--accent);">📍</div>
-            <div>
-              <div class="bu-title">Allonssy</div>
-              <div class="bu-entity">Hyperlocal Social & SMB Marketplace • Tradister SAS</div>
-            </div>
-          </div>
-          <span class="status-badge badge-live">Store & Web Live</span>
-        </div>
-
-        <p class="bu-desc">
-          Hyperlocal social network and commerce ecosystem for neighborhoods in France. Connects residents with pre-seeded local restaurants and artisans within configurable kilometer radius zones.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Verified Merchant Pilot</span>
-            <span class="data-metric-val blue">150+ Businesses</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Launch Territory</span>
-            <span class="data-metric-val">Ris-Orangis (91130)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Production Version</span>
-            <span class="data-metric-val green">v1.3.2 (Build 10)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Hosting Footprint</span>
-            <span class="data-metric-val">1 VPS (€15/mo)</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Seeded Merchant Base:</strong> 50 top-reviewed restaurants (with full menus) and 100 certified local trade professionals (plumbers, electricians, contractors).</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Dual Delivery Channels:</strong> Live on Google Play Store (Internal/Prod) and web portal at <code>https://app.allonssy.com</code> reverse-proxied by Caddy.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Lean Infrastructure:</strong> Self-hosted Supabase VPS (87.106.13.170) utilizing PostgreSQL Row-Level Security, FCM HTTP v1 notifications, and Deno edge workers.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Infrastructure Burn Rate:</span>
-          <span>~€15 / month (Self-Hosted Stack)</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <a href="https://app.allonssy.com" target="_blank" class="bu-link-btn">app.allonssy.com ↗</a>
-            <a href="https://github.com/kashif-malik12/allonssy" target="_blank" class="bu-link-btn">GitHub Repo ↗</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. eToro Autonomous Stock Portfolio Agent -->
-      <div class="bu-card" data-category="fintech" data-name="etoro stock investing trading quantitative ai portfolio">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--yellow);">📈</div>
-            <div>
-              <div class="bu-title">eToro Autonomous Agent</div>
-              <div class="bu-entity">Quantitative WealthTech • Algorithmic Trading AI</div>
-            </div>
-          </div>
-          <span class="status-badge badge-live">Production Ready</span>
-        </div>
-
-        <p class="bu-desc">
-          Automated algorithmic portfolio manager and interactive FastAPI dashboard executing disciplined Dollar-Cost Averaging (DCA), drift rebalancing, and multi-LLM fundamental research.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Managed Capital Pool</span>
-            <span class="data-metric-val green">$100,000.00 USD</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Risk Leverage Limit</span>
-            <span class="data-metric-val">1x Max (No Margin)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Execution Environment</span>
-            <span class="data-metric-val blue">24/7 Cloud (Railway)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Research Engine</span>
-            <span class="data-metric-val">Multi-LLM / Gemini</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Pre-Trade Risk Guardrails:</strong> Built-in hardware kill switch, daily loss circuit breakers, concentration caps, and demo-first paper broker.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Technical Analysis Engine:</strong> Real-time SMA (20/50/200), RSI(14), MACD, Bollinger Bands, and dynamic ATR-based trailing stop losses.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>LLM Conviction Scoring:</strong> Fundamental sentiment analysis with veto power against tickers flagged BEARISH with high conviction.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Downside Protection:</span>
-          <span>Hard Cash Reserves & Stop-Losses</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <span class="bu-link-btn">Local Web: http://127.0.0.1:8000</span>
-            <span class="bu-link-btn">Railway / Docker 24/7 Ready</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. eSuperMarche -->
-      <div class="bu-card" data-category="mobile marketplace" data-name="esupermarche ecommerce multi-vendor grocery store flutter woocommerce">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--yellow);">🛒</div>
-            <div>
-              <div class="bu-title">eSuperMarche</div>
-              <div class="bu-entity">Retail E-Commerce • Multi-Vendor Grocery Marketplace</div>
-            </div>
-          </div>
-          <span class="status-badge badge-active">Live Staging Store</span>
-        </div>
-
-        <p class="bu-desc">
-          Full-stack multi-vendor grocery marketplace app providing digital storefronts for local supermarket merchants, live delivery dispatch, and multi-currency localized checkout.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Platform Version</span>
-            <span class="data-metric-val">FluxStore 6.1.0</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Mobile OS Target</span>
-            <span class="data-metric-val green">Android 15 (SDK 35)</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Store Domain</span>
-            <span class="data-metric-val blue">esupermarche.com</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Push Marketing</span>
-            <span class="data-metric-val">OneSignal + Firebase</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Merchant Architecture:</strong> Multi-vendor catalog synchronization via WooCommerce REST API and WordPress backend.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Omnichannel Presence:</strong> Synchronized mobile client and web storefront for automated inventory sync.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Monetization Model:</span>
-          <span>Vendor Commission & Order Transaction Fee</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <a href="https://esupermarche.com" target="_blank" class="bu-link-btn">esupermarche.com ↗</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Curio Kids MVP -->
-      <div class="bu-card" data-category="media" data-name="curio kids reels scrapper edtech parental video nextjs">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--purple);">📺</div>
-            <div>
-              <div class="bu-title">Curio Kids MVP</div>
-              <div class="bu-entity">EdTech & Family SaaS • Safe Video Curation</div>
-            </div>
-          </div>
-          <span class="status-badge badge-mvp">Active MVP</span>
-        </div>
-
-        <p class="bu-desc">
-          Kid-safe curated short-video web application eliminating addictive algorithmic loops and unmoderated comments. Parents manage watch timers, PIN security, and approved YouTube/TikTok embeds.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Curated Video Library</span>
-            <span class="data-metric-val blue">100 Video Assets</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Tracked Watch Sessions</span>
-            <span class="data-metric-val">11 Logged Sessions</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Parent Admin Profiles</span>
-            <span class="data-metric-val">1 Master Profile</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Daily Watch Limit</span>
-            <span class="data-metric-val green">60 Min Cap</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Educational Content Pilot:</strong> Pre-loaded with French storytelling and educational language animations from CCube Academy.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Modern Tech Stack:</strong> Next.js 16.2.4 App Router, React 19, TypeScript 5.9, Tailwind CSS 4, Prisma 6.15 ORM, SQLite.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Security Architecture:</strong> Gated parent portal using HTTP-only signed session cookies with zero child personal data harvesting.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Market Opportunity:</span>
-          <span>B2C Parental Subscription / EdTech</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <span class="bu-link-btn">npm run dev (Port 3000)</span>
-            <span class="bu-link-btn">Prisma + SQLite</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. Streamer -->
-      <div class="bu-card" data-category="mobile media" data-name="streamer workout news podcast ai audio gemini capacitor">
-        <div class="bu-head">
-          <div class="bu-brand">
-            <div class="bu-icon" style="color:var(--purple);">🎙️</div>
-            <div>
-              <div class="bu-title">Streamer Workout News</div>
-              <div class="bu-entity">AI Audio Generation • Bilingual Fitness Media</div>
-            </div>
-          </div>
-          <span class="status-badge badge-active">Android APK Built</span>
-        </div>
-
-        <p class="bu-desc">
-          Automated generative media platform that aggregates daily fitness news, drafts bilingual French/English workout scripts via Gemini LLM, and synthesizes dual-voice audio podcasts.
-        </p>
-
-        <div class="data-metrics-grid">
-          <div class="data-metric">
-            <span class="data-metric-label">Client Mobile Build</span>
-            <span class="data-metric-val green">StreamerWorkout.apk</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Synthesized Episode</span>
-            <span class="data-metric-val blue">30-Min Master File</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">AI Generation Engine</span>
-            <span class="data-metric-val">Google Gemini</span>
-          </div>
-          <div class="data-metric">
-            <span class="data-metric-label">Distribution Format</span>
-            <span class="data-metric-val">RSS + HTTP Stream</span>
-          </div>
-        </div>
-
-        <ul class="impact-list">
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Hands-Free Immersion:</strong> Designed for athletes exercising while learning French or English with dual alternating voice actors.</span>
-          </li>
-          <li>
-            <span class="impact-bullet"></span>
-            <span><strong>Mobile Deployment:</strong> Android APK packaged with Capacitor 8 and native speech recognition integration.</span>
-          </li>
-        </ul>
-
-        <div class="econ-badge">
-          <span>Pipeline Cost:</span>
-          <span>Sub-cent generation per episode (Gemini)</span>
-        </div>
-
-        <div class="bu-footer">
-          <div class="bu-links">
-            <span class="bu-link-btn">StreamerWorkout.apk</span>
-            <span class="bu-link-btn">FastAPI + Capacitor</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Executive Performance Matrix Table -->
-    <div class="section-head" style="margin-top:20px;">
-      <div>
-        <h2>CEO Cross-Venture Performance Matrix</h2>
-        <p>Comparative business overview across operating entity, verified customer base, managed assets, and economic profile</p>
-      </div>
-    </div>
-
-    <div class="table-container">
-      <table class="ceo-table">
-        <thead>
-          <tr>
-            <th>Product Venture</th>
-            <th>Operating Entity</th>
-            <th>Verified Customer / Account Base</th>
-            <th>Real Tracked Asset Base</th>
-            <th>Economic Model / Margin</th>
-            <th>Deployment Stage</th>
-            <th>Health Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>🥗</span>
-                <span>CalorieFit</span>
-              </div>
-            </td>
-            <td>Consumer Mobile Health</td>
-            <td><span class="tag-mono">Global Local-First</span></td>
-            <td>On-Device SQLite DB (7 Languages)</td>
-            <td>~99% Margin ($0 Cloud Server Cost)</td>
-            <td>Google Play Store (v1.10.1+17)</td>
-            <td><span class="status-badge badge-live">Live Production</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>☁️</span>
-                <span>Tradister FinOps & Cloud</span>
-              </div>
-            </td>
-            <td>Tradister SASU (RCS 988 318 945)</td>
-            <td><span class="tag-mono">62 B2B Leads (€93.9k Pipeline)</span></td>
-            <td>M365 Audit Engine & L1/L2 Sandbox</td>
-            <td>$49/Audit or €99–€199/mo MSP Retainer</td>
-            <td>Live Vercel SaaS (audit.tradister.com)</td>
-            <td><span class="status-badge badge-live">Live SaaS</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>📍</span>
-                <span>Allonssy</span>
-              </div>
-            </td>
-            <td>Tradister SAS (France)</td>
-            <td><span class="tag-mono">150+ Verified Merchants</span></td>
-            <td>Ris-Orangis (91130) Directory & Menus</td>
-            <td>€15/mo VPS (High Operating Leverage)</td>
-            <td>Play Store & app.allonssy.com</td>
-            <td><span class="status-badge badge-live">Live Production</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>📈</span>
-                <span>eToro Autonomous Agent</span>
-              </div>
-            </td>
-            <td>Quantitative WealthTech</td>
-            <td><span class="tag-mono">1 Quantitative Operator</span></td>
-            <td>$100,000.00 USD Capital Pool</td>
-            <td>Automated Systematic Alpha / DCA</td>
-            <td>24/7 Cloud (Railway / Docker)</td>
-            <td><span class="status-badge badge-live">Production Ready</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>🛒</span>
-                <span>eSuperMarche</span>
-              </div>
-            </td>
-            <td>Multi-Vendor Retail</td>
-            <td><span class="tag-mono">Supermarket Shoppers</span></td>
-            <td>WooCommerce Multi-Store Catalog</td>
-            <td>Vendor Take-Rate / Transaction Fee</td>
-            <td>Staging Store (esupermarche.com)</td>
-            <td><span class="status-badge badge-active">Live Staging</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>📺</span>
-                <span>Curio Kids MVP</span>
-              </div>
-            </td>
-            <td>Family EdTech Media</td>
-            <td><span class="tag-mono">1 Parent / 11 Watch Logs</span></td>
-            <td>100 Curated Educational Videos</td>
-            <td>Subscription Potential ($4.99/mo)</td>
-            <td>Private Alpha / Local Web</td>
-            <td><span class="status-badge badge-mvp">Active MVP</span></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="table-brand-cell">
-                <span>🎙️</span>
-                <span>Streamer Workout News</span>
-              </div>
-            </td>
-            <td>AI Audio & Podcasts</td>
-            <td><span class="tag-mono">Fitness Athletes / Learners</span></td>
-            <td>30-min Master Episode & Android APK</td>
-            <td>Sub-cent LLM Generation Cost</td>
-            <td>Capacitor Android APK</td>
-            <td><span class="status-badge badge-active">Active Dev</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Executive Footer -->
-    <footer>
-      <div>
-        <span>Executive Command Center • <strong>CEO Business Performance Radar</strong></span>
-        <span style="margin:0 8px;">•</span>
-        <span>Lead Architect & Owner: <strong>Kashif Ali</strong></span>
-      </div>
-      <div>
-        Audit Timestamp: <span style="font-family:'JetBrains Mono';">November 19, 2026</span>
-      </div>
-    </footer>
+    <h1>👁️ Super Eye</h1>
+    <p class="tagline">Real Stats, Active Users & Marketing Snapshot (Single Page)</p>
   </div>
 
-  <script>
-    // Live Clock
-    function updateClock() {
-      const now = new Date();
-      const options = { timeZone: 'Europe/Paris', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      document.getElementById('clock-display').innerText = 'CET ' + now.toLocaleTimeString('en-GB', options);
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+  <!-- Real Stats Snapshot Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-won">
+      <div class="kpi-label">Won Deals <span>🏆</span></div>
+      <div class="kpi-val">0</div>
+      <div class="kpi-note">€0 closed • Target: 1st 3 retainers (@ €950/mo)</div>
+    </div>
+    <div class="kpi-card kpi-pipeline">
+      <div class="kpi-label">B2B Pipeline <span>💼</span></div>
+      <div class="kpi-val">€93.9k</div>
+      <div class="kpi-note">62 qualified enterprise & MSP target accounts</div>
+    </div>
+    <div class="kpi-card kpi-users">
+      <div class="kpi-label">Active Users / Reach <span>👥</span></div>
+      <div class="kpi-val">150+</div>
+      <div class="kpi-note">150+ pilot merchants (91130) + Store users</div>
+    </div>
+    <div class="kpi-card kpi-clicks">
+      <div class="kpi-label">Outbound Clicks <span>⚡</span></div>
+      <div class="kpi-val">11 Clicks</div>
+      <div class="kpi-note">26 sent • 11 clicked • 42.3% interest rate</div>
+    </div>
+  </div>
 
-    // Theme Toggle
-    const themeBtn = document.getElementById('theme-btn');
-    let isDark = localStorage.getItem('ceo_dashboard_theme') !== 'light';
+  <!-- Summarized Actual Marketing Plan -->
+  <div class="section-title">Actual Marketing Plan (Summary)</div>
+  <div class="mktg-plan-card">
+    <div class="mktg-header">
+      <span class="mktg-title">🎯 3-Pillar Execution Roadmap</span>
+      <span style="font-size: 0.68rem; color: var(--text-sub); font-family: 'JetBrains Mono';">DAILY CADENCE</span>
+    </div>
 
-    function setDashboardTheme(dark) {
-      if (dark) {
-        document.documentElement.removeAttribute('data-theme');
-        themeBtn.innerText = 'Light Mode';
-        localStorage.setItem('ceo_dashboard_theme', 'dark');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        themeBtn.innerText = 'Dark Mode';
-        localStorage.setItem('ceo_dashboard_theme', 'light');
-      }
-    }
-    setDashboardTheme(isDark);
+    <!-- Pillar 1 -->
+    <div class="mktg-pillar">
+      <div class="pillar-name">
+        <span>1. Tradister B2B Cold Outreach (Resend + Waalaxy)</span>
+        <span class="pillar-tag">B2B Cloud SaaS</span>
+      </div>
+      <div class="pillar-desc">Target 62 Paris & Essonne PMEs (DSI / CFO) with 15-min screen-share M365 audit (audit.tradister.com). Zero password required, exposes €3k-€8k/yr wasted licenses.</div>
+      <div class="pillar-target">Target: 20 emails/day &rarr; 10 audits/mo &rarr; 3 converted MSP contracts (€2,850/mo MRR).</div>
+    </div>
 
-    themeBtn.addEventListener('click', () => {
-      isDark = !isDark;
-      setDashboardTheme(isDark);
-    });
+    <!-- Pillar 2 -->
+    <div class="mktg-pillar p2">
+      <div class="pillar-name">
+        <span>2. CalorieFit Organic Growth (Play Store ASO)</span>
+        <span class="pillar-tag">B2C Digital Health</span>
+      </div>
+      <div class="pillar-desc">7 localized languages + organic Reddit threads (r/loseit, r/intermittentfasting). Core pitch: 100% offline private calorie tracker (0 subscriptions, 0 cloud logins).</div>
+      <div class="pillar-target">Target: 50 weekly downloads &rarr; 1,000 MAU &rarr; Pro upgrade in-app monetization.</div>
+    </div>
 
-    // Search & Filter
-    const searchBox = document.getElementById('search-box');
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    const cards = document.querySelectorAll('.bu-card');
-    let activeFilter = 'all';
+    <!-- Pillar 3 -->
+    <div class="mktg-pillar p3">
+      <div class="pillar-name">
+        <span>3. Allonssy Direct Merchant Onboarding</span>
+        <span class="pillar-tag">Hyperlocal Marketplace</span>
+      </div>
+      <div class="pillar-desc">Field onboarding of 150 local trade & food pros in Ris-Orangis / Grigny (91130). 0% platform fee alternative to UberEats/Deliveroo with QR stickers on storefronts.</div>
+      <div class="pillar-target">Target: 25 active ordering restaurants &rarr; 500 local residential active users.</div>
+    </div>
+  </div>
 
-    function filterCards() {
-      const q = searchBox.value.toLowerCase().trim();
+  <!-- Real Project Stats Snapshot -->
+  <div class="section-title">Ventures & Live Traction</div>
 
-      cards.forEach(card => {
-        const cat = card.getAttribute('data-category') || '';
-        const name = card.getAttribute('data-name') || '';
-        const bodyText = card.innerText.toLowerCase();
+  <!-- Card 1: Tradister FinOps & Cloud -->
+  <div class="proj-card">
+    <div class="proj-head">
+      <div>
+        <div class="proj-title">Tradister FinOps & Cloud <span>☁️</span></div>
+        <div class="proj-sub">B2B M365 License Audit & Managed Cloud (Tradister SASU)</div>
+      </div>
+      <span class="badge badge-outbound">Pipeline Active</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-col">
+        <span class="stat-col-label">Active Leads</span>
+        <span class="stat-col-val" style="color:var(--accent);">62 Qualified</span>
+      </div>
+      <div class="stat-col">
+        <span class="stat-col-label">Won Deals</span>
+        <span class="stat-col-val" style="color:var(--amber);">0 (€0 closed)</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Pipeline Value</span>
+        <span class="stat-col-val">€93,894</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Outbound Engine</span>
+        <span class="stat-col-val" style="color:var(--green);">26 sent / 11 clicks</span>
+      </div>
+    </div>
+    <div class="proj-bullet">
+      <span class="icon">▸</span>
+      <span><strong>Next Step:</strong> Deliver 15-minute screen-share audits on 11 clicked leads to close 1st retainer.</span>
+    </div>
+    <div class="proj-links">
+      <a href="https://audit.tradister.com" target="_blank" class="proj-link-btn">audit.tradister.com ↗</a>
+      <a href="https://plan.tradister.com" target="_blank" class="proj-link-btn">plan.tradister.com ↗</a>
+    </div>
+  </div>
 
-        const matchTab = (activeFilter === 'all') || cat.includes(activeFilter);
-        const matchQuery = !q || name.includes(q) || bodyText.includes(q);
+  <!-- Card 2: CalorieFit -->
+  <div class="proj-card">
+    <div class="proj-head">
+      <div>
+        <div class="proj-title">CalorieFit <span>🥗</span></div>
+        <div class="proj-sub">Local-First Health & Macro Tracker (Flutter Mobile)</div>
+      </div>
+      <span class="badge badge-live">Play Store Live</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-col">
+        <span class="stat-col-label">Store Status</span>
+        <span class="stat-col-val" style="color:var(--green);">v1.10.1 Live</span>
+      </div>
+      <div class="stat-col">
+        <span class="stat-col-label">Cloud Cost / User</span>
+        <span class="stat-col-val">$0.00 (Offline)</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Localization</span>
+        <span class="stat-col-val">7 Languages</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Won Revenue</span>
+        <span class="stat-col-val" style="color:var(--amber);">$0 (Free Utility)</span>
+      </div>
+    </div>
+    <div class="proj-bullet">
+      <span class="icon">▸</span>
+      <span><strong>Next Step:</strong> Post launch threads on Reddit & submit to Product Hunt to trigger initial 500 downloads.</span>
+    </div>
+    <div class="proj-links">
+      <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="proj-link-btn">Google Play Listing ↗</a>
+    </div>
+  </div>
 
-        if (matchTab && matchQuery) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
+  <!-- Card 3: Allonssy -->
+  <div class="proj-card">
+    <div class="proj-head">
+      <div>
+        <div class="proj-title">Allonssy <span>📍</span></div>
+        <div class="proj-sub">Hyperlocal Community Social & Marketplace</div>
+      </div>
+      <span class="badge badge-pilot">Pilot 91130</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-col">
+        <span class="stat-col-label">Verified Merchants</span>
+        <span class="stat-col-val" style="color:var(--purple);">150+ Pros</span>
+      </div>
+      <div class="stat-col">
+        <span class="stat-col-label">Pilot Zone</span>
+        <span class="stat-col-val">91130 (Ris-Orangis)</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Build Version</span>
+        <span class="stat-col-val" style="color:var(--green);">v1.3.2 Live</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Infra Cost</span>
+        <span class="stat-col-val">€15/mo VPS</span>
+      </div>
+    </div>
+    <div class="proj-bullet">
+      <span class="icon">▸</span>
+      <span><strong>Next Step:</strong> Activate direct ordering for 50 onboarded restaurants and roll out storefront window stickers.</span>
+    </div>
+  </div>
 
-    searchBox.addEventListener('input', filterCards);
+  <!-- Card 4: eToro Autonomous Agent & Other Assets -->
+  <div class="proj-card">
+    <div class="proj-head">
+      <div>
+        <div class="proj-title">eToro Agent & FinTech <span>📈</span></div>
+        <div class="proj-sub">Quantitative Autonomous Capital Rebalancer</div>
+      </div>
+      <span class="badge badge-live">Production</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-col">
+        <span class="stat-col-label">Managed Capital</span>
+        <span class="stat-col-val" style="color:var(--accent);">$100,000</span>
+      </div>
+      <div class="stat-col">
+        <span class="stat-col-label">Leverage</span>
+        <span class="stat-col-val">1x (Spot Only)</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Execution</span>
+        <span class="stat-col-val" style="color:var(--green);">24/7 Automated</span>
+      </div>
+      <div class="stat-col" style="margin-top:6px;">
+        <span class="stat-col-label">Risk Threshold</span>
+        <span class="stat-col-val">Hard Stop Loss</span>
+      </div>
+    </div>
+    <div class="proj-bullet">
+      <span class="icon">▸</span>
+      <span><strong>Other Assets:</strong> eSuperMarche (Multi-vendor grocery staging), Curio Kids (100 curated media), Streamer (AI Audio).</span>
+    </div>
+  </div>
 
-    filterTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        filterTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        activeFilter = tab.getAttribute('data-filter');
-        filterCards();
-      });
-    });
+  <div class="footer-bar">
+    Super Eye Mobile Executive Dashboard • Updated Live from Workspace Repositories
+  </div>
 
-    // Export Executive Summary
-    function exportExecutiveSummary() {
-      const summary = {
-        executiveTitle: "CEO Overall Business Success & Ventures Report",
-        auditDate: new Date().toISOString(),
-        kpiTotals: {
-          googlePlayProductionApps: 2,
-          b2bSalesPipelineEUR: 93894,
-          qualifiedB2BAccounts: 62,
-          verifiedLocalMerchants: 150,
-          managedTradingCapitalUSD: 100000,
-          curatedEducationalMedia: 100,
-          operatingMarginProfile: "~99%"
-        },
-        ventures: [
-          { name: "CalorieFit", entity: "Consumer Mobile Health", stage: "Play Store Live (v1.10.1+17)", margin: "~99%", telemetry: "100% Local-First" },
-          { name: "Tradister FinOps & Cloud", entity: "Tradister SASU (RCS 988 318 945)", stage: "Live Vercel SaaS", pipelineEUR: 93894, leads: 62, domains: ["audit.tradister.com", "plan.tradister.com"] },
-          { name: "Allonssy", entity: "Tradister SAS", stage: "Live Play Store & Web", pilotMerchants: 150, pilotCity: "Ris-Orangis (91130)" },
-          { name: "eToro Autonomous Agent", entity: "Quantitative WealthTech", stage: "Production Ready", capitalUSD: 100000 },
-          { name: "eSuperMarche", entity: "Multi-Vendor Retail", stage: "Live Staging Store (esupermarche.com)" },
-          { name: "Curio Kids MVP", entity: "Family EdTech Media", stage: "Active MVP", curatedVideos: 100, watchSessions: 11 },
-          { name: "Streamer Workout News", entity: "AI Fitness Audio", stage: "Android APK Built" }
-        ]
-      };
-
-      const blob = new Blob([JSON.stringify(summary, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `CEO_Ventures_Portfolio_Report_${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  </script>
 </body>
 </html>
