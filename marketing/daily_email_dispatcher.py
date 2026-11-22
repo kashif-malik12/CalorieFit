@@ -10,6 +10,7 @@ Each post has a pre-filled 1-click submission link targeting a specific subreddi
 import os
 import sys
 import json
+from datetime import date
 import requests
 from pathlib import Path
 from dotenv import dotenv_values
@@ -129,27 +130,37 @@ def send_post_email(item):
 
     res = requests.post("https://api.resend.com/emails", headers=headers, json=payload)
     print(f"Dispatched Day {item['day']} ({item['target']}) -> Status {res.status_code}")
-    return res.status_code == 200
+    if res.status_code not in (200, 201):
+        print(f"Resend Error Response: {res.text}")
+    return res.status_code in (200, 201)
 
-def run_next():
+def run_next(force=False):
+    today_str = str(date.today())
     state = load_state()
+    
+    if not force and state.get("last_sent_date") == today_str:
+        print(f"Post already sent today ({today_str}). Use --force to send again.")
+        return
+
     current_day = state.get("last_day_sent", 0) + 1
     
     item = next((s for s in SCHEDULE if s["day"] == current_day), None)
     if not item:
-        print("Schedule complete or reset needed.")
+        print("Schedule cycle complete, looping back to Day 1.")
         item = SCHEDULE[0]
         current_day = 1
 
     success = send_post_email(item)
     if success:
         state["last_day_sent"] = current_day
+        state["last_sent_date"] = today_str
         save_state(state)
-        print(f"Successfully sent Day {current_day} email.")
+        print(f"Successfully sent Day {current_day} email ({item['target']}).")
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--next":
-        run_next()
+    if len(sys.argv) > 1 and ("--next" in sys.argv or "--force" in sys.argv):
+        force_send = "--force" in sys.argv
+        run_next(force=force_send)
     else:
         state = load_state()
-        print(f"Current state: Last day sent was Day {state.get('last_day_sent', 0)}")
+        print(f"Current state: Last day sent was Day {state.get('last_day_sent', 0)} on {state.get('last_sent_date', 'N/A')}")
