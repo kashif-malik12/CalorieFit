@@ -719,6 +719,9 @@
       <button class="top-nav-btn" id="topnav-infra" onclick="switchRightView('infra')" style="background: rgba(16,185,129,0.18); color: #34d399; border: 1px solid rgba(16,185,129,0.45); font-weight: 800; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 14px rgba(16,185,129,0.25);">
         ⚡ Cloud & Remote Infrastructure Radar <span style="background: #10b981; color: #070b12; font-size: 0.65rem; font-weight: 900; padding: 2px 8px; border-radius: 999px;">ZERO-PC (100% CLOUD)</span>
       </button>
+      <button class="top-nav-btn" id="topnav-vps" onclick="switchRightView('vps')" style="background: rgba(14,165,233,0.18); color: #38bdf8; border: 1px solid rgba(14,165,233,0.45); font-weight: 800; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 14px rgba(14,165,233,0.25);">
+        🖥️ VPS Server Health Radar <span style="background: #38bdf8; color: #070b12; font-size: 0.65rem; font-weight: 900; padding: 2px 8px; border-radius: 999px;">255d UPTIME • 15 CONTAINERS</span>
+      </button>
     </div>
 
     <!-- Executive KPI Grid (Always Visible) -->
@@ -903,6 +906,24 @@
           </div>
         </div>
 
+        <!-- TILE 8: VPS SERVER HEALTH -->
+        <div class="project-tile tile-vps" onclick="switchRightView('vps')" style="border-left: 3px solid #38bdf8; margin-top: 10px; background: rgba(56,189,248,0.06); cursor: pointer;">
+          <div class="tile-head">
+            <span class="tile-name" style="color:#38bdf8;">🖥️ VPS Server Health <span>🟢</span></span>
+            <span class="status-badge sb-active" style="background:rgba(56,189,248,0.25); color:#7dd3fc; border-color:rgba(56,189,248,0.5);"><span class="p-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span> 255d UP</span>
+          </div>
+          <div class="tile-sub">allonssy-vps (Ubuntu 24.04 LTS) • 15 Docker Containers</div>
+          <div class="tile-kpis">
+            <span>Disk: <strong style="color:#34d399;">89 GB Free (23%)</strong></span>
+            <span>RAM: <strong style="color:#38bdf8;">1.7 GB Avail</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Supabase Fleet</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Caddy SSL</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> 0 Failed Svc</span>
+          </div>
+        </div>
+
       </div>
 
       <!-- =================================================== -->
@@ -921,6 +942,10 @@
           <button class="rtab-btn" id="btn-infra" onclick="switchRightView('infra')" style="border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.06);">
             <span style="color:#6ee7b7;">⚡ Cloud & Remote Infrastructure Radar</span>
             <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(16,185,129,0.25); color:#a7f3d0; border:1px solid rgba(16,185,129,0.4); padding:2px 8px; border-radius:999px; font-weight:800;">Zero-PC Dependency</span>
+          </button>
+          <button class="rtab-btn" id="btn-vps" onclick="switchRightView('vps')" style="border: 1px solid rgba(56,189,248,0.35); background: rgba(56,189,248,0.06);">
+            <span style="color:#7dd3fc;">🖥️ VPS Server Health Radar</span>
+            <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(56,189,248,0.25); color:#bae6fd; border:1px solid rgba(56,189,248,0.4); padding:2px 8px; border-radius:999px; font-weight:800;">15 Containers • 255d Up</span>
           </button>
         </div>
 
@@ -1738,6 +1763,318 @@
 
         </div>
 
+        <!-- =================================================== -->
+        <!-- VIEW D: VPS SERVER HEALTH & DOCKER FLEET RADAR -->
+        <!-- =================================================== -->
+        <div id="view-vps" style="display:none;">
+
+          <!-- Top Status Banner -->
+          <div class="infra-banner" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(14, 116, 144, 0.25)); border-color: rgba(56, 189, 248, 0.35);">
+            <div>
+              <div class="infra-banner-title" style="color: #38bdf8;">
+                <span>🖥️</span>
+                <span>allonssy-vps • Production Cloud Server Health</span>
+              </div>
+              <div class="infra-banner-desc">
+                Ubuntu 24.04 LTS Cloud Server • Supabase Multi-Tenant Suite • Tradister FinOps Engines • Caddy Automated SSL Reverse Proxy
+              </div>
+            </div>
+            <div class="infra-chip-row">
+              <span class="infra-chip infra-chip-blue">🟢 Uptime: 255 Days</span>
+              <span class="infra-chip infra-chip-green">💾 Disk: 89 GB Free (23% Used)</span>
+              <span class="infra-chip infra-chip-purple">🐳 15/15 Containers Up</span>
+              <span class="infra-chip infra-chip-blue">🔒 Auto-SSL (Let's Encrypt)</span>
+            </div>
+          </div>
+
+          <!-- KPI Metric Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card" style="border-left: 3px solid #38bdf8;">
+              <div class="kpi-label">
+                <span>System Uptime</span>
+                <span class="pipe-badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.3);">99.99% UP</span>
+              </div>
+              <div class="kpi-val" style="color:#38bdf8;">255 Days</div>
+              <div class="kpi-note">Load avg: 1.43, 1.05, 0.89 (Optimal)</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #10b981;">
+              <div class="kpi-label">
+                <span>Memory & Swap</span>
+                <span class="pipe-badge" style="background:rgba(16,185,129,0.15); color:#34d399; border-color:rgba(16,185,129,0.3);">HEALTHY</span>
+              </div>
+              <div class="kpi-val" style="color:#10b981;">1.7 GB Avail</div>
+              <div class="kpi-note">2.1G used / 3.8G RAM • 1.8G Swap active</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #a855f7;">
+              <div class="kpi-label">
+                <span>NVMe SSD Storage</span>
+                <span class="pipe-badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.3);">CLEAN</span>
+              </div>
+              <div class="kpi-val" style="color:#a855f7;">89 GB Free</div>
+              <div class="kpi-note">27 GB used / 116 GB total (23% utilized)</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
+              <div class="kpi-label">
+                <span>Docker Containers</span>
+                <span class="pipe-badge" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.3);">ALL RUNNING</span>
+              </div>
+              <div class="kpi-val" style="color:#f59e0b;">15 / 15 Up</div>
+              <div class="kpi-note">0 stopped • 0 failed services • 100% healthy</div>
+            </div>
+          </div>
+
+          <!-- Docker Containers Live Fleet Table -->
+          <div class="table-box" style="margin-bottom: 20px;">
+            <div style="padding: 14px 16px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+              <h3 style="font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                <span>🐳 Production Docker Container Fleet (15 Active Microservices)</span>
+              </h3>
+              <span class="handle-pill" style="color:#38bdf8; border-color:rgba(56,189,248,0.3); background:rgba(56,189,248,0.08);">100% HEALTHY FLEET</span>
+            </div>
+
+            <table class="mktg-table">
+              <thead>
+                <tr>
+                  <th style="width: 220px;">Container Name</th>
+                  <th style="width: 200px;">Base Image & Tech</th>
+                  <th style="width: 150px;">Live Status</th>
+                  <th style="width: 180px;">Exposed Ports</th>
+                  <th>Service Purpose & Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:#38bdf8;">tradister-compte</strong></td>
+                  <td><span class="handle-pill">php:8.2-apache</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (26h)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">0.0.0.0:8093</span></td>
+                  <td>French SASU Corporate Accounting & Invoicing Portal</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#38bdf8;">tradister-plan</strong></td>
+                  <td><span class="handle-pill">php:8.2-apache</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (27h)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">0.0.0.0:8092</span></td>
+                  <td>Tradister Commercial Strategy & Outreach Planner</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#34d399;">supabase-db</strong></td>
+                  <td><span class="handle-pill">supabase/postgres:15.8</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">5432/tcp (int)</span></td>
+                  <td>Primary Production PostgreSQL 15 Database</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#34d399;">supabase-pooler</strong></td>
+                  <td><span class="handle-pill">supabase/supavisor:2.7</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">5432, 6543/tcp</span></td>
+                  <td>Supavisor Connection Pooler (High Concurrency)</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#c084fc;">supabase-auth</strong></td>
+                  <td><span class="handle-pill">supabase/gotrue:v2.186</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">Internal</span></td>
+                  <td>GoTrue Identity, User Authentication & JWT Issuer</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#c084fc;">supabase-storage</strong></td>
+                  <td><span class="handle-pill">supabase/storage-api:v1.37</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">5000/tcp</span></td>
+                  <td>Object Storage Engine (Receipts, Photos & Menus)</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#c084fc;">supabase-rest</strong></td>
+                  <td><span class="handle-pill">postgrest/postgrest:v14.5</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (8 days)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">3000/tcp</span></td>
+                  <td>PostgREST Automated High-Performance REST API</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#c084fc;">realtime-dev.supabase-realtime</strong></td>
+                  <td><span class="handle-pill">supabase/realtime:v2.76</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">Internal</span></td>
+                  <td>Live WebSockets & Real-Time Channel Broadcaster</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#fbbf24;">supabase-kong</strong></td>
+                  <td><span class="handle-pill">kong:2.8.1</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">8000, 8443/tcp</span></td>
+                  <td>API Gateway & Internal Request Router</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#fbbf24;">supabase-studio</strong></td>
+                  <td><span class="handle-pill">supabase/studio:2026</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">3000/tcp</span></td>
+                  <td>Administrative Web Management Studio Console</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#94a3b8;">supabase-meta</strong></td>
+                  <td><span class="handle-pill">supabase/postgres-meta:v0.95</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">8080/tcp</span></td>
+                  <td>Database Schema Introspection & Management API</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#94a3b8;">supabase-vector</strong></td>
+                  <td><span class="handle-pill">timberio/vector:0.53</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">Internal</span></td>
+                  <td>Vector & AI Embedding Log Shipper</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#94a3b8;">supabase-analytics</strong></td>
+                  <td><span class="handle-pill">supabase/logflare:1.31</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">Internal</span></td>
+                  <td>Logflare Server Metrics & Query Telemetry</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#94a3b8;">supabase-imgproxy</strong></td>
+                  <td><span class="handle-pill">darthsim/imgproxy:v3.30</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (HEALTHY)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">8080/tcp</span></td>
+                  <td>Dynamic Image Resizing & WebP Conversion</td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color:#94a3b8;">supabase-edge-functions</strong></td>
+                  <td><span class="handle-pill">supabase/edge-runtime:v1.70</span></td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> UP (8 days)</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem;">Internal</span></td>
+                  <td>Deno-powered Serverless Edge Function Runtime</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Architecture & Housekeeping Details Grid -->
+          <div class="infra-grid-3">
+
+            <!-- Card 1: System Services & SSL -->
+            <div class="infra-card" style="border-left: 3px solid #38bdf8;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#38bdf8;">
+                    <span>🔒</span> Reverse Proxy & Security
+                  </div>
+                  <div class="infra-card-sub">Caddy v2.8 • Auto-Renewing SSL</div>
+                </div>
+                <span class="freq-badge freq-always">ACTIVE</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Reverse Proxy</span>
+                <span class="infra-val" style="color:#38bdf8;">caddy.service (Active, 8d)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">TLS / SSL</span>
+                <span class="infra-val">Automated Let's Encrypt</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Mesh Network</span>
+                <span class="infra-val">Tailscale private node</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">SSH Access</span>
+                <span class="infra-val">Hardened Ed25519 Keys</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Failed Systemd Units</span>
+                <span class="infra-val" style="color:#34d399;">0 (Clean System)</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Crontab Automations -->
+            <div class="infra-card" style="border-left: 3px solid #10b981;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#34d399;">
+                    <span>⏱️</span> Server-Side Crontab Engines
+                  </div>
+                  <div class="infra-card-sub">Autonomous Background Tasks</div>
+                </div>
+                <span class="freq-badge freq-daily">SCHEDULED</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">SASU Reminder Cron</span>
+                <span class="infra-val" style="color:#34d399;">Every minute (* * * * *)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Full VPS Backup Bundle</span>
+                <span class="infra-val">02:45 UTC Nightly</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">GitHub Vault Push</span>
+                <span class="infra-val" style="color:#c084fc;">03:00 UTC Nightly</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Health Monitor</span>
+                <span class="infra-val">monitor_vps_health.sh</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Execution Environment</span>
+                <span class="infra-val">Ubuntu crond daemon</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Storage Hygiene & Cleanup -->
+            <div class="infra-card" style="border-left: 3px solid #a855f7;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#c084fc;">
+                    <span>🧹</span> Hygiene & Housekeeping
+                  </div>
+                  <div class="infra-card-sub">Zero Bloat • Clean Directory Structure</div>
+                </div>
+                <span class="freq-badge freq-always">OPTIMIZED</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Old Migration Files</span>
+                <span class="infra-val" style="color:#34d399;">Cleaned & Archived</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Archive Location</span>
+                <span class="infra-val">/home/deploy/archived_sql/</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Docker Image Cache</span>
+                <span class="infra-val">14/14 active (0 dangling)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Available Storage</span>
+                <span class="infra-val" style="color:#38bdf8;">89 GB NVMe SSD Free</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Server Maintenance State</span>
+                <span class="infra-val" style="color:#34d399;">Production Ready</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
@@ -2325,17 +2662,25 @@
         document.querySelectorAll('.project-tile').forEach(tile => tile.classList.remove('active'));
         const infraTile = document.querySelector('.tile-infra');
         if (infraTile) infraTile.classList.add('active');
+      } else if (viewId === 'vps') {
+        document.querySelectorAll('.project-tile').forEach(tile => tile.classList.remove('active'));
+        const vpsTile = document.querySelector('.tile-vps');
+        if (vpsTile) vpsTile.classList.add('active');
       }
 
       document.getElementById('view-inspect').style.display = (viewId === 'inspect') ? 'block' : 'none';
       document.getElementById('view-table').style.display = (viewId === 'table') ? 'block' : 'none';
       const infraView = document.getElementById('view-infra');
       if (infraView) infraView.style.display = (viewId === 'infra') ? 'block' : 'none';
+      const vpsView = document.getElementById('view-vps');
+      if (vpsView) vpsView.style.display = (viewId === 'vps') ? 'block' : 'none';
     }
 
-    // Initialize with URL hash check (e.g. #infra)
+    // Initialize with URL hash check (e.g. #infra, #vps)
     if (window.location.hash === '#infra') {
       switchRightView('infra');
+    } else if (window.location.hash === '#vps' || window.location.hash === '#server') {
+      switchRightView('vps');
     } else {
       renderDetail('tradister');
     }
