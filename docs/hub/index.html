@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Super Eye">
   <meta name="theme-color" content="#070b12">
-  <title>Super Eye | CEO Executive Ventures & Marketing Radar</title>
+  <title>Super Eye | CEO Executive Ventures & Marketing Operations Radar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #070b12;
@@ -43,7 +43,7 @@
     }
 
     .main-wrapper {
-      max-width: 1600px;
+      max-width: 1620px;
       margin: 0 auto;
     }
 
@@ -145,7 +145,7 @@
     /* =================================================== */
     .dashboard-layout {
       display: grid;
-      grid-template-columns: 330px 1fr;
+      grid-template-columns: 340px 1fr;
       gap: 20px;
       align-items: start;
     }
@@ -385,6 +385,62 @@
       gap: 6px;
     }
 
+    /* Route Box for 5 Tradister Routes */
+    .route-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .route-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .route-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .route-window {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Production Pipeline Pill */
+    .pipe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Frequency Badges */
+    .freq-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+    }
+    .freq-daily { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .freq-weekly { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .freq-always { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
     /* Marketing Full Table */
     .table-box {
       background: var(--card-bg);
@@ -532,7 +588,7 @@
     <div class="header">
       <div class="header-left">
         <h1>👁️ Super Eye</h1>
-        <p>Operations & Marketing Radar: Full Human Handles (Bisma, Kashif) & Delivery Routes</p>
+        <p>Operations & Marketing Radar: Full Human Handles, Creation Pipelines, Send Windows & 5 Outbound Routes</p>
       </div>
       <div class="header-right">
         <div class="live-pulse">
@@ -594,13 +650,12 @@
           </div>
           <div class="tile-kpis">
             <span>Pipeline: <strong style="color:var(--color-tradister);">€93.9k</strong></span>
-            <span>Leads: <strong>62</strong></span>
-            <span>Won: <strong>€0</strong></span>
+            <span>Send Window: <strong>09:00 - 18:00</strong></span>
           </div>
           <div class="tile-platforms-row">
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Resend Email</span>
+            <span class="plat-mini" style="border-color:var(--color-tradister);"><span class="p-dot dot-active"></span> 5 Email Routes</span>
             <span class="plat-mini"><span class="p-dot dot-active"></span> Bisma LinkedIn</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Kashif LinkedIn</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Kashif Lab</span>
           </div>
         </div>
 
@@ -616,13 +671,13 @@
           </div>
           <div class="tile-kpis">
             <span>Store: <strong style="color:var(--color-caloriefit);">v1.10.1</strong></span>
-            <span>Locales: <strong>7</strong></span>
-            <span>Won: <strong>$0 Free</strong></span>
+            <span>Email Dispatch: <strong>Daily</strong></span>
+            <span>Reels: <strong>1x/Wk</strong></span>
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> Google Play</span>
             <span class="plat-mini" style="border-color:rgba(16,185,129,0.4);"><span class="p-dot dot-active"></span> 📸 @caloriefit.app</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Reddit u/kashif-malik</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Reddit Intent</span>
           </div>
         </div>
 
@@ -634,17 +689,16 @@
           </div>
           <div class="tile-sub">Hyperlocal Community Social & Marketplace (91130)</div>
           <div class="tile-operators">
-            <span>👤 <strong>Allonssy Team</strong> (Ris-Orangis / Grigny)</span>
+            <span>👥 <strong>Allonssy Team</strong> (Ris-Orangis / Grigny)</span>
           </div>
           <div class="tile-kpis">
             <span>Merchants: <strong style="color:var(--color-allonssy);">150+</strong></span>
-            <span>Zone: <strong>91130</strong></span>
-            <span>VPS: <strong>€15/mo</strong></span>
+            <span>VPS Cron: <strong>08:15 UTC</strong></span>
           </div>
           <div class="tile-platforms-row">
-            <span class="plat-mini"><span class="p-dot dot-active"></span> FB: Bons Plans 91</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> FB: Essonne Actu</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Daily Reels</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> FB Pages (Daily)</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Daily MP4 Reels</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Store QR (1x/Wk)</span>
           </div>
         </div>
 
@@ -660,12 +714,11 @@
           </div>
           <div class="tile-kpis">
             <span>Capital: <strong style="color:var(--color-etoro);">$100k</strong></span>
-            <span>Leverage: <strong>1x Spot</strong></span>
-            <span>Errors: <strong>0</strong></span>
+            <span>Reports: <strong>Weekly</strong></span>
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> Trading Daemon</span>
-            <span class="plat-mini"><span class="p-dot dot-ready"></span> X: @tradister</span>
+            <span class="plat-mini"><span class="p-dot dot-ready"></span> X Track Record</span>
           </div>
         </div>
 
@@ -677,15 +730,14 @@
           </div>
           <div class="tile-sub">AI Bilingual Workout Audio & Safe Family Media</div>
           <div class="tile-operators">
-            <span>👤 <strong>Streamer Voice</strong> / Curio Family</span>
+            <span>🎙️ <strong>Streamer Voice</strong> / Curio Family</span>
           </div>
           <div class="tile-kpis">
             <span>Videos: <strong style="color:var(--color-streamer);">100 Safe</strong></span>
-            <span>Streamer: <strong>v1.0.0</strong></span>
-            <span>Sub: <strong>$4.99</strong></span>
+            <span>Podcast: <strong>Daily Auto</strong></span>
           </div>
           <div class="tile-platforms-row">
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Podcast RSS</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> RSS Feed</span>
             <span class="plat-mini"><span class="p-dot dot-ready"></span> Parent Reels</span>
           </div>
         </div>
@@ -699,7 +751,7 @@
           <div class="tile-sub">Multi-Vendor Grocery Retail Marketplace (WooCommerce)</div>
           <div class="tile-kpis">
             <span>Web: <strong>Live Staging</strong></span>
-            <span>Flutter: <strong>FluxStore</strong></span>
+            <span>App: <strong>FluxStore 6.1</strong></span>
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> esupermarche.com</span>
@@ -719,7 +771,7 @@
             <span>🔍 Inspected Venture Detail</span>
           </button>
           <button class="rtab-btn" id="btn-table" onclick="switchRightView('table')">
-            <span>🎯 Unified Marketing Matrix (Handles & Delivery)</span>
+            <span>🎯 Unified Marketing Matrix (Pipelines & Frequency)</span>
             <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:999px;">12 Channels</span>
           </button>
         </div>
@@ -742,43 +794,51 @@
               <thead>
                 <tr>
                   <th>Project</th>
-                  <th>Platform / Channel</th>
+                  <th>Platform & Channel</th>
                   <th>Operator & Account Handle</th>
-                  <th>Delivery Method</th>
+                  <th>How It's Made & Delivery Route</th>
+                  <th>Frequency & Send Window</th>
                   <th>Platform Status</th>
                   <th>Format</th>
-                  <th>Cadence</th>
-                  <th>Campaign Hook & Real Operational Status</th>
+                  <th>Campaign Hook & Operational Target</th>
                 </tr>
               </thead>
               <tbody>
 
-                <!-- 1. Tradister Email (Kashif Ali) -->
+                <!-- 1. Tradister Email (5 Routes) -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
-                  <td>Cold Email Outbound</td>
+                  <td>Cold Email Outbound<br><span style="font-size:0.65rem; color:var(--color-tradister); font-weight:700;">(5 Targeted Routes)</span></td>
                   <td>
                     <div class="person-badge person-kashif">👤 Kashif Ali (CTO)</div>
                     <div class="handle-pill">kashif@tradister-cloud.com</div>
-                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">Reply-To: operations@tradister.com</div>
+                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">Reply: operations@tradister.com</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Resend SMTP API (GitHub Actions)</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">GitHub Actions + outreach_engine.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Resend SMTP API with 120s-360s randomized delays</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY (MON-FRI)</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#38bdf8;">09:00 - 18:00 CET</span><br>
+                    <span style="font-size:0.63rem; color:var(--text-sub);">Cadence: Step 2 (+3d), Step 3 (+4d)</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-email">✉️ EMAIL</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">09:00 CET</span></td>
                   <td>
-                    <strong>3-Step Inbound Cadence (20 emails/day)</strong>
+                    <strong>5 Regional B2B Outbound Routes:</strong>
                     <div class="hook-box" style="border-left-color:var(--color-tradister);">
-                      <em>"Audit express M365 (sans mot de passe) & support de proximité chez {{company}}"</em>
+                      <strong>R1:</strong> 91/IDF PMEs (09:00-12:00) • <strong>R2:</strong> IDF Hiring L1 (09:00-12:00)<br>
+                      <strong>R3:</strong> Foreign Subsidiaries (09:30-12:30) • <strong>R4:</strong> US Direct (14:00-18:00)<br>
+                      <strong>R5:</strong> UK/DE Companies (10:00-16:00)<br>
+                      <em>Hook: 15-min screen-share audit (audit.tradister.com) exposing €3k-€8k license waste</em>
                     </div>
                     <span style="font-size:0.7rem; color:var(--text-muted);">26 sent • 11 clicked links (42.3% interest rate) • 3 pending.</span>
                   </td>
                 </tr>
 
-                <!-- 2. Tradister LinkedIn - BISMA KASHIF (President) -->
+                <!-- 2. Tradister LinkedIn - BISMA KASHIF -->
                 <tr style="background:rgba(244, 114, 182, 0.03);">
                   <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
                   <td>LinkedIn Executive</td>
@@ -789,96 +849,82 @@
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API (content_engine.py)</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">GitHub repo / content_engine.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Gemini LLM post builder &rarr; Buffer API Queue</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY AUTO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:var(--text-sub);">Buffer Scheduled Queue</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">BUFFER QUEUE</span></td>
                   <td>
                     <strong>Executive Governance & 60s M365 Waste Audit Pitch</strong>
                     <div class="hook-box" style="border-left-color:#f472b6;">
                       <em>"How European CFOs and DSIs eliminate 8-15% of Microsoft 365 license waste with zero-password audits on audit.tradister.com"</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated daily leadership queue via Buffer API active.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Daily leadership posts scheduled via Buffer API.</span>
                   </td>
                 </tr>
 
-                <!-- 3. Tradister LinkedIn - KASHIF ALI (CTO Lab Notes) -->
+                <!-- 3. Tradister LinkedIn - KASHIF ALI -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
                   <td>LinkedIn Tech / R&D</td>
                   <td>
                     <div class="person-badge person-kashif">👤 Kashif Ali (Lead Architect)</div>
                     <div class="handle-pill">in/kashifalimalik</div>
-                    <div style="font-size:0.65rem; color:#38bdf8; margin-top:2px;">Engineering Lab Notes (Zero Sales Pitch)</div>
+                    <div style="font-size:0.65rem; color:#38bdf8; margin-top:2px;">Engineering Lab Notes (Zero Pitch)</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API (content_engine.py)</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">GitHub repo / content_engine.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Lab notes extractor &rarr; Buffer API Queue</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY AUTO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:var(--text-sub);">Buffer Scheduled Queue</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
                   <td>
                     <strong>Lab Observations & Graph API / PowerShell Internals</strong>
                     <div class="hook-box" style="border-left-color:var(--color-tradister);">
                       <em>"Benchmarking Graph API telemetry vs. Intune heartbeat logs on French hybrid enterprise tenants."</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Strictly informational engineering thought leadership (100% CDI compliant).</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Strictly informational engineering thought leadership (100% CDI protected).</span>
                   </td>
                 </tr>
 
-                <!-- 4. Tradister Company Page -->
-                <tr>
-                  <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
-                  <td>LinkedIn Corporate & X</td>
-                  <td>
-                    <div class="person-badge person-brand">🏢 Tradister SASU</div>
-                    <div class="handle-pill">company/tradister</div>
-                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">X: @tradister | IG: @tradister2</div>
-                  </td>
-                  <td>
-                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API + Waalaxy Tool</span>
-                  </td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
-                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
-                  <td>
-                    <strong>Official Company Announcements & Case Studies</strong>
-                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
-                      Whitepaper breakdowns of French PME cloud cost optimization and security hardening.
-                    </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Waalaxy connection invite batches prepared for Paris/Essonne targets.</span>
-                  </td>
-                </tr>
-
-                <!-- 5. CalorieFit Instagram -->
+                <!-- 4. CalorieFit Instagram -->
                 <tr style="background:rgba(16, 185, 129, 0.03);">
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>📸 Instagram (Reels & Feed)</td>
                   <td>
                     <div class="person-badge" style="color:#10b981;">👤 Kashif Malik (Creator)</div>
                     <div class="handle-pill handle-caloriefit">@caloriefit.app / @caloriefit</div>
-                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">Personal developer brand</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Instagram Mobile App / Studio</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">From GitHub Scripts: short_form_video_scripts.md</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Storyboarded scripts recorded & uploaded via Instagram App</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-weekly">ONCE A WEEK</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#fbbf24;">Weekly Manual Reel</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-video">🎥 VIDEO</span> <span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
                     <strong>Privacy-First Nutrition Reels & Infographics</strong>
                     <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
-                      <em>"Free barcode scanner without paying $80/yr subscription. 100% offline, zero cloud tracking."</em>
+                      <em>"Why I deleted MyFitnessPal: Free barcode scanner without $80/yr paywall. 100% offline, zero cloud tracking."</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Reel assets & carousel cards staged for publishing.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Side-by-side video assets and carousel infographics ready to publish.</span>
                   </td>
                 </tr>
 
-                <!-- 6. CalorieFit Reddit -->
+                <!-- 5. CalorieFit Reddit -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>Reddit (r/androidapps, r/loseit)</td>
@@ -887,46 +933,26 @@
                     <div class="handle-pill handle-caloriefit">u/kashif-malik</div>
                   </td>
                   <td>
-                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Web Intent Launcher (1-click link)</span>
+                    <span class="delivery-pill dp-direct">✋ Direct (via Email Link)</span><br>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">daily_email_dispatcher.py sends 1-click email</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Resend API sends ready-to-click submission link to inbox</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily" style="font-size:0.6rem;">EMAIL: DAILY</span><br>
+                    <span class="freq-badge freq-weekly" style="font-size:0.6rem; margin-top:2px;">POST: ONCE A WEEK</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
                     <strong>Dev Self-Post (Compliant Markdown)</strong>
                     <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
                       <em>"[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions"</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);"><code>daily_email_dispatcher.py</code> ready. 1-click link opens Reddit composer.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Daily email dispatched to inbox; 1-click opens pre-filled Reddit composer.</span>
                   </td>
                 </tr>
 
-                <!-- 7. CalorieFit TikTok / Shorts -->
-                <tr>
-                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
-                  <td>TikTok & YouTube Shorts</td>
-                  <td>
-                    <div class="person-badge" style="color:#10b981;">👤 Kashif Malik</div>
-                    <div class="handle-pill handle-caloriefit">@caloriefit</div>
-                  </td>
-                  <td>
-                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Creator App Upload</span>
-                  </td>
-                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
-                  <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
-                  <td>
-                    <strong>35s UGC Comparison Reel</strong>
-                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
-                      <em>"Why I deleted MyFitnessPal after 4 years"</em> ($80 paywall vs instant free scan)
-                    </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">3 video scripts storyboarded in <code>short_form_video_scripts.md</code>.</span>
-                  </td>
-                </tr>
-
-                <!-- 8. CalorieFit Google Play -->
+                <!-- 6. CalorieFit ASO -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>Google Play Search (ASO)</td>
@@ -936,13 +962,17 @@
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Google Play Developer Console</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">Play Console Native</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Production release pipeline via upload-keystore.jks</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-always">CONTINUOUS ASO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#38bdf8;">24/7 Organic</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-aso">📱 ASO</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#38bdf8; font-size:0.68rem;">CONTINUOUS ASO</span></td>
                   <td>
-                    <strong>Multi-Language Organic Search Listing</strong>
+                    <strong>Localized Multi-Language Keyword Indexing</strong>
                     <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
                       "Private Calorie Counter", "Compteur hors ligne", "Macro Tracker No Sub"
                     </div>
@@ -950,56 +980,92 @@
                   </td>
                 </tr>
 
-                <!-- 9. Allonssy FB Pages -->
+                <!-- 7. Allonssy FB Pages -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
                   <td>Facebook Pages (Essonne 91)</td>
                   <td>
-                    <div class="person-badge person-brand">👥 Allonssy Social Bot</div>
+                    <div class="person-badge person-brand">👥 Allonssy Bot</div>
                     <div class="handle-pill">1. Allonssy - Bons Plans 91</div>
                     <div class="handle-pill" style="margin-top:2px;">2. Essonne Actu & Débats</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Meta Graph API v19 (VPS Cron)</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">scripts/meta_auto_publisher.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Scrapes daily deals &rarr; Meta Graph API v19 with Page Token</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY AUTO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#34d399;">08:15 UTC (VPS CRON)</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">08:15 UTC</span></td>
                   <td>
                     <strong>Dual-Page Automated Community Broadcaster</strong>
                     <div class="hook-box" style="border-left-color:var(--color-allonssy);">
-                      Daily local restaurant deal & Grand Paris Sud municipal debates.
+                      Page 1: Daily local restaurant deal spotlight • Page 2: Grand Paris Sud municipal debates.
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Running daily cron on VPS via <code>meta_auto_publisher.py</code>.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Running daily Linux cron on VPS at 08:15 UTC.</span>
                   </td>
                 </tr>
 
-                <!-- 10. Allonssy Reels -->
+                <!-- 8. Allonssy Reels -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
-                  <td>TikTok & Reels (9:16)</td>
+                  <td>TikTok & Reels (9:16 Video)</td>
                   <td>
                     <div class="person-badge person-brand">👥 Allonssy Media</div>
                     <div class="handle-pill">@allonssy.app</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Pillow & imageio MP4 Engine</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">scripts/generate_daily_reel.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Pillow (card compositor) + imageio (MP4 video encoder)</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY AUTO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#34d399;">Morning Video Render</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
                   <td>
-                    <strong>Daily Vertical 9:16 MP4 Reels</strong>
+                    <strong>Daily Vertical 9:16 MP4 Reels Production</strong>
                     <div class="hook-box" style="border-left-color:var(--color-allonssy);">
-                      <code>reel_bonplan.mp4</code> & <code>reel_actu.mp4</code>
+                      Outputs 2 MP4s: <code>reel_bonplan.mp4</code> (Bargain card) & <code>reel_actu.mp4</code> (Local news).
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated video pipeline rendering editorial cards every morning.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated rendering pipeline executing daily on VPS.</span>
                   </td>
                 </tr>
 
-                <!-- 11. eToro Quant -->
+                <!-- 9. Allonssy QR -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
+                  <td>Storefronts (91130)</td>
+                  <td>
+                    <div class="person-badge person-brand">👥 Allonssy Field Team</div>
+                    <div class="handle-pill">allonssy.com/pro</div>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">In-Person Storefront Visits</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Physical window QR stickers & merchant onboarding</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-weekly">ONCE A WEEK</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#fbbf24;">Weekly Field Visits</span>
+                  </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td><span class="fmt-badge fb-qr">🏪 PHYSICAL</span></td>
+                  <td>
+                    <strong>0% Commission Direct Ordering Alternative</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      Merchant window decals vs 30% delivery app fees in Ris-Orangis / Grigny.
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">150 merchants pre-seeded in database; field activation in progress.</span>
+                  </td>
+                </tr>
+
+                <!-- 10. eToro Quant -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-etoro);">eToro Quant Agent</td>
                   <td>X (Twitter) & LinkedIn</td>
@@ -1009,11 +1075,15 @@
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Personal Profile Post</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">Personal Profile Post</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">24/7 background Python trading daemon extracts metrics</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-weekly">ONCE A WEEK</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#fbbf24;">Weekly Audit Report</span>
                   </td>
                   <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
                     <strong>Quant Performance & Alpha Track Record</strong>
                     <div class="hook-box" style="border-left-color:var(--color-etoro);">
@@ -1023,7 +1093,7 @@
                   </td>
                 </tr>
 
-                <!-- 12. Streamer Podcast -->
+                <!-- 11. Streamer Podcast -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-streamer);">Streamer & Curio</td>
                   <td>Spotify & Apple Podcasts</td>
@@ -1033,17 +1103,21 @@
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Gemini LLM + TTS Engine</span>
+                    <span style="font-size:0.7rem; color:#fff; font-weight:600;">scripts/audio_producer.py</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Gemini LLM bilingual script &rarr; TTS voice engine &rarr; RSS XML</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">DAILY AUTO</span><br>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.68rem; color:#34d399;">Daily Morning Episode</span>
                   </td>
                   <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-audio">🎙️ AUDIO</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
                   <td>
-                    <strong>Daily Bilingual Workout Audio</strong>
+                    <strong>Daily Bilingual Workout Motivation Podcast</strong>
                     <div class="hook-box" style="border-left-color:var(--color-streamer);">
-                      Automated 10-min bilingual French-English fitness motivation coaching.
+                      Automated 10-min bilingual French-English fitness coaching episode.
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Pipeline fully functional; RSS generator deployed.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Pipeline fully functional; RSS feed deployed.</span>
                   </td>
                 </tr>
 
@@ -1063,7 +1137,7 @@
   </div>
 
   <script>
-    // Detailed Data Store with Real Human Operators & Handles
+    // Detailed Data Store with Real Human Operators, Exact Pipelines, Frequency, and Routes
     const projectDetails = {
       tradister: {
         title: "Tradister FinOps & Cloud",
@@ -1079,17 +1153,84 @@
           { label: "Outbound Sent", val: "26 Leads", color: "#34d399" },
           { label: "Won Deals", val: "0 (€0)", color: "#f59e0b" }
         ],
+        routesSection: `
+          <div class="subhead" style="color:var(--color-tradister);">Autonomous Outbound Engine: 5 Specific Regional Routes</div>
+          <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(56,189,248,0.2); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.72rem; color:var(--text-muted); flex-wrap:wrap; gap:6px;">
+              <span><strong>Engine:</strong> GitHub Actions (<code>outreach_engine.yml</code>) + Python (<code>outreach_engine.py</code>)</span>
+              <span><strong>SMTP:</strong> Resend API (<code>kashif@tradister-cloud.com</code>)</span>
+              <span><strong>Pacing:</strong> 120s–360s randomized delay</span>
+              <span><strong>Cadence:</strong> 3 Steps (Step 2: +3d, Step 3: +4d)</span>
+            </div>
+            
+            <!-- Route 1 -->
+            <div class="route-card">
+              <div class="route-header">
+                <span class="route-name">Route 1: Local French PMEs (Essonne 91 & Île-de-France)</span>
+                <span class="route-window">09:00 - 12:00 CET • 20/day</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">
+                <strong>Target:</strong> Essonne & Paris IT Directors / CEOs. <strong>Pitch:</strong> Infogérance de proximité, support réactif & audit 'Flash' 15 min en partage d'écran (audit.tradister.com) sans mot de passe.
+              </div>
+            </div>
+
+            <!-- Route 2 -->
+            <div class="route-card">
+              <div class="route-header">
+                <span class="route-name">Route 2: IDF Companies Actively Hiring L1 IT Support</span>
+                <span class="route-window">09:00 - 12:00 CET • 20/day</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">
+                <strong>Target:</strong> Firms with open Helpdesk job posts on LinkedIn/Indeed. <strong>Pitch:</strong> Immediate L1/L2 managed IT support from €950/mo instead of €35k-€45k/yr recruitment costs.
+              </div>
+            </div>
+
+            <!-- Route 3 -->
+            <div class="route-card">
+              <div class="route-header">
+                <span class="route-name">Route 3: Foreign Subsidiaries in France (UK, US, European)</span>
+                <span class="route-window">09:30 - 12:30 CET • 20/day</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">
+                <strong>Target:</strong> European / US branch offices in Paris. <strong>Pitch:</strong> 100% bilingual French-English endpoint support, local French compliance, and on-site field technicians in Paris/IDF.
+              </div>
+            </div>
+
+            <!-- Route 4 -->
+            <div class="route-card">
+              <div class="route-header">
+                <span class="route-name">Route 4: Direct US Companies (L1 Workload Automation & Night Shift)</span>
+                <span class="route-window">14:00 - 18:00 CET (US Morning) • 20/day</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">
+                <strong>Target:</strong> US East/West Coast MSPs & SaaS firms. <strong>Pitch:</strong> Offload overnight Tier-1 support tickets during European daylight hours with automated Graph API resolution.
+              </div>
+            </div>
+
+            <!-- Route 5 -->
+            <div class="route-card">
+              <div class="route-header">
+                <span class="route-name">Route 5: Direct UK & German Companies (Tier-1 Offloading)</span>
+                <span class="route-window">10:00 - 16:00 CET • 20/day</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">
+                <strong>Target:</strong> London & Frankfurt mid-market firms. <strong>Pitch:</strong> Cost-effective European nearshore cloud governance, ticket offloading, and M365 licensing audit.
+              </div>
+            </div>
+          </div>
+        `,
         platforms: [
           {
-            name: "Cold Email Outbound (Resend API)",
+            name: "Cold Email Outbound (5 Regional Routes)",
             status: "ACTIVE",
             statusClass: "sb-active",
             operator: "Kashif Ali (CTO)",
             handle: "kashif@tradister-cloud.com",
-            delivery: "⚡ Intermediary via Resend SMTP API (GitHub Actions runner)",
+            howMade: "Automated Python engine (scripts/outreach_engine.py) triggered by GitHub Actions workflow (.github/workflows/outreach_engine.yml).",
+            delivery: "⚡ Intermediary via Resend SMTP API (Paced with 120s-360s randomized delays)",
+            frequency: "DAILY (MON-FRI) across 5 Regional Windows (09:00 - 18:00 CET)",
             format: "✉️ EMAIL",
-            cadence: "DAILY AUTO (09:00 CET - 20 emails/day)",
-            hook: "Audit express M365 (sans mot de passe) & support de proximité chez {{company}} (15-min screen-share test).",
+            hook: "15-min screen-share M365 audit (audit.tradister.com) exposing €3k-€8k/yr waste without passwords.",
             statusText: "26 sent, 11 link clicks (42.3% interest rate), 3 pending. Warmup Phase 2 active."
           },
           {
@@ -1098,11 +1239,12 @@
             statusClass: "sb-active",
             operator: "Bisma Kashif (Présidente & Managing Director)",
             handle: "linkedin.com/in/bisma-kashif-310672451",
-            delivery: "⚡ Intermediary via Buffer API (content_engine.py automated queue)",
+            howMade: "Generated via scripts/content_engine.py pulling Gemini LLM executive leadership prompts.",
+            delivery: "⚡ Intermediary via Buffer API Queue (auto-published)",
+            frequency: "DAILY AUTO (Buffer Scheduled Queue)",
             format: "📝 POST",
-            cadence: "DAILY AUTO (Buffer Queue)",
-            hook: "Executive governance: Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms.",
-            statusText: "Strategic leadership & 60s audit CTA on audit.tradister.com publishing daily via Buffer."
+            hook: "Strategic leadership on cloud governance, FinOps waste reduction, and 60-second zero-trust audits.",
+            statusText: "Executive posts actively scheduled and published daily via Buffer API."
           },
           {
             name: "LinkedIn Engineering Lab Notes",
@@ -1110,23 +1252,12 @@
             statusClass: "sb-active",
             operator: "Kashif Ali (Lead Cloud & Endpoint Architect)",
             handle: "linkedin.com/in/kashifalimalik",
-            delivery: "⚡ Intermediary via Buffer API (content_engine.py automated queue)",
+            howMade: "Generated via scripts/content_engine.py extracting engineering lab benchmarks & PowerShell snippets.",
+            delivery: "⚡ Intermediary via Buffer API Queue (auto-published)",
+            frequency: "DAILY AUTO (Buffer Scheduled Queue)",
             format: "📝 POST",
-            cadence: "DAILY AUTO (Buffer Queue)",
-            hook: "Real-world engineering lab testing, Graph API telemetry, and PowerShell nuances (strictly non-commercial, zero sales pitch).",
-            statusText: "Automated daily technical thought leadership active (100% CDI professional protection)."
-          },
-          {
-            name: "Tradister Corporate Presence",
-            status: "ACTIVE",
-            statusClass: "sb-active",
-            operator: "Tradister SASU Corporate",
-            handle: "linkedin.com/company/tradister | Twitter: @tradister | IG: @tradister2",
-            delivery: "⚡ Intermediary via Buffer API + Waalaxy Chrome Extension",
-            format: "📝 POST",
-            cadence: "DAILY AUTO",
-            hook: "Official French PME cloud cost optimization guides and security hardening whitepapers.",
-            statusText: "Waalaxy connection invite batches prepared for Paris/Essonne target DSIs."
+            hook: "Telemetry analysis, Graph API nuances, Intune heartbeat logs (strictly non-commercial, zero sales pitch).",
+            statusText: "Automated daily technical lab notes active (100% CDI professional protection)."
           }
         ],
         nextAction: "Deliver 15-minute screen-share audits on 11 clicked leads to convert 1st €950/mo retainer.",
@@ -1148,30 +1279,32 @@
           { label: "Languages", val: "7 Locales", color: "#38bdf8" },
           { label: "Won Revenue", val: "$0 (Free)", color: "#f59e0b" }
         ],
+        routesSection: `
+          <div class="subhead" style="color:var(--color-caloriefit);">CalorieFit Growth & Dispatch Pipelines</div>
+          <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(16,185,129,0.2); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:0.75rem; color:#fff; font-weight:700; margin-bottom:6px;">
+              📦 How Content is Made & Dispatched from GitHub:
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.45;">
+              • <strong>Instagram Reels:</strong> Storyboarded scripts in <code>marketing/short_form_video_scripts.md</code>. Side-by-side comparison: $80/yr paywall popup vs. instant offline barcode scan. Recorded on mobile & uploaded to <code>@caloriefit.app</code>.<br>
+              • <strong>Reddit 1-Click Dispatch:</strong> Python script <code>marketing/daily_email_dispatcher.py</code> runs on daily schedule. Sends an email via Resend API to <code>ali.kashifmalik@gmail.com</code> containing pre-filled Web Intent submission URLs for <code>r/androidapps</code> & <code>r/loseit</code>.<br>
+              • <strong>Frequency Schedule:</strong> Email dispatch runs <strong>DAILY</strong>; Reddit submission confirmed <strong>ONCE A WEEK</strong>; Instagram Reel published <strong>ONCE A WEEK</strong>; Play Store ASO is <strong>CONTINUOUS</strong>.
+            </div>
+          </div>
+        `,
         platforms: [
           {
-            name: "Instagram (Reels & Feed)",
+            name: "Instagram (Reels & Carousels)",
             status: "ACTIVE",
             statusClass: "sb-active",
             operator: "Kashif Malik (Creator)",
             handle: "@caloriefit.app / @caloriefit",
-            delivery: "✋ Direct via Instagram Mobile App & Creator Studio",
+            howMade: "From GitHub repo: marketing/short_form_video_scripts.md (35s storyboarded video scripts).",
+            delivery: "✋ Direct via Instagram Mobile App / Creator Studio",
+            frequency: "ONCE A WEEK (Manual Reel & Carousel)",
             format: "🎥 VIDEO / 📝 POST",
-            cadence: "WEEKLY MANUAL",
-            hook: "Free barcode scanner without paying $80/yr subscription. 100% offline, zero cloud tracking.",
-            statusText: "Reel assets & carousel cards staged in marketing/short_form_video_scripts.md."
-          },
-          {
-            name: "Google Play Store (ASO)",
-            status: "ACTIVE",
-            statusClass: "sb-active",
-            operator: "Kashif Malik (Google Play Console)",
-            handle: "com.caloriefit.app",
-            delivery: "✋ Direct via Google Play Console",
-            format: "📱 ASO",
-            cadence: "CONTINUOUS ASO",
-            hook: "Keywords: Private Calorie Counter, Compteur de calories hors ligne, Macro tracker no sub.",
-            statusText: "Production APK live in EN, FR, ES, DE, IT, PT, AR."
+            hook: "Why I deleted MyFitnessPal: Free barcode scanner without $80/yr paywall. 100% offline, zero cloud tracking.",
+            statusText: "Reel assets & carousel cards staged in repository."
           },
           {
             name: "Reddit (r/androidapps, r/loseit)",
@@ -1179,23 +1312,25 @@
             statusClass: "sb-active",
             operator: "Kashif Malik (Dev)",
             handle: "u/kashif-malik",
-            delivery: "✋ Direct via 1-Click Web Intent Launcher (daily_email_dispatcher.py)",
+            howMade: "From GitHub script: daily_email_dispatcher.py pulls compliant markdown from reddit_launch_posts.md.",
+            delivery: "✋ Direct via 1-Click Email Link (Resend API sends link to ali.kashifmalik@gmail.com)",
+            frequency: "EMAIL: DAILY • POST SUBMISSION: ONCE A WEEK",
             format: "📝 POST",
-            cadence: "WEEKLY MANUAL (ASSISTED)",
             hook: "[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions.",
-            statusText: "Dispatcher ready: sends 1-click pre-filled submission links to inbox."
+            statusText: "Dispatcher active: 1-click link opens pre-filled Reddit composer."
           },
           {
-            name: "TikTok & YouTube Shorts",
-            status: "READY",
-            statusClass: "sb-ready",
-            operator: "Kashif Malik (Creator)",
-            handle: "@caloriefit",
-            delivery: "✋ Direct Creator App Upload",
-            format: "🎥 VIDEO",
-            cadence: "WEEKLY MANUAL",
-            hook: "Why I deleted MyFitnessPal after 4 years ($80 paywall vs instant free scan).",
-            statusText: "3 short-form scripts fully storyboarded with timestamps and sound tags."
+            name: "Google Play Store (ASO)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            operator: "Kashif Malik",
+            handle: "com.caloriefit.app",
+            howMade: "Flutter build signed with upload-keystore.jks and localized across 7 language store descriptions.",
+            delivery: "✋ Direct via Google Play Console",
+            frequency: "CONTINUOUS ASO (24/7 Organic Search)",
+            format: "📱 ASO",
+            hook: "Private Calorie Counter, Compteur de calories hors ligne, Macro tracker no sub.",
+            statusText: "Production APK live in EN, FR, ES, DE, IT, PT, AR."
           }
         ],
         nextAction: "Post launch threads on Reddit & deploy Instagram Reels to trigger organic 1,000 MAU push.",
@@ -1217,18 +1352,32 @@
           { label: "Infra Cost", val: "€15/mo VPS", color: "#fff" },
           { label: "Won Subs", val: "0 (€0)", color: "#f59e0b" }
         ],
+        routesSection: `
+          <div class="subhead" style="color:var(--color-allonssy);">Allonssy Automated Production & Field Routes</div>
+          <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(168,85,247,0.2); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:0.75rem; color:#fff; font-weight:700; margin-bottom:6px;">
+              ⚙️ How Allonssy Content is Produced & Sent on the VPS:
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.45;">
+              • <strong>Facebook Pages Engine:</strong> Python script <code>scripts/meta_auto_publisher.py</code> queries Supabase database for daily restaurant discounts and local municipal news. Directly calls <strong>Meta Graph API v19</strong> with Page Access Token. Runs <strong>DAILY at 08:15 UTC</strong> via Linux system cron.<br>
+              • <strong>Automated 9:16 Video Engine:</strong> Python script <code>scripts/generate_daily_reel.py</code> runs on the VPS every morning. Uses <strong>Pillow</strong> to composite editorial cards and <strong>imageio</strong> to encode MP4 reels (<code>reel_bonplan.mp4</code> & <code>reel_actu.mp4</code>). Runs <strong>DAILY</strong>.<br>
+              • <strong>Field Ground Onboarding:</strong> Physical window stickers distributed in Ris-Orangis / Grigny (91130) offering 0% commissions vs 30% delivery apps. Executed <strong>ONCE A WEEK</strong>.
+            </div>
+          </div>
+        `,
         platforms: [
           {
-            name: "Facebook Pages (Essonne 91)",
+            name: "Facebook Pages (Dual Broadcaster)",
             status: "ACTIVE",
             statusClass: "sb-active",
-            operator: "Allonssy Automated Social Bot",
+            operator: "Allonssy Automated Bot",
             handle: "1. Allonssy - Bons Plans 91 (ID: 1515002858354179) | 2. Essonne Actu (ID: 1492903483898849)",
-            delivery: "⚡ Intermediary via Meta Graph API v19 (VPS Cron 08:15 UTC)",
+            howMade: "scripts/meta_auto_publisher.py extracts daily deals & news & calls Meta Graph API v19 with Page Token.",
+            delivery: "⚡ Intermediary via Meta Graph API on VPS Cron",
+            frequency: "DAILY AUTO (08:15 UTC every morning)",
             format: "📝 POST",
-            cadence: "DAILY AUTO (08:15 UTC)",
-            hook: "Daily spotlight on 1 Ris-Orangis restaurant bargain + Grand Paris Sud municipal debates.",
-            statusText: "meta_auto_publisher.py actively dispatching daily growth packs."
+            hook: "Daily local restaurant deal spotlight & Grand Paris Sud community discussions.",
+            statusText: "Actively running cron on VPS; daily social growth packs dispatched."
           },
           {
             name: "TikTok & Reels (9:16 Video)",
@@ -1236,11 +1385,12 @@
             statusClass: "sb-active",
             operator: "Allonssy Media Producer",
             handle: "@allonssy.app",
-            delivery: "⚡ Intermediary via Pillow + imageio MP4 Engine",
+            howMade: "scripts/generate_daily_reel.py renders editorial cards with Pillow and encodes MP4 with imageio.",
+            delivery: "⚡ Intermediary via Pillow + imageio MP4 Engine on VPS",
+            frequency: "DAILY AUTO (Morning Video Render)",
             format: "🎥 VIDEO",
-            cadence: "DAILY AUTO",
             hook: "reel_bonplan.mp4 (Bargain spotlight) & reel_actu.mp4 (Breaking 91 news).",
-            statusText: "Automated video pipeline generating 2 vertical MP4 reels every morning on VPS."
+            statusText: "Automated video pipeline rendering 2 vertical reels every morning on VPS."
           },
           {
             name: "Storefront Window QR",
@@ -1248,9 +1398,10 @@
             statusClass: "sb-active",
             operator: "Allonssy Field Team",
             handle: "Storefronts in Ris-Orangis / Grigny (91130)",
-            delivery: "✋ Direct Field Distribution",
+            howMade: "Physical QR stickers printed with custom merchant ordering links (allonssy.com/pro).",
+            delivery: "✋ Direct In-Person Field Distribution",
+            frequency: "ONCE A WEEK (Field Visits)",
             format: "🏪 PHYSICAL/QR",
-            cadence: "WEEKLY MANUAL",
             hook: "0% commission local ordering (vs 30% UberEats/Deliveroo) with storefront QR stickers.",
             statusText: "150 merchants pre-seeded in database; activating first 25 restaurants."
           }
@@ -1274,6 +1425,15 @@
           { label: "Execution", val: "24/7 Auto", color: "#fff" },
           { label: "Human Errors", val: "0 Errors", color: "#34d399" }
         ],
+        routesSection: `
+          <div class="subhead" style="color:var(--color-etoro);">eToro Quantitative Operations</div>
+          <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.45;">
+              • <strong>Execution Engine:</strong> 24/7 Python daemon running on cloud container, monitoring $100k capital pool with systematic DCA & volatility drift rebalancing.<br>
+              • <strong>Marketing Reports:</strong> Audited performance updates published <strong>ONCE A WEEK</strong> on X (Twitter: <code>@tradister</code>) & LinkedIn (<code>kashifalimalik</code>).
+            </div>
+          </div>
+        `,
         platforms: [
           {
             name: "Trading Daemon",
@@ -1281,9 +1441,10 @@
             statusClass: "sb-active",
             operator: "Autonomous Worker Daemon",
             handle: "Autonomous Python Engine (eToro Agent)",
+            howMade: "Python quantitative engine running in Docker with automated broker API integration.",
             delivery: "⚡ Intermediary via Broker API",
+            frequency: "24/7 REALTIME (Continuous)",
             format: "⚡ ENGINE",
-            cadence: "24/7 REALTIME",
             hook: "Automated DCA, systematic volatility drift rebalancing, strict stop-loss rules.",
             statusText: "Cloud daemon active; 0 manual trading errors recorded."
           },
@@ -1293,9 +1454,10 @@
             statusClass: "sb-ready",
             operator: "Kashif Malik",
             handle: "@tradister / in/kashifalimalik",
+            howMade: "Automated telemetry summary exported from trading daemon logs.",
             delivery: "✋ Direct Profile Post",
+            frequency: "ONCE A WEEK (Weekly Audit Report)",
             format: "📝 POST",
-            cadence: "WEEKLY MANUAL",
             hook: "How an autonomous 24/7 agent eliminates emotional trading with disciplined DCA.",
             statusText: "Building 90-day audited public track record before capital syndication."
           }
@@ -1319,6 +1481,15 @@
           { label: "Target Sub", val: "$4.99/mo", color: "#fff" },
           { label: "Test Sessions", val: "11 Sessions", color: "#f59e0b" }
         ],
+        routesSection: `
+          <div class="subhead" style="color:var(--color-streamer);">AI Audio & Media Production Pipelines</div>
+          <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(236,72,153,0.2); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.45;">
+              • <strong>Streamer Audio Pipeline:</strong> <code>scripts/audio_producer.py</code> calls Gemini LLM for bilingual French-English fitness scripts, generates audio via TTS, and deploys RSS feed <strong>DAILY</strong>.<br>
+              • <strong>Curio Kids Reels:</strong> Educational video snippets for parents published <strong>ONCE A WEEK</strong> on family channels.
+            </div>
+          </div>
+        `,
         platforms: [
           {
             name: "Spotify & Apple Podcasts RSS",
@@ -1326,23 +1497,12 @@
             statusClass: "sb-active",
             operator: "Streamer Fitness Voice",
             handle: "Streamer Bilingual RSS Feed",
+            howMade: "scripts/audio_producer.py calls Gemini LLM for bilingual workout scripts and renders audio via TTS.",
             delivery: "⚡ Intermediary via Gemini LLM + TTS Engine",
+            frequency: "DAILY AUTO (Daily Morning Episode)",
             format: "🎙️ AUDIO",
-            cadence: "DAILY AUTO",
             hook: "Daily 10-minute bilingual French-English fitness motivation and workout coaching.",
             statusText: "Audio producer script (audio_producer.py) & RSS feed deployed."
-          },
-          {
-            name: "Family Safe Reels (Curio Kids)",
-            status: "READY",
-            statusClass: "sb-ready",
-            operator: "Curio Family Media",
-            handle: "Curio Kids Media Portal",
-            delivery: "✋ Direct Parent Video Posts",
-            format: "🎥 VIDEO",
-            cadence: "WEEKLY MANUAL",
-            hook: "Safe Screen Time Without Toxic Feeds (100% ad-free educational entertainment).",
-            statusText: "100 curated educational videos indexed; parental PIN testing in progress."
           }
         ],
         nextAction: "Deploy RSS feed to Spotify / Apple Podcasts and test Curio parental subscription.",
@@ -1364,6 +1524,7 @@
           { label: "Platform", val: "WooCommerce", color: "#38bdf8" },
           { label: "Catalog", val: "Multi-Vendor", color: "#34d399" }
         ],
+        routesSection: "",
         platforms: [
           {
             name: "Web Marketplace",
@@ -1371,23 +1532,12 @@
             statusClass: "sb-active",
             operator: "Retail Operations",
             handle: "esupermarche.com",
+            howMade: "WooCommerce WordPress multi-vendor store configured with French payment & delivery gateways.",
             delivery: "✋ Direct Web Server",
+            frequency: "CONTINUOUS (24/7 Live)",
             format: "📱 WEB STORE",
-            cadence: "24/7 LIVE",
             hook: "Multi-vendor grocery & specialty store with local fulfillment.",
             statusText: "Production/staging catalog operational."
-          },
-          {
-            name: "Mobile App Stores",
-            status: "STAGING",
-            statusClass: "sb-staging",
-            operator: "Retail Operations",
-            handle: "com.esupermarche.app (FluxStore Build)",
-            delivery: "✋ Direct App Release",
-            format: "📱 MOBILE APP",
-            cadence: "VERSION RELEASE",
-            hook: "Fast mobile shopping app targeting Android 15 & iOS 15+.",
-            statusText: "APK build configured with release keystores."
           }
         ],
         nextAction: "Finalize merchant catalog import and initiate local delivery vendor testing.",
@@ -1421,7 +1571,7 @@
               </span>
               <div style="display:flex; align-items:center; gap:6px;">
                 <span class="status-badge ${pl.statusClass}"><span class="p-dot ${dotClass}"></span> ${pl.status}</span>
-                <span style="font-size:0.65rem; color:var(--text-sub); font-family:'JetBrains Mono';">${pl.cadence}</span>
+                <span style="font-size:0.65rem; color:var(--text-sub); font-family:'JetBrains Mono';">${pl.frequency}</span>
               </div>
             </div>
             
@@ -1435,6 +1585,10 @@
                 <span style="color:var(--text-sub);">Delivery Route:</span>
                 <div style="margin-top:2px; font-weight:600; color:#fff;">${pl.delivery}</div>
               </div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.2); border-radius:6px; padding:6px 8px; margin:6px 0; font-size:0.72rem; color:var(--text-muted);">
+              <strong>⚙️ How It's Made:</strong> ${pl.howMade}
             </div>
 
             <div class="hook-box" style="border-left-color:${p.color};">
@@ -1466,7 +1620,9 @@
           ${statsHtml}
         </div>
 
-        <div class="subhead">Marketing Platforms & Channel Execution</div>
+        ${p.routesSection || ''}
+
+        <div class="subhead">Marketing Platforms, Creation Methods & Frequency</div>
         ${platformsHtml}
 
         <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-top:14px; font-size:0.75rem;">
