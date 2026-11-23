@@ -10,7 +10,7 @@
   <title>Super Eye | CEO Executive Ventures & Marketing Radar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #070b12;
@@ -23,27 +23,11 @@
       
       /* Distinct Project Brand Colors */
       --color-tradister: #38bdf8;
-      --color-tradister-glow: rgba(56, 189, 248, 0.16);
-      
       --color-caloriefit: #10b981;
-      --color-caloriefit-glow: rgba(16, 185, 129, 0.16);
-      
       --color-allonssy: #a855f7;
-      --color-allonssy-glow: rgba(168, 85, 247, 0.16);
-      
       --color-etoro: #f59e0b;
-      --color-etoro-glow: rgba(245, 158, 11, 0.16);
-      
       --color-streamer: #ec4899;
-      --color-streamer-glow: rgba(236, 72, 153, 0.16);
-      
       --color-esuper: #6366f1;
-      --color-esuper-glow: rgba(99, 102, 241, 0.16);
-
-      --status-active: #10b981;
-      --status-ready: #94a3b8;
-      --status-staging: #f59e0b;
-      --status-inactive: #ef4444;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,7 +43,7 @@
     }
 
     .main-wrapper {
-      max-width: 1560px;
+      max-width: 1600px;
       margin: 0 auto;
     }
 
@@ -86,11 +70,6 @@
       font-size: 0.82rem;
       color: var(--text-muted);
       margin-top: 2px;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .live-pulse {
       display: inline-flex;
@@ -166,7 +145,7 @@
     /* =================================================== */
     .dashboard-layout {
       display: grid;
-      grid-template-columns: 340px 1fr;
+      grid-template-columns: 330px 1fr;
       gap: 20px;
       align-items: start;
     }
@@ -176,9 +155,7 @@
       }
     }
 
-    /* =================================================== */
-    /* LEFT SIDE: INDIVIDUAL PROJECT TILES */
-    /* =================================================== */
+    /* LEFT TILES PANEL */
     .left-tiles-panel {
       display: flex;
       flex-direction: column;
@@ -203,11 +180,10 @@
       padding: 12px 14px;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
     }
     .project-tile:hover {
       transform: translateX(3px);
@@ -218,29 +194,29 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
-    /* Color Bars & Themes per Project */
+    /* Color-Coded Borders per Project */
     .tile-tradister { border-left: 4px solid var(--color-tradister); }
-    .tile-tradister.active { border-color: var(--color-tradister); background: linear-gradient(135deg, rgba(56,189,248,0.1) 0%, #111827 100%); }
+    .tile-tradister.active { border-color: var(--color-tradister); background: linear-gradient(135deg, rgba(56,189,248,0.12) 0%, #111827 100%); }
     .tile-tradister .tile-name { color: var(--color-tradister); }
 
     .tile-caloriefit { border-left: 4px solid var(--color-caloriefit); }
-    .tile-caloriefit.active { border-color: var(--color-caloriefit); background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, #111827 100%); }
+    .tile-caloriefit.active { border-color: var(--color-caloriefit); background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, #111827 100%); }
     .tile-caloriefit .tile-name { color: var(--color-caloriefit); }
 
     .tile-allonssy { border-left: 4px solid var(--color-allonssy); }
-    .tile-allonssy.active { border-color: var(--color-allonssy); background: linear-gradient(135deg, rgba(168,85,247,0.1) 0%, #111827 100%); }
+    .tile-allonssy.active { border-color: var(--color-allonssy); background: linear-gradient(135deg, rgba(168,85,247,0.12) 0%, #111827 100%); }
     .tile-allonssy .tile-name { color: var(--color-allonssy); }
 
     .tile-etoro { border-left: 4px solid var(--color-etoro); }
-    .tile-etoro.active { border-color: var(--color-etoro); background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, #111827 100%); }
+    .tile-etoro.active { border-color: var(--color-etoro); background: linear-gradient(135deg, rgba(245,158,11,0.12) 0%, #111827 100%); }
     .tile-etoro .tile-name { color: var(--color-etoro); }
 
     .tile-streamer { border-left: 4px solid var(--color-streamer); }
-    .tile-streamer.active { border-color: var(--color-streamer); background: linear-gradient(135deg, rgba(236,72,153,0.1) 0%, #111827 100%); }
+    .tile-streamer.active { border-color: var(--color-streamer); background: linear-gradient(135deg, rgba(236,72,153,0.12) 0%, #111827 100%); }
     .tile-streamer .tile-name { color: var(--color-streamer); }
 
     .tile-esuper { border-left: 4px solid var(--color-esuper); }
-    .tile-esuper.active { border-color: var(--color-esuper); background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, #111827 100%); }
+    .tile-esuper.active { border-color: var(--color-esuper); background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, #111827 100%); }
     .tile-esuper .tile-name { color: var(--color-esuper); }
 
     .tile-head {
@@ -262,11 +238,18 @@
     .tile-kpis {
       display: flex;
       justify-content: space-between;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       background: rgba(0, 0, 0, 0.25);
-      padding: 5px 8px;
+      padding: 4px 7px;
       border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
+    }
+    .tile-operators {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
     .tile-platforms-row {
       display: flex;
@@ -274,13 +257,12 @@
       gap: 4px;
     }
 
-    /* Platform Mini Status Pill */
     .plat-mini {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      font-size: 0.63rem;
-      padding: 1px 6px;
+      font-size: 0.62rem;
+      padding: 1px 5px;
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-muted);
@@ -295,18 +277,14 @@
     .dot-active { background: #10b981; box-shadow: 0 0 5px #10b981; }
     .dot-ready { background: #94a3b8; }
     .dot-staging { background: #f59e0b; }
-    .dot-inactive { background: #ef4444; }
 
-    /* =================================================== */
-    /* RIGHT SIDE: INTERACTIVE MAIN PANEL */
-    /* =================================================== */
+    /* RIGHT CONTENT PANEL */
     .right-content-panel {
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    /* Right Navigation Tabs */
     .right-tabs {
       display: flex;
       gap: 8px;
@@ -338,12 +316,12 @@
       border: 1px solid rgba(56, 189, 248, 0.3);
     }
 
-    /* Selected Venture Detailed Hero Card */
+    /* Selected Venture Card */
     .venture-detail-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 20px;
+      padding: 18px 20px;
     }
     .vd-header {
       display: flex;
@@ -395,7 +373,6 @@
       margin-top: 2px;
     }
 
-    /* Section Subhead */
     .subhead {
       font-size: 0.8rem;
       font-weight: 800;
@@ -408,7 +385,7 @@
       gap: 6px;
     }
 
-    /* Dedicated Marketing Table */
+    /* Marketing Full Table */
     .table-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -428,7 +405,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-bottom: 1px solid var(--card-border);
       white-space: nowrap;
     }
@@ -441,6 +418,58 @@
     .mktg-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
     }
+
+    /* Person / Operator Badge */
+    .person-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .person-bisma { color: #f472b6; }
+    .person-kashif { color: #38bdf8; }
+    .person-brand { color: #a855f7; }
+
+    /* Handles & Monospace tags */
+    .handle-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .handle-bisma {
+      color: #f472b6;
+      background: rgba(244, 114, 182, 0.08);
+      border-color: rgba(244, 114, 182, 0.25);
+    }
+    .handle-caloriefit {
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.25);
+    }
+
+    /* Delivery Pills */
+    .delivery-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .dp-direct { background: #b45309; color: #fef3c7; }
+    .dp-interm { background: #0369a1; color: #e0f2fe; }
 
     /* Status Badges */
     .status-badge {
@@ -459,33 +488,6 @@
     .sb-active { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
     .sb-ready { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
     .sb-staging { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .sb-inactive { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-    /* Handles & Delivery */
-    .handle-pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.08);
-      padding: 2px 6px;
-      border-radius: 4px;
-      display: inline-block;
-      border: 1px solid rgba(56, 189, 248, 0.2);
-    }
-    .delivery-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      white-space: nowrap;
-    }
-    .dp-direct { background: #b45309; color: #fef3c7; }
-    .dp-interm { background: #0369a1; color: #e0f2fe; }
 
     .fmt-badge {
       font-size: 0.65rem;
@@ -530,7 +532,7 @@
     <div class="header">
       <div class="header-left">
         <h1>👁️ Super Eye</h1>
-        <p>Executive Ventures Radar: Left Project Tiles & Marketing Operations Matrix</p>
+        <p>Operations & Marketing Radar: Full Human Handles (Bisma, Kashif) & Delivery Routes</p>
       </div>
       <div class="header-right">
         <div class="live-pulse">
@@ -585,6 +587,11 @@
             <span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span>
           </div>
           <div class="tile-sub">B2B M365 Cloud & License FinOps (Tradister SASU)</div>
+          <div class="tile-operators">
+            <span>👤 <strong>Bisma Kashif</strong> (Pres.)</span>
+            <span>•</span>
+            <span>👤 <strong>Kashif Ali</strong> (CTO)</span>
+          </div>
           <div class="tile-kpis">
             <span>Pipeline: <strong style="color:var(--color-tradister);">€93.9k</strong></span>
             <span>Leads: <strong>62</strong></span>
@@ -592,8 +599,8 @@
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> Resend Email</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> LinkedIn Post</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> audit.tradister</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Bisma LinkedIn</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Kashif LinkedIn</span>
           </div>
         </div>
 
@@ -604,6 +611,9 @@
             <span class="status-badge sb-active"><span class="p-dot dot-active"></span> LIVE</span>
           </div>
           <div class="tile-sub">Local-First Macro & Calorie Tracker (Flutter Mobile)</div>
+          <div class="tile-operators">
+            <span>👤 <strong>Kashif Malik</strong> (Indie Developer)</span>
+          </div>
           <div class="tile-kpis">
             <span>Store: <strong style="color:var(--color-caloriefit);">v1.10.1</strong></span>
             <span>Locales: <strong>7</strong></span>
@@ -611,9 +621,8 @@
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> Google Play</span>
-            <span class="plat-mini" style="border-color:rgba(16,185,129,0.4);"><span class="p-dot dot-active"></span> 📸 Instagram</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Reddit Post</span>
-            <span class="plat-mini"><span class="p-dot dot-ready"></span> TikTok UGC</span>
+            <span class="plat-mini" style="border-color:rgba(16,185,129,0.4);"><span class="p-dot dot-active"></span> 📸 @caloriefit.app</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Reddit u/kashif-malik</span>
           </div>
         </div>
 
@@ -624,15 +633,18 @@
             <span class="status-badge sb-active"><span class="p-dot dot-active"></span> PILOT</span>
           </div>
           <div class="tile-sub">Hyperlocal Community Social & Marketplace (91130)</div>
+          <div class="tile-operators">
+            <span>👤 <strong>Allonssy Team</strong> (Ris-Orangis / Grigny)</span>
+          </div>
           <div class="tile-kpis">
             <span>Merchants: <strong style="color:var(--color-allonssy);">150+</strong></span>
             <span>Zone: <strong>91130</strong></span>
             <span>VPS: <strong>€15/mo</strong></span>
           </div>
           <div class="tile-platforms-row">
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Facebook 91</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> FB: Bons Plans 91</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> FB: Essonne Actu</span>
             <span class="plat-mini"><span class="p-dot dot-active"></span> Daily Reels</span>
-            <span class="plat-mini"><span class="p-dot dot-active"></span> Store QR</span>
           </div>
         </div>
 
@@ -643,6 +655,9 @@
             <span class="status-badge sb-active"><span class="p-dot dot-active"></span> 24/7 AUTO</span>
           </div>
           <div class="tile-sub">Quantitative WealthTech & Systematic Rebalancing</div>
+          <div class="tile-operators">
+            <span>👤 <strong>Kashif Malik</strong> (@tradister)</span>
+          </div>
           <div class="tile-kpis">
             <span>Capital: <strong style="color:var(--color-etoro);">$100k</strong></span>
             <span>Leverage: <strong>1x Spot</strong></span>
@@ -650,7 +665,7 @@
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> Trading Daemon</span>
-            <span class="plat-mini"><span class="p-dot dot-ready"></span> X/LinkedIn Alpha</span>
+            <span class="plat-mini"><span class="p-dot dot-ready"></span> X: @tradister</span>
           </div>
         </div>
 
@@ -661,6 +676,9 @@
             <span class="status-badge sb-staging"><span class="p-dot dot-staging"></span> MVP</span>
           </div>
           <div class="tile-sub">AI Bilingual Workout Audio & Safe Family Media</div>
+          <div class="tile-operators">
+            <span>👤 <strong>Streamer Voice</strong> / Curio Family</span>
+          </div>
           <div class="tile-kpis">
             <span>Videos: <strong style="color:var(--color-streamer);">100 Safe</strong></span>
             <span>Streamer: <strong>v1.0.0</strong></span>
@@ -685,7 +703,7 @@
           </div>
           <div class="tile-platforms-row">
             <span class="plat-mini"><span class="p-dot dot-active"></span> esupermarche.com</span>
-            <span class="plat-mini"><span class="p-dot dot-staging"></span> Mobile App Store</span>
+            <span class="plat-mini"><span class="p-dot dot-staging"></span> Play Store APK</span>
           </div>
         </div>
 
@@ -701,8 +719,8 @@
             <span>🔍 Inspected Venture Detail</span>
           </button>
           <button class="rtab-btn" id="btn-table" onclick="switchRightView('table')">
-            <span>🎯 Unified Marketing Operations Table</span>
-            <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:999px;">11 Channels</span>
+            <span>🎯 Unified Marketing Matrix (Handles & Delivery)</span>
+            <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:999px;">12 Channels</span>
           </button>
         </div>
 
@@ -710,11 +728,9 @@
         <!-- VIEW A: INSPECTED VENTURE DETAIL -->
         <!-- =================================================== -->
         <div id="view-inspect">
-          
           <div class="venture-detail-card" id="detail-card-container">
             <!-- Dynamically populated via JS -->
           </div>
-
         </div>
 
         <!-- =================================================== -->
@@ -726,78 +742,131 @@
               <thead>
                 <tr>
                   <th>Project</th>
-                  <th>Platform & Channel</th>
-                  <th>Platform Status</th>
-                  <th>Account Handle / Sender</th>
+                  <th>Platform / Channel</th>
+                  <th>Operator & Account Handle</th>
                   <th>Delivery Method</th>
+                  <th>Platform Status</th>
                   <th>Format</th>
                   <th>Cadence</th>
-                  <th>Campaign Hook & Real Status</th>
+                  <th>Campaign Hook & Real Operational Status</th>
                 </tr>
               </thead>
               <tbody>
 
-                <!-- 1. Tradister Email -->
+                <!-- 1. Tradister Email (Kashif Ali) -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
                   <td>Cold Email Outbound</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">kashif@tradister-cloud.com</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">Kashif Ali (CTO)</span>
+                    <div class="person-badge person-kashif">👤 Kashif Ali (CTO)</div>
+                    <div class="handle-pill">kashif@tradister-cloud.com</div>
+                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">Reply-To: operations@tradister.com</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Resend SMTP API</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Resend SMTP API (GitHub Actions)</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-email">✉️ EMAIL</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.63rem; color:var(--text-sub);">09:00 CET</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">09:00 CET</span></td>
                   <td>
-                    <strong>3-Step Inbound Cadence (20/day)</strong>
+                    <strong>3-Step Inbound Cadence (20 emails/day)</strong>
                     <div class="hook-box" style="border-left-color:var(--color-tradister);">
                       <em>"Audit express M365 (sans mot de passe) & support de proximité chez {{company}}"</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">26 sent • 11 clicked links (42.3% CTR) • 3 pending.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">26 sent • 11 clicked links (42.3% interest rate) • 3 pending.</span>
                   </td>
                 </tr>
 
-                <!-- 2. Tradister LinkedIn -->
-                <tr>
+                <!-- 2. Tradister LinkedIn - BISMA KASHIF (President) -->
+                <tr style="background:rgba(244, 114, 182, 0.03);">
                   <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
-                  <td>LinkedIn & Waalaxy</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>LinkedIn Executive</td>
                   <td>
-                    <span class="handle-pill">linkedin.com/in/kashif-ali</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">Twitter: @tradister</span>
+                    <div class="person-badge person-bisma">👤 Bisma Kashif (Présidente & MD)</div>
+                    <div class="handle-pill handle-bisma">in/bisma-kashif-310672451</div>
+                    <div style="font-size:0.65rem; color:#f472b6; margin-top:2px;">Strategic Leadership & Audit CTA</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API + Waalaxy</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API (content_engine.py)</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">BUFFER QUEUE</span></td>
                   <td>
-                    <strong>Paris/Essonne DSI Cloud Posts</strong>
-                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
-                      <em>"Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms."</em>
+                    <strong>Executive Governance & 60s M365 Waste Audit Pitch</strong>
+                    <div class="hook-box" style="border-left-color:#f472b6;">
+                      <em>"How European CFOs and DSIs eliminate 8-15% of Microsoft 365 license waste with zero-password audits on audit.tradister.com"</em>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Daily publishing active; Waalaxy invite batches prepared.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated daily leadership queue via Buffer API active.</span>
                   </td>
                 </tr>
 
-                <!-- 3. CalorieFit Instagram (ADDED) -->
+                <!-- 3. Tradister LinkedIn - KASHIF ALI (CTO Lab Notes) -->
                 <tr>
+                  <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
+                  <td>LinkedIn Tech / R&D</td>
+                  <td>
+                    <div class="person-badge person-kashif">👤 Kashif Ali (Lead Architect)</div>
+                    <div class="handle-pill">in/kashifalimalik</div>
+                    <div style="font-size:0.65rem; color:#38bdf8; margin-top:2px;">Engineering Lab Notes (Zero Sales Pitch)</div>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API (content_engine.py)</span>
+                  </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td>
+                    <strong>Lab Observations & Graph API / PowerShell Internals</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      <em>"Benchmarking Graph API telemetry vs. Intune heartbeat logs on French hybrid enterprise tenants."</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Strictly informational engineering thought leadership (100% CDI compliant).</span>
+                  </td>
+                </tr>
+
+                <!-- 4. Tradister Company Page -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
+                  <td>LinkedIn Corporate & X</td>
+                  <td>
+                    <div class="person-badge person-brand">🏢 Tradister SASU</div>
+                    <div class="handle-pill">company/tradister</div>
+                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">X: @tradister | IG: @tradister2</div>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API + Waalaxy Tool</span>
+                  </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td>
+                    <strong>Official Company Announcements & Case Studies</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      Whitepaper breakdowns of French PME cloud cost optimization and security hardening.
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Waalaxy connection invite batches prepared for Paris/Essonne targets.</span>
+                  </td>
+                </tr>
+
+                <!-- 5. CalorieFit Instagram -->
+                <tr style="background:rgba(16, 185, 129, 0.03);">
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>📸 Instagram (Reels & Feed)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">@caloriefit.app</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">CalorieFit Official</span>
+                    <div class="person-badge" style="color:#10b981;">👤 Kashif Malik (Creator)</div>
+                    <div class="handle-pill handle-caloriefit">@caloriefit.app / @caloriefit</div>
+                    <div style="font-size:0.65rem; color:var(--text-sub); margin-top:2px;">Personal developer brand</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
                     <span style="font-size:0.68rem; color:var(--text-sub);">Instagram Mobile App / Studio</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-video">🎥 VIDEO</span> <span class="fmt-badge fb-post">📝 POST</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
@@ -809,43 +878,19 @@
                   </td>
                 </tr>
 
-                <!-- 4. CalorieFit Play Store -->
-                <tr>
-                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
-                  <td>Google Play Search (ASO)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
-                  <td>
-                    <span class="handle-pill">com.caloriefit.app</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">Console: Kashif Malik</span>
-                  </td>
-                  <td>
-                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Google Play Console</span>
-                  </td>
-                  <td><span class="fmt-badge fb-aso">📱 ASO</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#38bdf8; font-size:0.68rem;">CONTINUOUS ASO</span></td>
-                  <td>
-                    <strong>Multi-Language Keyword Indexing</strong>
-                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
-                      "Private Calorie Counter", "Compteur hors ligne", "Macro Tracker No Sub"
-                    </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">v1.10.1 live in 7 languages (FR, EN, ES, DE, IT, PT, AR).</span>
-                  </td>
-                </tr>
-
-                <!-- 5. CalorieFit Reddit -->
+                <!-- 6. CalorieFit Reddit -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>Reddit (r/androidapps, r/loseit)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">u/kashif-malik</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">Developer account</span>
+                    <div class="person-badge" style="color:#10b981;">👤 Kashif Malik (Dev)</div>
+                    <div class="handle-pill handle-caloriefit">u/kashif-malik</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Web Intent Launcher</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Web Intent Launcher (1-click link)</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
@@ -857,18 +902,19 @@
                   </td>
                 </tr>
 
-                <!-- 6. CalorieFit TikTok -->
+                <!-- 7. CalorieFit TikTok / Shorts -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
                   <td>TikTok & YouTube Shorts</td>
-                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
                   <td>
-                    <span class="handle-pill">@caloriefit</span>
+                    <div class="person-badge" style="color:#10b981;">👤 Kashif Malik</div>
+                    <div class="handle-pill handle-caloriefit">@caloriefit</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Creator App</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Creator App Upload</span>
                   </td>
+                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
                   <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
@@ -880,42 +926,68 @@
                   </td>
                 </tr>
 
-                <!-- 7. Allonssy FB -->
+                <!-- 8. CalorieFit Google Play -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
+                  <td>Google Play Search (ASO)</td>
+                  <td>
+                    <div class="person-badge" style="color:#10b981;">👤 Kashif Malik</div>
+                    <div class="handle-pill handle-caloriefit">com.caloriefit.app</div>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Google Play Developer Console</span>
+                  </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td><span class="fmt-badge fb-aso">📱 ASO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#38bdf8; font-size:0.68rem;">CONTINUOUS ASO</span></td>
+                  <td>
+                    <strong>Multi-Language Organic Search Listing</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      "Private Calorie Counter", "Compteur hors ligne", "Macro Tracker No Sub"
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">v1.10.1 live in 7 languages (FR, EN, ES, DE, IT, PT, AR).</span>
+                  </td>
+                </tr>
+
+                <!-- 9. Allonssy FB Pages -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
                   <td>Facebook Pages (Essonne 91)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">Allonssy - Bons Plans 91</span><br>
-                    <span style="font-size:0.65rem; color:var(--text-sub);">Essonne Actu & Débats</span>
+                    <div class="person-badge person-brand">👥 Allonssy Social Bot</div>
+                    <div class="handle-pill">1. Allonssy - Bons Plans 91</div>
+                    <div class="handle-pill" style="margin-top:2px;">2. Essonne Actu & Débats</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Meta Graph API (v19)</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Meta Graph API v19 (VPS Cron)</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.63rem; color:var(--text-sub);">08:15 UTC</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.62rem; color:var(--text-sub);">08:15 UTC</span></td>
                   <td>
                     <strong>Dual-Page Automated Community Broadcaster</strong>
                     <div class="hook-box" style="border-left-color:var(--color-allonssy);">
-                      Daily local restaurant deal & Grand Paris Sud municipal discussions.
+                      Daily local restaurant deal & Grand Paris Sud municipal debates.
                     </div>
                     <span style="font-size:0.7rem; color:var(--text-muted);">Running daily cron on VPS via <code>meta_auto_publisher.py</code>.</span>
                   </td>
                 </tr>
 
-                <!-- 8. Allonssy Video -->
+                <!-- 10. Allonssy Reels -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
                   <td>TikTok & Reels (9:16)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">@allonssy.app</span>
+                    <div class="person-badge person-brand">👥 Allonssy Media</div>
+                    <div class="handle-pill">@allonssy.app</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Pillow & imageio Engine</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Pillow & imageio MP4 Engine</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
                   <td>
@@ -923,45 +995,23 @@
                     <div class="hook-box" style="border-left-color:var(--color-allonssy);">
                       <code>reel_bonplan.mp4</code> & <code>reel_actu.mp4</code>
                     </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated video builder rendering editorial cards every morning.</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated video pipeline rendering editorial cards every morning.</span>
                   </td>
                 </tr>
 
-                <!-- 9. Allonssy QR -->
-                <tr>
-                  <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
-                  <td>Storefronts (Ris-Orangis/Grigny)</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
-                  <td>
-                    <span class="handle-pill">Allonssy Field Team</span>
-                  </td>
-                  <td>
-                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">In-Person Distribution</span>
-                  </td>
-                  <td><span class="fmt-badge fb-qr">🏪 PHYSICAL</span></td>
-                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
-                  <td>
-                    <strong>0% Commission Merchant Alternative</strong>
-                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
-                      Direct ordering decals vs 30% delivery apps.
-                    </div>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">150 merchants pre-seeded in 91130 database.</span>
-                  </td>
-                </tr>
-
-                <!-- 10. eToro Quant -->
+                <!-- 11. eToro Quant -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-etoro);">eToro Quant Agent</td>
                   <td>X (Twitter) & LinkedIn</td>
-                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
                   <td>
-                    <span class="handle-pill">@tradister / Kashif Malik</span>
+                    <div class="person-badge person-kashif">👤 Kashif Malik</div>
+                    <div class="handle-pill">@tradister / in/kashifalimalik</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-direct">✋ Direct</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">Personal Profile</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Personal Profile Post</span>
                   </td>
+                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
                   <td><span class="fmt-badge fb-post">📝 POST</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
                   <td>
@@ -973,24 +1023,25 @@
                   </td>
                 </tr>
 
-                <!-- 11. Streamer Podcast -->
+                <!-- 12. Streamer Podcast -->
                 <tr>
                   <td style="font-weight:700; color:var(--color-streamer);">Streamer & Curio</td>
                   <td>Spotify & Apple Podcasts</td>
-                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td>
-                    <span class="handle-pill">Streamer Fitness AI</span>
+                    <div class="person-badge" style="color:#ec4899;">🎙️ Streamer AI Coach</div>
+                    <div class="handle-pill">Streamer Fitness RSS</div>
                   </td>
                   <td>
                     <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
-                    <span style="font-size:0.68rem; color:var(--text-sub);">via Gemini LLM + TTS</span>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Gemini LLM + TTS Engine</span>
                   </td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
                   <td><span class="fmt-badge fb-audio">🎙️ AUDIO</span></td>
                   <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
                   <td>
                     <strong>Daily Bilingual Workout Audio</strong>
                     <div class="hook-box" style="border-left-color:var(--color-streamer);">
-                      Automated 10-min bilingual French-English fitness motivation episode.
+                      Automated 10-min bilingual French-English fitness motivation coaching.
                     </div>
                     <span style="font-size:0.7rem; color:var(--text-muted);">Pipeline fully functional; RSS generator deployed.</span>
                   </td>
@@ -1012,7 +1063,7 @@
   </div>
 
   <script>
-    // Project Detailed Data Store
+    // Detailed Data Store with Real Human Operators & Handles
     const projectDetails = {
       tradister: {
         title: "Tradister FinOps & Cloud",
@@ -1021,6 +1072,7 @@
         badge: "Pipeline Active",
         badgeClass: "sb-active",
         category: "B2B M365 License Audit & Managed Cloud (Tradister SASU)",
+        operators: "👤 Bisma Kashif (Présidente) & 👤 Kashif Ali (CTO)",
         stats: [
           { label: "Pipeline Value", val: "€93,894", color: "var(--color-tradister)" },
           { label: "Target Leads", val: "62 Qualified", color: "#fff" },
@@ -1029,10 +1081,11 @@
         ],
         platforms: [
           {
-            name: "Cold Email (Resend API)",
+            name: "Cold Email Outbound (Resend API)",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "kashif@tradister-cloud.com (Kashif Ali, CTO)",
+            operator: "Kashif Ali (CTO)",
+            handle: "kashif@tradister-cloud.com",
             delivery: "⚡ Intermediary via Resend SMTP API (GitHub Actions runner)",
             format: "✉️ EMAIL",
             cadence: "DAILY AUTO (09:00 CET - 20 emails/day)",
@@ -1040,26 +1093,40 @@
             statusText: "26 sent, 11 link clicks (42.3% interest rate), 3 pending. Warmup Phase 2 active."
           },
           {
-            name: "LinkedIn & Waalaxy",
+            name: "LinkedIn Executive Leadership",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "Kashif Ali (linkedin.com/in/kashif-ali) & @tradister",
-            delivery: "⚡ Intermediary via Buffer API + Waalaxy Chrome Extension",
+            operator: "Bisma Kashif (Présidente & Managing Director)",
+            handle: "linkedin.com/in/bisma-kashif-310672451",
+            delivery: "⚡ Intermediary via Buffer API (content_engine.py automated queue)",
             format: "📝 POST",
             cadence: "DAILY AUTO (Buffer Queue)",
-            hook: "Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms.",
-            statusText: "Automated daily posts publishing; Waalaxy connection invite batches prepared."
+            hook: "Executive governance: Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms.",
+            statusText: "Strategic leadership & 60s audit CTA on audit.tradister.com publishing daily via Buffer."
           },
           {
-            name: "Web Scanner (audit.tradister.com)",
+            name: "LinkedIn Engineering Lab Notes",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "audit.tradister.com",
-            delivery: "✋ Direct Next.js Cloud App",
-            format: "📱 WEB APP",
-            cadence: "24/7 LIVE",
-            hook: "60-Second Read-Only Microsoft 365 Waste & Security Scanner (0 password required).",
-            statusText: "Live on Vercel & Cloudflare SSL."
+            operator: "Kashif Ali (Lead Cloud & Endpoint Architect)",
+            handle: "linkedin.com/in/kashifalimalik",
+            delivery: "⚡ Intermediary via Buffer API (content_engine.py automated queue)",
+            format: "📝 POST",
+            cadence: "DAILY AUTO (Buffer Queue)",
+            hook: "Real-world engineering lab testing, Graph API telemetry, and PowerShell nuances (strictly non-commercial, zero sales pitch).",
+            statusText: "Automated daily technical thought leadership active (100% CDI professional protection)."
+          },
+          {
+            name: "Tradister Corporate Presence",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            operator: "Tradister SASU Corporate",
+            handle: "linkedin.com/company/tradister | Twitter: @tradister | IG: @tradister2",
+            delivery: "⚡ Intermediary via Buffer API + Waalaxy Chrome Extension",
+            format: "📝 POST",
+            cadence: "DAILY AUTO",
+            hook: "Official French PME cloud cost optimization guides and security hardening whitepapers.",
+            statusText: "Waalaxy connection invite batches prepared for Paris/Essonne target DSIs."
           }
         ],
         nextAction: "Deliver 15-minute screen-share audits on 11 clicked leads to convert 1st €950/mo retainer.",
@@ -1074,6 +1141,7 @@
         badge: "Play Store Live",
         badgeClass: "sb-active",
         category: "Local-First Macro & Calorie Tracker (Flutter Mobile)",
+        operators: "👤 Kashif Malik (Solo Creator / Developer)",
         stats: [
           { label: "Store Version", val: "v1.10.1 Live", color: "var(--color-caloriefit)" },
           { label: "Cloud Cost", val: "$0.00/user", color: "#fff" },
@@ -1085,6 +1153,7 @@
             name: "Instagram (Reels & Feed)",
             status: "ACTIVE",
             statusClass: "sb-active",
+            operator: "Kashif Malik (Creator)",
             handle: "@caloriefit.app / @caloriefit",
             delivery: "✋ Direct via Instagram Mobile App & Creator Studio",
             format: "🎥 VIDEO / 📝 POST",
@@ -1096,7 +1165,8 @@
             name: "Google Play Store (ASO)",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "com.caloriefit.app (Kashif Malik)",
+            operator: "Kashif Malik (Google Play Console)",
+            handle: "com.caloriefit.app",
             delivery: "✋ Direct via Google Play Console",
             format: "📱 ASO",
             cadence: "CONTINUOUS ASO",
@@ -1107,6 +1177,7 @@
             name: "Reddit (r/androidapps, r/loseit)",
             status: "ACTIVE",
             statusClass: "sb-active",
+            operator: "Kashif Malik (Dev)",
             handle: "u/kashif-malik",
             delivery: "✋ Direct via 1-Click Web Intent Launcher (daily_email_dispatcher.py)",
             format: "📝 POST",
@@ -1118,6 +1189,7 @@
             name: "TikTok & YouTube Shorts",
             status: "READY",
             statusClass: "sb-ready",
+            operator: "Kashif Malik (Creator)",
             handle: "@caloriefit",
             delivery: "✋ Direct Creator App Upload",
             format: "🎥 VIDEO",
@@ -1138,6 +1210,7 @@
         badge: "Pilot 91130",
         badgeClass: "sb-active",
         category: "Hyperlocal Community Social & Marketplace (91130)",
+        operators: "👥 Allonssy Ground & Social Operations",
         stats: [
           { label: "Merchants", val: "150+ Pros", color: "var(--color-allonssy)" },
           { label: "Build", val: "v1.3.2 Live", color: "#34d399" },
@@ -1149,7 +1222,8 @@
             name: "Facebook Pages (Essonne 91)",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "Allonssy - Bons Plans 91 (ID: 1515002858354179) & Essonne Actu",
+            operator: "Allonssy Automated Social Bot",
+            handle: "1. Allonssy - Bons Plans 91 (ID: 1515002858354179) | 2. Essonne Actu (ID: 1492903483898849)",
             delivery: "⚡ Intermediary via Meta Graph API v19 (VPS Cron 08:15 UTC)",
             format: "📝 POST",
             cadence: "DAILY AUTO (08:15 UTC)",
@@ -1160,6 +1234,7 @@
             name: "TikTok & Reels (9:16 Video)",
             status: "ACTIVE",
             statusClass: "sb-active",
+            operator: "Allonssy Media Producer",
             handle: "@allonssy.app",
             delivery: "⚡ Intermediary via Pillow + imageio MP4 Engine",
             format: "🎥 VIDEO",
@@ -1171,7 +1246,8 @@
             name: "Storefront Window QR",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "Allonssy Field Team",
+            operator: "Allonssy Field Team",
+            handle: "Storefronts in Ris-Orangis / Grigny (91130)",
             delivery: "✋ Direct Field Distribution",
             format: "🏪 PHYSICAL/QR",
             cadence: "WEEKLY MANUAL",
@@ -1191,6 +1267,7 @@
         badge: "Production 24/7",
         badgeClass: "sb-active",
         category: "Quantitative WealthTech & Systematic Rebalancing",
+        operators: "👤 Kashif Malik (@tradister)",
         stats: [
           { label: "Monitored Capital", val: "$100,000", color: "var(--color-etoro)" },
           { label: "Leverage", val: "1x Spot", color: "#34d399" },
@@ -1202,7 +1279,8 @@
             name: "Trading Daemon",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "Autonomous Python Engine",
+            operator: "Autonomous Worker Daemon",
+            handle: "Autonomous Python Engine (eToro Agent)",
             delivery: "⚡ Intermediary via Broker API",
             format: "⚡ ENGINE",
             cadence: "24/7 REALTIME",
@@ -1213,7 +1291,8 @@
             name: "X (Twitter) & LinkedIn Reports",
             status: "READY",
             statusClass: "sb-ready",
-            handle: "@tradister / Kashif Malik",
+            operator: "Kashif Malik",
+            handle: "@tradister / in/kashifalimalik",
             delivery: "✋ Direct Profile Post",
             format: "📝 POST",
             cadence: "WEEKLY MANUAL",
@@ -1233,6 +1312,7 @@
         badge: "MVP Active",
         badgeClass: "sb-staging",
         category: "AI Bilingual Audio Podcasts & Family Safe Media MVP",
+        operators: "🎙️ Streamer AI / Curio Family",
         stats: [
           { label: "Curio Media", val: "100 Safe", color: "var(--color-streamer)" },
           { label: "Streamer APK", val: "v1.0.0", color: "#34d399" },
@@ -1244,7 +1324,8 @@
             name: "Spotify & Apple Podcasts RSS",
             status: "ACTIVE",
             statusClass: "sb-active",
-            handle: "Streamer Fitness AI",
+            operator: "Streamer Fitness Voice",
+            handle: "Streamer Bilingual RSS Feed",
             delivery: "⚡ Intermediary via Gemini LLM + TTS Engine",
             format: "🎙️ AUDIO",
             cadence: "DAILY AUTO",
@@ -1255,7 +1336,8 @@
             name: "Family Safe Reels (Curio Kids)",
             status: "READY",
             statusClass: "sb-ready",
-            handle: "Curio Family Media",
+            operator: "Curio Family Media",
+            handle: "Curio Kids Media Portal",
             delivery: "✋ Direct Parent Video Posts",
             format: "🎥 VIDEO",
             cadence: "WEEKLY MANUAL",
@@ -1275,6 +1357,7 @@
         badge: "Staging Active",
         badgeClass: "sb-staging",
         category: "Multi-Vendor Retail & Grocery Marketplace",
+        operators: "👥 Retail Operations",
         stats: [
           { label: "Web Portal", val: "Live Staging", color: "var(--color-esuper)" },
           { label: "Mobile App", val: "FluxStore 6.1", color: "#fff" },
@@ -1286,6 +1369,7 @@
             name: "Web Marketplace",
             status: "ACTIVE",
             statusClass: "sb-active",
+            operator: "Retail Operations",
             handle: "esupermarche.com",
             delivery: "✋ Direct Web Server",
             format: "📱 WEB STORE",
@@ -1297,7 +1381,8 @@
             name: "Mobile App Stores",
             status: "STAGING",
             statusClass: "sb-staging",
-            handle: "FluxStore Flutter Build",
+            operator: "Retail Operations",
+            handle: "com.esupermarche.app (FluxStore Build)",
             delivery: "✋ Direct App Release",
             format: "📱 MOBILE APP",
             cadence: "VERSION RELEASE",
@@ -1340,13 +1425,14 @@
               </div>
             </div>
             
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; font-size:0.72rem;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; font-size:0.72rem;">
               <div>
-                <span style="color:var(--text-sub);">Account Handle:</span>
+                <span style="color:var(--text-sub);">Operator / Person:</span>
+                <div style="font-weight:700; color:#fff; margin-top:2px;">${pl.operator}</div>
                 <div class="handle-pill" style="margin-top:2px;">${pl.handle}</div>
               </div>
               <div>
-                <span style="color:var(--text-sub);">Delivery Method:</span>
+                <span style="color:var(--text-sub);">Delivery Route:</span>
                 <div style="margin-top:2px; font-weight:600; color:#fff;">${pl.delivery}</div>
               </div>
             </div>
@@ -1356,7 +1442,7 @@
             </div>
 
             <div style="font-size:0.7rem; color:var(--text-sub); margin-top:5px;">
-              <strong>Live Status:</strong> ${pl.statusText}
+              <strong>Live Operational Status:</strong> ${pl.statusText}
             </div>
           </div>
         `;
@@ -1369,6 +1455,9 @@
               <span>${p.icon}</span> ${p.title}
             </div>
             <div class="vd-sub">${p.category}</div>
+            <div style="font-size:0.74rem; color:var(--text-muted); margin-top:3px;">
+              <strong>Active Operators:</strong> ${p.operators}
+            </div>
           </div>
           <span class="status-badge ${p.badgeClass}">${p.badge}</span>
         </div>
@@ -1393,13 +1482,10 @@
     }
 
     function selectProject(key) {
-      // Remove active from all tiles
       document.querySelectorAll('.project-tile').forEach(tile => tile.classList.remove('active'));
-      // Add active to selected tile
       const target = document.querySelector(`.tile-${key}`);
       if (target) target.classList.add('active');
 
-      // Make sure we're on the inspect view
       switchRightView('inspect');
       renderDetail(key);
     }
