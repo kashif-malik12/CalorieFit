@@ -17,7 +17,16 @@ from datetime import date
 import requests
 from pathlib import Path
 from dotenv import dotenv_values
-from marketing.auto_video_generator import build_video
+
+# Ensure project root is in sys.path
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+try:
+    from marketing.auto_video_generator import build_video
+except ImportError:
+    from auto_video_generator import build_video
 
 TRADISTER_ENV = r"E:\Gdrive\1Business\1a Tradister IT SASU\tradister-finops-cloud\.env"
 CONFIG = dotenv_values(TRADISTER_ENV) if os.path.exists(TRADISTER_ENV) else {}
@@ -276,12 +285,12 @@ def send_post_email(item):
           <h3>{video_info['title']}</h3>
           <p style="font-size: 13px; color: #475569;">Your 1080p video is ready to download instantly:</p>
           
-          <div style="text-align: center; margin: 15px 0;">
-            <a href="https://kashif-malik12.github.io/CalorieFit/videos/{video_info['name']}" class="btn" style="background: #10B981; color: #042F2E !important; margin-bottom: 8px;" target="_blank">
-              📥 1-Tap Download Video (Instant)
+          <div style="text-align: center; margin: 16px 0;">
+            <a href="https://kashif-malik12.github.io/CalorieFit/creator.html" class="btn" style="background: #0284c7; color: #ffffff !important; font-size: 16px; padding: 15px 24px; margin-bottom: 10px; display: block; border-radius: 10px;" target="_blank">
+              🌐 Open Video & Download Page (Mobile Hub)
             </a>
-            <a href="https://kashif-malik12.github.io/CalorieFit/creator.html" class="btn" style="background: #0284c7; color: #ffffff !important;" target="_blank">
-              🌐 Open Mobile Creator Hub (All Days)
+            <a href="https://kashif-malik12.github.io/CalorieFit/videos/{video_info['name']}" class="btn" style="background: #10B981; color: #042F2E !important; font-size: 15px; padding: 14px 24px; display: block; border-radius: 10px;" target="_blank">
+              📥 Direct 1-Tap Download Video (MP4)
             </a>
           </div>
 
