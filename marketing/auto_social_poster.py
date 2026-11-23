@@ -16,22 +16,36 @@ APP_NAME = "CalorieFit"
 PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 WEBSITE_URL = "https://kashif-malik12.github.io/CalorieFit/"
 
-REDDIT_TITLE = "I got tired of $80/year paywalls on calorie trackers, so I built a free, ad-free, offline tracker with on-device camera AI"
+REDDIT_TITLE = "[DEV] CalorieFit - Free, offline calorie & fasting tracker (No accounts, no ads)"
 
-REDDIT_BODY = f"""I got tired of $80/year subscriptions on calorie trackers, so I spent the last few months building CalorieFit: a 100% free, zero-ad, private offline tracker for Android.
+REDDIT_BODY = f"""Hey r/androidapps!
 
-Key features:
-• 🔒 100% Local-First: All nutrition and fasting logs stay in your phone's SQLite DB. No account or email needed.
-• 🚫 Zero Ads & Zero Paywalls: Free barcode scanner, free macro tracking.
-• 📸 AI Vision Food Scanner: On-device ML camera scanner to detect meal plates, calories, and macros with smart non-food filtering.
-• ⏳ Intermittent Fasting Timer: 16:8, 18:6, 20:4 windows with ketosis stages.
-• 🔥 Front-Page Streak Challenges: Pick your habit goal (1-day kickstart, 10-day challenge, or custom).
-• ⌚ Google Health Connect Sync: Automatically computes true Net Calories.
+A few months ago, I got tired of $80/year subscriptions, paywalled barcode scanners, and intrusive ads on mainstream diet apps. So I built CalorieFit: a 100% free, private, offline calorie & intermittent fasting tracker for Android.
+
+💰 Pricing & Monetization:
+• Price: 100% Free
+• Ads: Zero ads / No banners / No popups
+• Subscriptions / IAP: None ($0)
+• Accounts: None required (No email or login)
+
+🛡️ Privacy & Permissions:
+• 100% Local-First: All nutrition and fasting logs stay in your phone's SQLite DB.
+• Telemetry: Zero third-party ad SDKs or trackers.
+• Health Connect: Uses official Android Health Connect locally to sync steps and workout calories.
+
+✨ Key Features:
+• 🔒 100% Local-First & Private SQLite database
+• 🚫 Free barcode scanner & macro breakdown
+• 📸 AI Vision & Natural Language food estimator
+• ⏳ Intermittent Fasting Timer (14:10, 16:8, 18:6, 20:4) with ketosis stages
+• ⌚ Google Health Connect Sync for true Net Calories
+• 📱 Home Screen glanceable widgets
+• 📄 CSV / Clinical Doctor export
 
 Google Play: {PLAY_STORE_URL}
-Website: {WEBSITE_URL}
+Website & Privacy: {WEBSITE_URL}
 
-I'd love your honest feedback to make it better!"""
+I'd love your honest feedback and feature suggestions!"""
 
 TWITTER_TEXT = f"""Mainstream diet apps have lost their minds:
 • $79.99/yr paywalls just to scan barcodes
@@ -99,6 +113,13 @@ def post_via_apis_if_configured():
             )
             sub = r.subreddit("androidapps")
             submission = sub.submit(title=REDDIT_TITLE, selftext=REDDIT_BODY)
+            try:
+                for f in sub.flair.link_templates:
+                    if "dev" in f.get("text", "").lower():
+                        submission.flair.select(f["id"])
+                        break
+            except Exception:
+                pass
             print(f"Successfully posted to Reddit! URL: {submission.url}")
             has_keys = True
         except Exception as e:

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalorieFit - Daily Creator & Marketing Hub</title>
+  <style>
+    :root {
+      --bg: #0F172A;
+      --card: #1E293B;
+      --border: #334155;
+      --accent: #10B981;
+      --accent-hover: #059669;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --yellow: #F59E0B;
+      --reddit: #FF4500;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px 16px;
+      line-height: 1.5;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    header { text-align: center; margin-bottom: 24px; }
+    .badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    p.subtitle { color: var(--muted); font-size: 14px; }
+
+    /* Day Selector Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #042F2E;
+      border-color: var(--accent);
+    }
+
+    /* Content Card */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    }
+    .card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+    /* Video Player */
+    .video-wrap {
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      position: relative;
+      text-align: center;
+    }
+    video {
+      width: 100%;
+      max-height: 480px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.1s ease, filter 0.15s ease;
+      margin-bottom: 10px;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-download { background: var(--accent); color: #042F2E; }
+    .btn-download:hover { filter: brightness(1.1); }
+    .btn-copy { background: #334155; color: #FFF; }
+    .btn-reddit { background: var(--reddit); color: #FFF; }
+
+    /* Caption Box */
+    .box {
+      background: #0F172A;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      color: #E2E8F0;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+      font-family: inherit;
+      line-height: 1.5;
+    }
+
+    /* Social Shortcuts */
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .social-btn {
+      background: #0F172A;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+    }
+    .social-btn:hover { border-color: var(--muted); }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #042F2E;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      display: none;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="badge">Autopilot Growth Hub</span>
+    <h1>🚀 CalorieFit Creator Hub</h1>
+    <p class="subtitle">Download today's 1080p video, copy caption, and launch your posts in 60 seconds.</p>
+  </header>
+
+  <!-- Day Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" onclick="switchDay(1)">Day 1 (Paywall)</button>
+    <button class="tab-btn" onclick="switchDay(2)">Day 2 (Barcode)</button>
+    <button class="tab-btn" onclick="switchDay(3)">Day 3 (Fasting)</button>
+    <button class="tab-btn" onclick="switchDay(4)">Day 4 (Privacy)</button>
+    <button class="tab-btn" onclick="switchDay(5)">Day 5 (AI Food)</button>
+    <button class="tab-btn" onclick="switchDay(6)">Day 6 (Widgets)</button>
+    <button class="tab-btn" onclick="switchDay(7)">Day 7 (Indie Dev)</button>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+    <h2 class="card-title" id="day-title">Day 1: Why I Deleted MyFitnessPal</h2>
+    <p class="card-desc" id="day-desc">High-converting anti-subscription hook highlighting $80 paywalls vs free barcode scanning.</p>
+
+    <!-- Video Preview -->
+    <div class="video-wrap">
+      <video id="day-video" controls playsinline preload="metadata">
+        <source src="videos/CalorieFit_Video_Day1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- 1-Tap Download Button -->
+    <a id="download-link" href="videos/CalorieFit_Video_Day1.mp4" download="CalorieFit_Video_Day1.mp4" class="btn btn-download">
+      📲 Download Video to Phone / PC (1080p)
+    </a>
+
+    <!-- Caption Box -->
+    <p style="font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 14px; margin-bottom: 6px;">READY-TO-POST CAPTION & HASHTAGS:</p>
+    <div class="box" id="caption-box">Tired of $80/year diet app paywalls 🤦‍♂️ Built an offline-first tracker with zero ads, free barcode scanning & fasting timers. Link in bio! #myfitnesspal #calorietracker #cico #fitnessjourney #loseweight #indiedev #fitnesstips #reels #explorepage</div>
+
+    <!-- 1-Tap Copy Caption -->
+    <button class="btn btn-copy" onclick="copyCaption()">
+      📋 Copy Caption & Hashtags
+    </button>
+
+    <!-- Quick Upload Shortcuts -->
+    <div class="social-grid">
+      <a href="https://instagram.com/" target="_blank" class="social-btn">📸 Instagram</a>
+      <a href="https://www.tiktok.com/upload" target="_blank" class="social-btn">🎵 TikTok</a>
+      <a href="https://studio.youtube.com/" target="_blank" class="social-btn">▶️ Shorts</a>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+    <!-- Reddit Section -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <span style="font-size: 14px; font-weight: 700; color: #FFA07A;">🤖 TODAY'S REDDIT POST</span>
+      <span style="font-size: 12px; color: var(--yellow); font-weight: 600;" id="reddit-flair">Flair: Developer</span>
+    </div>
+    <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;" id="reddit-target">Target: r/androidapps (Tagged [DEV])</p>
+    
+    <a id="reddit-link" href="https://reddit.com/r/androidapps/submit?title=%5BDEV%5D%20CalorieFit%20-%20Free%2C%20offline%20calorie%20%26%20fasting%20tracker%20(No%20accounts%2C%20no%20ads)" target="_blank" class="btn btn-reddit">
+      👉 Open Pre-Filled Reddit Submission
+    </a>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard! ✅</div>
+
+  <script>
+    const DAY_DATA = {
+      1: {
+        title: "Day 1: Why I Deleted MyFitnessPal",
+        desc: "Anti-subscription hook highlighting $80 paywalls vs free barcode scanning.",
+        video: "videos/CalorieFit_Video_Day1.mp4",
+        caption: "Tired of $80/year diet app paywalls 🤦‍♂️ Built an offline-first tracker with zero ads, free barcode scanning & fasting timers. Link in bio! #myfitnesspal #calorietracker #cico #fitnessjourney #loseweight #indiedev #fitnesstips #reels #explorepage",
+        redditTarget: "Target: r/androidapps (Tagged [DEV])",
+        redditFlair: "Flair: Developer",
+        redditUrl: "https://reddit.com/r/androidapps/submit?title=%5BDEV%5D%20CalorieFit%20-%20Free%2C%20offline%20calorie%20%26%20fasting%20tracker%20(No%20accounts%2C%20no%20ads)"
+      },
+      2: {
+        title: "Day 2: Free Barcode Scanner Without Paywalls",
+        desc: "Targets gymgoers & dieters frustrated by barcode paywalls.",
+        video: "videos/CalorieFit_Video_Day2.mp4",
+        caption: "Stop paying to scan food barcodes! 🍎 CalorieFit is 100% free with barcode scanning, macros, and offline SQLite storage. Free on Google Play! #nutrition #dietapp #cico #barcodescanner #healthylifestyle #fitness #gymtok #reels",
+        redditTarget: "Target: r/CICO (300k+ dieters)",
+        redditFlair: "Flair: Resource / Tool",
+        redditUrl: "https://reddit.com/r/CICO/submit?title=Tired%20of%20paid%20calorie%20tracker%20subscriptions%2C%20so%20I%20built%20a%20100%25%20free%20ad-free%20offline%20tracker%20(CalorieFit)"
+      },
+      3: {
+        title: "Day 3: Stop Using Two Apps for Fasting & Calories",
+        desc: "Combines 16:8 fasting timer + full calorie diary with zero ads.",
+        video: "videos/CalorieFit_Video_Day1.mp4",
+        caption: "You don't need Zero for fasting and MyFitnessPal for calories! 🔥 CalorieFit combines 16:8 fasting timers + calorie tracking with zero ads. Free on Play Store! #intermittentfasting #fasting168 #cico #dieting #losefat #gymmotivation #health",
+        redditTarget: "Target: r/intermittentfasting (900k+ members)",
+        redditFlair: "Flair: Tool / Guide",
+        redditUrl: "https://reddit.com/r/intermittentfasting/submit?title=I%20built%20an%20ad-free%20fasting%20tracker%20%2B%20calorie%20counter%20in%20one%20app"
+      },
+      4: {
+        title: "Day 4: The Only Diet App That Respects Privacy",
+        desc: "Offline-first architecture with local SQLite and PIN lock.",
+        video: "videos/CalorieFit_Video_Day2.mp4",
+        caption: "Did you know diet apps sell your body weight and eating logs to ad brokers? 🛑 CalorieFit is 100% offline-first with local SQLite and PIN lock. Zero cloud tracking! #privacy #cybersecurity #degoogle #android #offlineapp #fitnesstracker #indiedev",
+        redditTarget: "Target: r/alphaandbetausers (Official tester feedback)",
+        redditFlair: "Flair: Android",
+        redditUrl: "https://reddit.com/r/alphaandbetausers/submit?title=%5BAndroid%5D%20CalorieFit%20-%20Free%2C%20offline-first%20calorie%20%26%20fasting%20tracker%20(Seeking%20feedback)"
+      },
+      5: {
+        title: "Day 5: AI Natural Language Meal Estimator",
+        desc: "Type or dictate meals for instant calorie and macro breakdowns.",
+        video: "videos/CalorieFit_Video_Day1.mp4",
+        caption: "Just type what you ate and get instant calories & macros! 🤖 CalorieFit has built-in AI meal estimation + free barcode scanning. Zero subscriptions! #ai #artificialintelligence #nutritiontips #macros #caloriedeficit #healthyeating #foodie",
+        redditTarget: "Target: r/loseit (4 Million members)",
+        redditFlair: "Flair: Resource / Tool",
+        redditUrl: "https://reddit.com/r/loseit/submit?title=Free%20alternative%20to%20MyFitnessPal%20with%20no%20ads%2C%20barcode%20paywall%2C%20or%20accounts%20(CalorieFit)"
+      },
+      6: {
+        title: "Day 6: Glanceable Home Screen Widgets",
+        desc: "Track Net Calories and fasting countdown right on your home screen.",
+        video: "videos/CalorieFit_Video_Day2.mp4",
+        caption: "See your remaining calories and fasting window right on your home screen! 📱 CalorieFit has Material 3 widgets with zero ads. Grab it free on Play Store! #androidhomescreen #androidwidgets #cico #fitnessgoals #macros #caloriedeficit",
+        redditTarget: "Target: r/SideProject (Indie dev feedback)",
+        redditFlair: "Flair: Feedback",
+        redditUrl: "https://reddit.com/r/SideProject/submit?title=I%20built%20CalorieFit%3A%20A%20100%25%20free%20diet%20%26%20fasting%20tracker%20to%20fight%20subscription%20bloat"
+      },
+      7: {
+        title: "Day 7: Indie Developer vs Corporate Bloat",
+        desc: "The authentic story of a solo developer building what dieters need.",
+        video: "videos/CalorieFit_Video_Day1.mp4",
+        caption: "I spent months building CalorieFit because mainstream diet apps charge $80/yr for basic features. Support an indie developer by trying CalorieFit free on Google Play! #indiedev #buildinpublic #solodev #myfitnesspal #tech #fitnessapp",
+        redditTarget: "Target: r/droidappshowcase (App showcase)",
+        redditFlair: "Flair: App Showcase",
+        redditUrl: "https://reddit.com/r/droidappshowcase/submit?title=CalorieFit%3A%20Free%2C%20offline%20calorie%20tracker%20%26%20fasting%20timer%20with%20camera%20AI"
+      }
+    };
+
+    function switchDay(day) {
+      // update tab styling
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', (idx + 1) === day);
+      });
+
+      const data = DAY_DATA[day];
+      document.getElementById('day-title').innerText = data.title;
+      document.getElementById('day-desc').innerText = data.desc;
+      
+      const videoEl = document.getElementById('day-video');
+      videoEl.querySelector('source').src = data.video;
+      videoEl.load();
+
+      const dl = document.getElementById('download-link');
+      dl.href = data.video;
+      dl.download = `CalorieFit_Video_Day${day}.mp4`;
+
+      document.getElementById('caption-box').innerText = data.caption;
+      document.getElementById('reddit-target').innerText = data.redditTarget;
+      document.getElementById('reddit-flair').innerText = data.redditFlair;
+      document.getElementById('reddit-link').href = data.redditUrl;
+    }
+
+    function copyCaption() {
+      const text = document.getElementById('caption-box').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
