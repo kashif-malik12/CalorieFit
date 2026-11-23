@@ -578,6 +578,115 @@
       font-size: 0.72rem;
       color: var(--text-sub);
     }
+
+    /* Cloud & Infrastructure Radar Tab Styles */
+    .infra-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 78, 59, 0.25));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .infra-banner-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .infra-banner-desc {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      margin-top: 3px;
+    }
+    .infra-chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .infra-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .infra-chip-green {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+    .infra-chip-blue {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+    }
+    .infra-chip-purple {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #d8b4fe;
+    }
+
+    .infra-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 1100px) {
+      .infra-grid-3 { grid-template-columns: 1fr; }
+    }
+    .infra-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+    }
+    .infra-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .infra-card-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .infra-card-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .infra-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+      font-size: 0.75rem;
+    }
+    .infra-item:last-child { border-bottom: none; }
+    .infra-label { color: var(--text-muted); }
+    .infra-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--text-main);
+    }
   </style>
 </head>
 <body>
@@ -596,6 +705,20 @@
           <span>SUPER EYE LIVE</span>
         </div>
       </div>
+    </div>
+
+    <!-- Master Top Navigation Bar (Prominent Tab Selector) -->
+    <div style="display: flex; gap: 10px; margin-bottom: 16px; background: #0d131f; padding: 10px 14px; border-radius: 12px; border: 1px solid #1e293b; flex-wrap: wrap; align-items: center;">
+      <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 4px;">VIEW MODES:</span>
+      <button class="top-nav-btn" id="topnav-inspect" onclick="switchRightView('inspect')" style="background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); font-weight: 700; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+        🔍 Project Deep Dive
+      </button>
+      <button class="top-nav-btn" id="topnav-table" onclick="switchRightView('table')" style="background: transparent; color: #94a3b8; border: 1px solid transparent; font-weight: 700; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+        🎯 Unified Marketing Matrix (12 Channels)
+      </button>
+      <button class="top-nav-btn" id="topnav-infra" onclick="switchRightView('infra')" style="background: rgba(16,185,129,0.18); color: #34d399; border: 1px solid rgba(16,185,129,0.45); font-weight: 800; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 14px rgba(16,185,129,0.25);">
+        ⚡ Cloud & Remote Infrastructure Radar <span style="background: #10b981; color: #070b12; font-size: 0.65rem; font-weight: 900; padding: 2px 8px; border-radius: 999px;">ZERO-PC (100% CLOUD)</span>
+      </button>
     </div>
 
     <!-- Executive KPI Grid (Always Visible) -->
@@ -762,6 +885,24 @@
           </div>
         </div>
 
+        <!-- TILE 7: CLOUD INFRASTRUCTURE & ZERO-PC RADAR -->
+        <div class="project-tile tile-infra" onclick="switchRightView('infra')" style="border-left: 3px solid #10b981; margin-top: 12px; background: rgba(16,185,129,0.06); cursor: pointer;">
+          <div class="tile-head">
+            <span class="tile-name" style="color:#34d399;">⚡ Cloud Infrastructure <span>🌐</span></span>
+            <span class="status-badge sb-active" style="background:rgba(16,185,129,0.25); color:#6ee7b7; border-color:rgba(16,185,129,0.5);"><span class="p-dot dot-active"></span> 100% CLOUD</span>
+          </div>
+          <div class="tile-sub">Zero-PC Dependency: GitHub Actions, Cloud VPS & Tailscale</div>
+          <div class="tile-kpis">
+            <span>PC Role: <strong style="color:#34d399;">Safe to Sleep</strong></span>
+            <span>Crons: <strong style="color:#38bdf8;">100% Autonomous</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> GitHub Actions</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> allonssy-vps</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Tailscale</span>
+          </div>
+        </div>
+
       </div>
 
       <!-- =================================================== -->
@@ -776,6 +917,10 @@
           <button class="rtab-btn" id="btn-table" onclick="switchRightView('table')">
             <span>🎯 Unified Marketing Matrix (Pipelines & Frequency)</span>
             <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:999px;">12 Channels</span>
+          </button>
+          <button class="rtab-btn" id="btn-infra" onclick="switchRightView('infra')" style="border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.06);">
+            <span style="color:#6ee7b7;">⚡ Cloud & Remote Infrastructure Radar</span>
+            <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(16,185,129,0.25); color:#a7f3d0; border:1px solid rgba(16,185,129,0.4); padding:2px 8px; border-radius:999px; font-weight:800;">Zero-PC Dependency</span>
           </button>
         </div>
 
@@ -1213,6 +1358,384 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW C: CLOUD & REMOTE INFRASTRUCTURE RADAR -->
+        <!-- =================================================== -->
+        <div id="view-infra" style="display:none;">
+
+          <!-- Top Status Banner -->
+          <div class="infra-banner">
+            <div>
+              <div class="infra-banner-title">
+                <span>🛡️</span>
+                <span>Desktop PC Relieved: 100% Stateless & Safe to Power Off</span>
+              </div>
+              <div class="infra-banner-desc">
+                All production servers, scheduled marketing engines, and automated backup mirrors are running 100% autonomously in the cloud. Only the Tailscale Mesh VPN is retained on this machine for on-demand remote access.
+              </div>
+            </div>
+            <div class="infra-chip-row">
+              <span class="infra-chip infra-chip-green">⚡ PC Safe to Sleep</span>
+              <span class="infra-chip infra-chip-blue">🌐 Tailscale: 100.96.64.18</span>
+              <span class="infra-chip infra-chip-purple">☁️ 100% Remote Crons</span>
+            </div>
+          </div>
+
+          <!-- KPI Status Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card" style="border-left: 3px solid #10b981;">
+              <div class="kpi-label">
+                <span>PC Dependency</span>
+                <span class="pipe-badge" style="background:rgba(16,185,129,0.15); color:#34d399; border-color:rgba(16,185,129,0.3);">OFFLINE-SAFE</span>
+              </div>
+              <div class="kpi-val" style="color:#10b981;">0 Tasks</div>
+              <div class="kpi-note">Zero production workloads rely on PC power</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #38bdf8;">
+              <div class="kpi-label">
+                <span>Cloud Cron Engines</span>
+                <span class="pipe-badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.3);">2 PLATFORMS</span>
+              </div>
+              <div class="kpi-val" style="color:#38bdf8;">Autonomous</div>
+              <div class="kpi-note">GitHub Actions (10:00 AM) + VPS Crontab</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #a855f7;">
+              <div class="kpi-label">
+                <span>Offsite Vault Backups</span>
+                <span class="pipe-badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.3);">GITHUB VAULT</span>
+              </div>
+              <div class="kpi-val" style="color:#a855f7;">03:00 UTC</div>
+              <div class="kpi-note">Direct VPS-to-GitHub encrypted push</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
+              <div class="kpi-label">
+                <span>Retained Local Service</span>
+                <span class="pipe-badge" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.3);">MESH GATEWAY</span>
+              </div>
+              <div class="kpi-val" style="color:#f59e0b;">Tailscale</div>
+              <div class="kpi-note">Only active for RDP & remote access</div>
+            </div>
+          </div>
+
+          <!-- Infrastructure Table -->
+          <div class="table-box" style="margin-bottom: 20px;">
+            <div style="padding: 14px 16px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+              <h3 style="font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                <span>🌐 Comprehensive Workload Migration & Remote Execution Record</span>
+              </h3>
+              <span class="handle-pill" style="color:#34d399; border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.08);">ALL RELIEVED FROM DESKTOP PC</span>
+            </div>
+
+            <table class="mktg-table">
+              <thead>
+                <tr>
+                  <th style="width: 130px;">Project</th>
+                  <th style="width: 220px;">Workload / Purpose</th>
+                  <th style="width: 210px;">Remote Host & Service</th>
+                  <th style="width: 140px;">Remote Schedule</th>
+                  <th style="width: 200px;">Former PC Dependency</th>
+                  <th>Current Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- CalorieFit -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-caloriefit">CalorieFit</span>
+                  </td>
+                  <td>
+                    <strong>Daily Short-Form Video & Marketing Dispatcher</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      Renders 1080x1920 MP4 via FFmpeg, generates voiceover via Edge-TTS, commits to GitHub Pages, and sends 1-click Reddit marketing post to Gmail via Resend.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#34d399;">GitHub Actions Runner</div>
+                    <span class="handle-pill">daily_marketing.yml</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">09:00 UTC (10:00 CET)</span>
+                  </td>
+                  <td>
+                    <div style="color:#f87171; font-size:0.75rem;">Windows Task Scheduler:</div>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.7rem; color:var(--text-sub);">CalorieFitDailyRedditPost</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> 100% CLOUD (TASK DISABLED ON PC)</span>
+                  </td>
+                </tr>
+
+                <!-- Allonssy Core -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-allonssy">Allonssy</span>
+                  </td>
+                  <td>
+                    <strong>Supabase Stack & POS Backend</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      PostgreSQL database, GoTrue auth, PostgREST API, real-time channels, and storage buckets.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#c084fc;">allonssy-vps (Cloud VPS)</div>
+                    <span class="handle-pill">Docker Compose Stack</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-always">24/7/365 ALWAYS ON</span>
+                  </td>
+                  <td>
+                    <span style="color:#94a3b8; font-size:0.75rem;">None (Already natively in cloud)</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> RUNNING ON VPS</span>
+                  </td>
+                </tr>
+
+                <!-- Allonssy / Tradister Fiscal Vault -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-allonssy">Allonssy</span>
+                    <span class="proj-badge badge-tradister" style="margin-left:4px;">Tradister</span>
+                  </td>
+                  <td>
+                    <strong>6-Year French POS Fiscal Vault & DB Backup</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      Art. 286 I-3° bis CGI Z-reports, chained receipts, and SHA-256 sealed database dump pushed offsite to private GitHub vault.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#c084fc;">allonssy-vps Crontab</div>
+                    <span class="handle-pill">backup_to_github_vault.sh</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">03:00 UTC NIGHTLY</span>
+                  </td>
+                  <td>
+                    <div style="color:#38bdf8; font-size:0.75rem;">Opportunistic Boot Mirror:</div>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.7rem; color:var(--text-sub);">SyncVPSBackup.vbs (syncs on PC logon)</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> DUAL BACKUP (CLOUD VAULT + LOGON GDRIVE)</span>
+                  </td>
+                </tr>
+
+                <!-- VPS Full Tarball Bundle -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-tradister">Tradister</span>
+                  </td>
+                  <td>
+                    <strong>Full VPS Disaster Recovery Bundle</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      Bundles full VPS state, Nginx/Caddy configs, and databases into standalone recovery tarballs on the cloud server.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#38bdf8;">allonssy-vps Crontab</div>
+                    <span class="handle-pill">bundle_full_vps_backup.sh</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-daily">02:45 UTC NIGHTLY</span>
+                  </td>
+                  <td>
+                    <span style="color:#94a3b8; font-size:0.75rem;">None (Local server cron)</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> RUNNING ON VPS</span>
+                  </td>
+                </tr>
+
+                <!-- Tradister FinOps Web Server -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-tradister">Tradister</span>
+                  </td>
+                  <td>
+                    <strong>Bilingual FinOps & MSP Cloud Website</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      Public website, 60-second cloud audit playbook, French/English bilingual portals, and lead funnels.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#38bdf8;">Cloudflare Pages & Edge CDN</div>
+                    <span class="handle-pill">Global Anycast Network</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-always">24/7/365 ALWAYS ON</span>
+                  </td>
+                  <td>
+                    <div style="color:#f87171; font-size:0.75rem;">Local Python HTTP Server:</div>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.7rem; color:var(--text-sub);">port 8085 (public/)</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> CLOUD HOSTED (LOCAL SERVER STOPPED)</span>
+                  </td>
+                </tr>
+
+                <!-- Tradister SASU Reminders -->
+                <tr>
+                  <td>
+                    <span class="proj-badge badge-tradister">Tradister</span>
+                  </td>
+                  <td>
+                    <strong>French SASU Ledger & Reminder Engine</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      Automated fiscal deadline checking and corporate calendar alerts for Tradister IT SASU.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#38bdf8;">allonssy-vps Crontab</div>
+                    <span class="handle-pill">sasu_reminder_cron.sh</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-always">EVERY MINUTE (* * * * *)</span>
+                  </td>
+                  <td>
+                    <span style="color:#94a3b8; font-size:0.75rem;">None (Natively on VPS)</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active"><span class="p-dot dot-active"></span> RUNNING ON VPS</span>
+                  </td>
+                </tr>
+
+                <!-- Tailscale VPN & Remote Access -->
+                <tr>
+                  <td>
+                    <span class="proj-badge" style="background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.2);">Infrastructure</span>
+                  </td>
+                  <td>
+                    <strong>Tailscale Mesh VPN & Remote Desktop (RDP)</strong>
+                    <div class="hook-box" style="border-left-color:#f59e0b;">
+                      Enables private, end-to-end encrypted remote access to this PC from phone (kashifs-s25) or laptops when you choose to turn it on.
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size:0.8rem; font-weight:700; color:#fbbf24;">Desktop PC (home-desktop-pc)</div>
+                    <span class="handle-pill">IP: 100.96.64.18 • Port 3389</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge freq-weekly">ON-DEMAND WORKSTATION</span>
+                  </td>
+                  <td>
+                    <span style="color:#10b981; font-size:0.75rem;">Intentionally Retained on Desktop</span>
+                  </td>
+                  <td>
+                    <span class="status-badge sb-active" style="color:#38bdf8; border-color:rgba(56,189,248,0.3); background:rgba(56,189,248,0.1);"><span class="p-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span> RETAINED (SAFE TO SLEEP)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Architecture Detail Cards Grid -->
+          <div class="infra-grid-3">
+
+            <!-- Card 1: CalorieFit Cloud Growth -->
+            <div class="infra-card" style="border-left: 3px solid #10b981;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#34d399;">
+                    <span>🚀</span> CalorieFit Cloud Autopilot
+                  </div>
+                  <div class="infra-card-sub">GitHub Actions Workflow • Zero Local Hardware</div>
+                </div>
+                <span class="freq-badge freq-daily">10:00 AM CET</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Trigger Engine</span>
+                <span class="infra-val" style="color:#34d399;">GitHub Actions (cron)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Workflow Path</span>
+                <span class="infra-val">.github/workflows/daily_marketing.yml</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Video Rendering</span>
+                <span class="infra-val">Ubuntu runner + FFmpeg + Edge-TTS</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Email Notification</span>
+                <span class="infra-val">Resend API -> ali.kashifmalik@gmail.com</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Windows Task Scheduler</span>
+                <span class="infra-val" style="color:#f87171;">Disabled (0% PC dependency)</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Allonssy & Tradister VPS Vault -->
+            <div class="infra-card" style="border-left: 3px solid #a855f7;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#c084fc;">
+                    <span>🗄️</span> VPS & Fiscal Backup Vault
+                  </div>
+                  <div class="infra-card-sub">allonssy-vps -> Private GitHub Vault</div>
+                </div>
+                <span class="freq-badge freq-daily">03:00 UTC</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Host Machine</span>
+                <span class="infra-val" style="color:#c084fc;">allonssy-vps (Ubuntu 24.04)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">French Fiscal Archives</span>
+                <span class="infra-val">6-Year POS Z-Reports (Art. 286 CGI)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Database Seal</span>
+                <span class="infra-val">Postgres Dump + SHA-256 Checksum</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Remote Git Vault</span>
+                <span class="infra-val">tradister-allonssy-bacakups.git</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Local GDrive Startup Sync</span>
+                <span class="infra-val" style="color:#34d399;">Active (Opportunistic on logon)</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Desktop PC Standalone State -->
+            <div class="infra-card" style="border-left: 3px solid #38bdf8;">
+              <div class="infra-card-header">
+                <div>
+                  <div class="infra-card-title" style="color:#38bdf8;">
+                    <span>💻</span> Desktop PC Workstation State
+                  </div>
+                  <div class="infra-card-sub">Tailscale Mesh Gateway • Stateless</div>
+                </div>
+                <span class="freq-badge freq-always">100% SAFE</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Mesh Node Name</span>
+                <span class="infra-val" style="color:#38bdf8;">home-desktop-pc</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Tailscale IP</span>
+                <span class="infra-val">100.96.64.18</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Remote Desktop (RDP)</span>
+                <span class="infra-val">Port 3389 (Available when PC on)</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Port 8085 Web Server</span>
+                <span class="infra-val" style="color:#f87171;">Terminated / Closed</span>
+              </div>
+              <div class="infra-item">
+                <span class="infra-label">Power State Policy</span>
+                <span class="infra-val" style="color:#34d399;">Safe to Shut Down / Sleep anytime</span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -1776,19 +2299,46 @@
 
     function switchRightView(viewId) {
       document.querySelectorAll('.rtab-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('btn-' + viewId).classList.add('active');
+      const activeBtn = document.getElementById('btn-' + viewId);
+      if (activeBtn) activeBtn.classList.add('active');
 
-      if (viewId === 'inspect') {
-        document.getElementById('view-inspect').style.display = 'block';
-        document.getElementById('view-table').style.display = 'none';
-      } else {
-        document.getElementById('view-inspect').style.display = 'none';
-        document.getElementById('view-table').style.display = 'block';
+      // Sync top navigation bar buttons
+      document.querySelectorAll('.top-nav-btn').forEach(btn => {
+        btn.style.background = 'transparent';
+        btn.style.color = '#94a3b8';
+        btn.style.borderColor = 'transparent';
+      });
+      const topBtn = document.getElementById('topnav-' + viewId);
+      if (topBtn) {
+        if (viewId === 'infra') {
+          topBtn.style.background = 'rgba(16,185,129,0.25)';
+          topBtn.style.color = '#34d399';
+          topBtn.style.borderColor = 'rgba(16,185,129,0.5)';
+        } else {
+          topBtn.style.background = 'rgba(56,189,248,0.15)';
+          topBtn.style.color = '#38bdf8';
+          topBtn.style.borderColor = 'rgba(56,189,248,0.3)';
+        }
       }
+
+      if (viewId === 'infra') {
+        document.querySelectorAll('.project-tile').forEach(tile => tile.classList.remove('active'));
+        const infraTile = document.querySelector('.tile-infra');
+        if (infraTile) infraTile.classList.add('active');
+      }
+
+      document.getElementById('view-inspect').style.display = (viewId === 'inspect') ? 'block' : 'none';
+      document.getElementById('view-table').style.display = (viewId === 'table') ? 'block' : 'none';
+      const infraView = document.getElementById('view-infra');
+      if (infraView) infraView.style.display = (viewId === 'infra') ? 'block' : 'none';
     }
 
-    // Initialize with Tradister FinOps
-    renderDetail('tradister');
+    // Initialize with URL hash check (e.g. #infra)
+    if (window.location.hash === '#infra') {
+      switchRightView('infra');
+    } else {
+      renderDetail('tradister');
+    }
   </script>
 
 </body>
