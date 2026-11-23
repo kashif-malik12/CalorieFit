@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Super Eye">
   <meta name="theme-color" content="#090d16">
-  <title>Super Eye | Real Stats & Marketing Snapshot</title>
+  <title>Super Eye | Real Stats & Marketing Radar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -15,19 +15,21 @@
     :root {
       --bg: #090d16;
       --card-bg: #111827;
-      --card-border: #1f293d;
-      --card-hover: #162035;
+      --card-border: #1e293b;
+      --card-hover: #172338;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-sub: #64748b;
       --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.15);
+      --accent-glow: rgba(56, 189, 248, 0.12);
       --green: #10b981;
-      --green-glow: rgba(16, 185, 129, 0.15);
+      --green-glow: rgba(16, 185, 129, 0.12);
       --amber: #f59e0b;
-      --amber-glow: rgba(245, 158, 11, 0.15);
+      --amber-glow: rgba(245, 158, 11, 0.12);
       --purple: #a855f7;
-      --purple-glow: rgba(168, 85, 247, 0.15);
+      --purple-glow: rgba(168, 85, 247, 0.12);
+      --pink: #ec4899;
+      --pink-glow: rgba(236, 72, 153, 0.12);
       --red: #ef4444;
     }
 
@@ -37,23 +39,23 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text-main);
-      padding: 16px 14px 60px 14px;
-      line-height: 1.45;
+      padding: 14px 12px 60px 12px;
+      line-height: 1.4;
       max-width: 680px;
       margin: 0 auto;
     }
 
     /* Header */
     .header {
-      padding: 12px 4px 18px 4px;
+      padding: 8px 4px 14px 4px;
       border-bottom: 1px solid var(--card-border);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .badge-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .status-pill {
       display: inline-flex;
@@ -62,11 +64,11 @@
       background: var(--accent-glow);
       border: 1px solid rgba(56, 189, 248, 0.3);
       color: var(--accent);
-      padding: 3px 8px;
+      padding: 2px 8px;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
     .pulse-dot {
@@ -77,52 +79,45 @@
       box-shadow: 0 0 8px var(--green);
     }
     .sync-date {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-sub);
       font-family: 'JetBrains Mono', monospace;
     }
     h1 {
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.025em;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .tagline {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
     /* Executive KPI Grid */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 22px;
+      gap: 8px;
+      margin-bottom: 16px;
     }
     .kpi-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 12px 14px;
+      border-radius: 12px;
+      padding: 10px 12px;
       position: relative;
-      overflow: hidden;
     }
-    .kpi-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-    .kpi-won::before { background: var(--amber); }
-    .kpi-pipeline::before { background: var(--accent); }
-    .kpi-users::before { background: var(--green); }
-    .kpi-clicks::before { background: var(--purple); }
+    .kpi-won { border-left: 3px solid var(--amber); }
+    .kpi-pipeline { border-left: 3px solid var(--accent); }
+    .kpi-users { border-left: 3px solid var(--green); }
+    .kpi-clicks { border-left: 3px solid var(--purple); }
     
     .kpi-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -132,21 +127,50 @@
       align-items: center;
     }
     .kpi-val {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
-      margin: 4px 0 2px 0;
+      margin: 3px 0 1px 0;
       color: var(--text-main);
     }
     .kpi-note {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-sub);
-      line-height: 1.3;
+      line-height: 1.25;
+    }
+
+    /* Interactive Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      border-color: var(--accent);
     }
 
     /* Section Headers */
     .section-title {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -154,7 +178,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin: 22px 4px 10px 4px;
+      margin: 18px 2px 10px 2px;
     }
     .section-title::after {
       content: '';
@@ -168,170 +192,180 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
-      transition: border-color 0.15s ease;
-    }
-    .proj-card:hover {
-      border-color: #2e3e5c;
+      padding: 13px;
+      margin-bottom: 14px;
     }
     .proj-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
     }
     .proj-title {
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .proj-sub {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       color: var(--text-sub);
-      margin-top: 1px;
+      margin-top: 2px;
     }
     .badge {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 700;
       padding: 3px 7px;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
     }
     .badge-live { background: var(--green-glow); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-outbound { background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-pipeline { background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
     .badge-pilot { background: var(--purple-glow); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
 
-    /* Stat Rows inside card */
-    .stat-row {
+    /* Snapshot Stat Strip */
+    .stat-strip {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: rgba(255, 255, 255, 0.02);
+      grid-template-columns: repeat(4, 1fr);
+      background: rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(255, 255, 255, 0.04);
       border-radius: 8px;
-      padding: 8px 10px;
-      gap: 8px;
-      margin-bottom: 10px;
+      padding: 7px 8px;
+      gap: 6px;
+      margin-bottom: 12px;
     }
-    .stat-col {
+    .stat-cell {
       display: flex;
       flex-direction: column;
     }
-    .stat-col-label {
-      font-size: 0.65rem;
+    .stat-label {
+      font-size: 0.6rem;
       color: var(--text-sub);
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
-    .stat-col-val {
-      font-size: 0.88rem;
+    .stat-val {
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-main);
       font-family: 'JetBrains Mono', monospace;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
-    .proj-bullet {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+    /* Marketing Campaign Box */
+    .mktg-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+    .mktg-top {
       display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      margin-top: 5px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 4px;
     }
-    .proj-bullet span.icon {
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-    .proj-links {
+    .mktg-platform {
       display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--card-border);
+      align-items: center;
+      gap: 5px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-main);
     }
-    .proj-link-btn {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--accent);
-      text-decoration: none;
-      background: var(--accent-glow);
-      padding: 3px 8px;
-      border-radius: 6px;
+    .mktg-cadence {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-    }
-
-    /* Summarized Marketing Plan Box */
-    .mktg-plan-card {
-      background: linear-gradient(145deg, #111827 0%, #0d1525 100%);
-      border: 1px solid #233352;
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-    .mktg-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .mktg-title {
-      font-size: 0.92rem;
-      font-weight: 800;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .mktg-pillar {
-      background: rgba(255, 255, 255, 0.03);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-      padding: 8px 10px;
-      margin-bottom: 8px;
-    }
-    .mktg-pillar.p2 { border-left-color: var(--green); }
-    .mktg-pillar.p3 { border-left-color: var(--purple); }
-    
-    .pillar-name {
-      font-size: 0.78rem;
+      font-size: 0.62rem;
       font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      justify-content: space-between;
-    }
-    .pillar-tag {
-      font-size: 0.65rem;
-      color: var(--text-sub);
-      font-weight: 600;
-    }
-    .pillar-desc {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-    .pillar-target {
-      font-size: 0.7rem;
-      color: var(--accent);
       font-family: 'JetBrains Mono', monospace;
-      margin-top: 3px;
-      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .cadence-auto { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .cadence-manual { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .cadence-aso { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+    /* Content Format Badges */
+    .fmt-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+    }
+    .fmt-email { background: #3b82f6; color: #fff; }
+    .fmt-post { background: #8b5cf6; color: #fff; }
+    .fmt-video { background: #ec4899; color: #fff; }
+    .fmt-aso { background: #059669; color: #fff; }
+    .fmt-qr { background: #d97706; color: #fff; }
+    .fmt-audio { background: #0284c7; color: #fff; }
+
+    .mktg-hook {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      margin: 4px 0 6px 0;
+      line-height: 1.35;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 6px 8px;
+      border-radius: 6px;
+      border-left: 2px solid var(--accent);
+    }
+    .mktg-hook.p-green { border-left-color: var(--green); }
+    .mktg-hook.p-pink { border-left-color: var(--pink); }
+    .mktg-hook.p-purple { border-left-color: var(--purple); }
+
+    .mktg-exact-state {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .mktg-exact-state strong {
+      color: var(--text-muted);
     }
 
-    /* Mobile Quick Action Footer */
-    .footer-bar {
-      margin-top: 24px;
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--card-border);
+      font-size: 0.72rem;
+    }
+    .card-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .footer {
       text-align: center;
+      margin-top: 24px;
       padding-top: 14px;
       border-top: 1px solid var(--card-border);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-sub);
     }
   </style>
@@ -345,10 +379,10 @@
         <span class="pulse-dot"></span>
         <span>SUPER EYE PULSE</span>
       </div>
-      <div class="sync-date">NOV 2026 • LIVE RADAR</div>
+      <div class="sync-date">NOV 2026 • MARKETING RADAR</div>
     </div>
     <h1>👁️ Super Eye</h1>
-    <p class="tagline">Real Stats, Active Users & Marketing Snapshot (Single Page)</p>
+    <p class="tagline">Real Stats & Active Marketing Plan for Every Project</p>
   </div>
 
   <!-- Real Stats Snapshot Grid -->
@@ -375,190 +409,447 @@
     </div>
   </div>
 
-  <!-- Summarized Actual Marketing Plan -->
-  <div class="section-title">Actual Marketing Plan (Summary)</div>
-  <div class="mktg-plan-card">
-    <div class="mktg-header">
-      <span class="mktg-title">🎯 3-Pillar Execution Roadmap</span>
-      <span style="font-size: 0.68rem; color: var(--text-sub); font-family: 'JetBrains Mono';">DAILY CADENCE</span>
-    </div>
-
-    <!-- Pillar 1 -->
-    <div class="mktg-pillar">
-      <div class="pillar-name">
-        <span>1. Tradister B2B Cold Outreach (Resend + Waalaxy)</span>
-        <span class="pillar-tag">B2B Cloud SaaS</span>
-      </div>
-      <div class="pillar-desc">Target 62 Paris & Essonne PMEs (DSI / CFO) with 15-min screen-share M365 audit (audit.tradister.com). Zero password required, exposes €3k-€8k/yr wasted licenses.</div>
-      <div class="pillar-target">Target: 20 emails/day &rarr; 10 audits/mo &rarr; 3 converted MSP contracts (€2,850/mo MRR).</div>
-    </div>
-
-    <!-- Pillar 2 -->
-    <div class="mktg-pillar p2">
-      <div class="pillar-name">
-        <span>2. CalorieFit Organic Growth (Play Store ASO)</span>
-        <span class="pillar-tag">B2C Digital Health</span>
-      </div>
-      <div class="pillar-desc">7 localized languages + organic Reddit threads (r/loseit, r/intermittentfasting). Core pitch: 100% offline private calorie tracker (0 subscriptions, 0 cloud logins).</div>
-      <div class="pillar-target">Target: 50 weekly downloads &rarr; 1,000 MAU &rarr; Pro upgrade in-app monetization.</div>
-    </div>
-
-    <!-- Pillar 3 -->
-    <div class="mktg-pillar p3">
-      <div class="pillar-name">
-        <span>3. Allonssy Direct Merchant Onboarding</span>
-        <span class="pillar-tag">Hyperlocal Marketplace</span>
-      </div>
-      <div class="pillar-desc">Field onboarding of 150 local trade & food pros in Ris-Orangis / Grigny (91130). 0% platform fee alternative to UberEats/Deliveroo with QR stickers on storefronts.</div>
-      <div class="pillar-target">Target: 25 active ordering restaurants &rarr; 500 local residential active users.</div>
-    </div>
+  <!-- Quick Filter Pills -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterVentures('all')">All Projects</button>
+    <button class="filter-btn" onclick="filterVentures('email')">✉️ Emails</button>
+    <button class="filter-btn" onclick="filterVentures('post')">📝 Posts</button>
+    <button class="filter-btn" onclick="filterVentures('video')">🎥 Videos</button>
+    <button class="filter-btn" onclick="filterVentures('aso')">📱 Store & ASO</button>
   </div>
 
-  <!-- Real Project Stats Snapshot -->
-  <div class="section-title">Ventures & Live Traction</div>
+  <div class="section-title">Projects & Current Marketing Matrix</div>
 
-  <!-- Card 1: Tradister FinOps & Cloud -->
-  <div class="proj-card">
+  <!-- ======================================================== -->
+  <!-- PROJECT 1: TRADISTER FINOPS & CLOUD (B2B SaaS) -->
+  <!-- ======================================================== -->
+  <div class="proj-card" data-tags="email post">
     <div class="proj-head">
       <div>
-        <div class="proj-title">Tradister FinOps & Cloud <span>☁️</span></div>
+        <div class="proj-title">1. Tradister FinOps & Cloud <span>☁️</span></div>
         <div class="proj-sub">B2B M365 License Audit & Managed Cloud (Tradister SASU)</div>
       </div>
-      <span class="badge badge-outbound">Pipeline Active</span>
+      <span class="badge badge-pipeline">Pipeline Active</span>
     </div>
-    <div class="stat-row">
-      <div class="stat-col">
-        <span class="stat-col-label">Active Leads</span>
-        <span class="stat-col-val" style="color:var(--accent);">62 Qualified</span>
+
+    <!-- Stats Snapshot -->
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <span class="stat-label">Active Leads</span>
+        <span class="stat-val" style="color:var(--accent);">62 Target</span>
       </div>
-      <div class="stat-col">
-        <span class="stat-col-label">Won Deals</span>
-        <span class="stat-col-val" style="color:var(--amber);">0 (€0 closed)</span>
+      <div class="stat-cell">
+        <span class="stat-label">Pipeline Val</span>
+        <span class="stat-val">€93,894</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Pipeline Value</span>
-        <span class="stat-col-val">€93,894</span>
+      <div class="stat-cell">
+        <span class="stat-label">Outbound CTR</span>
+        <span class="stat-val" style="color:var(--green);">42.3% (11)</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Outbound Engine</span>
-        <span class="stat-col-val" style="color:var(--green);">26 sent / 11 clicks</span>
+      <div class="stat-cell">
+        <span class="stat-label">Won Deals</span>
+        <span class="stat-val" style="color:var(--amber);">0 (€0)</span>
       </div>
     </div>
-    <div class="proj-bullet">
-      <span class="icon">▸</span>
-      <span><strong>Next Step:</strong> Deliver 15-minute screen-share audits on 11 clicked leads to close 1st retainer.</span>
+
+    <!-- Marketing Campaign 1: Email -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-email">✉️ EMAIL</span>
+          <span>Resend API Outreach Engine</span>
+        </div>
+        <span class="mktg-cadence cadence-auto">DAILY AUTO (09:00 CET)</span>
+      </div>
+      <div class="mktg-hook">
+        <strong>Campaign:</strong> 3-Step Cold Inbound Cadence (20 emails/day)<br>
+        <strong>Subject:</strong> <em>"Audit express M365 (sans mot de passe) & support de proximité chez {{company}}"</em><br>
+        <strong>Pitch:</strong> Free 15-min screen-share audit (audit.tradister.com) exposing €3k-€8k/yr in orphan M365 licenses.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> 26 contacts sent, 21 bounced, 11 clicked links, 3 pending. Warmup Phase 2 active.</span>
+      </div>
     </div>
-    <div class="proj-links">
-      <a href="https://audit.tradister.com" target="_blank" class="proj-link-btn">audit.tradister.com ↗</a>
-      <a href="https://plan.tradister.com" target="_blank" class="proj-link-btn">plan.tradister.com ↗</a>
+
+    <!-- Marketing Campaign 2: Post -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-post">📝 POST</span>
+          <span>LinkedIn & Waalaxy Automation</span>
+        </div>
+        <span class="mktg-cadence cadence-auto">DAILY AUTO (BUFFER)</span>
+      </div>
+      <div class="mktg-hook p-purple">
+        <strong>Campaign:</strong> Paris & Essonne DSI/CFO Executive Nurturing<br>
+        <strong>Format:</strong> Daily thought leadership post via Gemini + Buffer API & targeted connection requests.<br>
+        <strong>Hook:</strong> <em>"Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms."</em>
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Waalaxy campaign CSVs generated (FR & EN); automated daily posting to LinkedIn & Twitter active.</span>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span style="color:var(--text-sub);">Next Step: Deliver screen-share audits on 11 clicked leads</span>
+      <a href="https://audit.tradister.com" target="_blank" class="card-link">audit.tradister.com ↗</a>
     </div>
   </div>
 
-  <!-- Card 2: CalorieFit -->
-  <div class="proj-card">
+  <!-- ======================================================== -->
+  <!-- PROJECT 2: CALORIEFIT (B2C Health Mobile) -->
+  <!-- ======================================================== -->
+  <div class="proj-card" data-tags="post video aso">
     <div class="proj-head">
       <div>
-        <div class="proj-title">CalorieFit <span>🥗</span></div>
+        <div class="proj-title">2. CalorieFit <span>🥗</span></div>
         <div class="proj-sub">Local-First Health & Macro Tracker (Flutter Mobile)</div>
       </div>
       <span class="badge badge-live">Play Store Live</span>
     </div>
-    <div class="stat-row">
-      <div class="stat-col">
-        <span class="stat-col-label">Store Status</span>
-        <span class="stat-col-val" style="color:var(--green);">v1.10.1 Live</span>
+
+    <!-- Stats Snapshot -->
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <span class="stat-label">Store Version</span>
+        <span class="stat-val" style="color:var(--green);">v1.10.1</span>
       </div>
-      <div class="stat-col">
-        <span class="stat-col-label">Cloud Cost / User</span>
-        <span class="stat-col-val">$0.00 (Offline)</span>
+      <div class="stat-cell">
+        <span class="stat-label">Cloud Cost</span>
+        <span class="stat-val">$0.00/usr</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Localization</span>
-        <span class="stat-col-val">7 Languages</span>
+      <div class="stat-cell">
+        <span class="stat-label">Languages</span>
+        <span class="stat-val">7 Locales</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Won Revenue</span>
-        <span class="stat-col-val" style="color:var(--amber);">$0 (Free Utility)</span>
+      <div class="stat-cell">
+        <span class="stat-label">Won Revenue</span>
+        <span class="stat-val" style="color:var(--amber);">$0 (Free)</span>
       </div>
     </div>
-    <div class="proj-bullet">
-      <span class="icon">▸</span>
-      <span><strong>Next Step:</strong> Post launch threads on Reddit & submit to Product Hunt to trigger initial 500 downloads.</span>
+
+    <!-- Marketing Campaign 1: Post -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-post">📝 POST</span>
+          <span>Reddit Communities (r/androidapps, r/loseit)</span>
+        </div>
+        <span class="mktg-cadence cadence-manual">WEEKLY MANUAL</span>
+      </div>
+      <div class="mktg-hook p-green">
+        <strong>Campaign:</strong> Dev Launch Self-Post (Compliant Markdown)<br>
+        <strong>Title:</strong> <em>"[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions"</em><br>
+        <strong>Pitch:</strong> Highlighting privacy, no sign-up wall, Health Connect sync, and zero cloud lock-in.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Dispatcher script (<code>daily_email_dispatcher.py</code>) sends 1-click submission links to inbox daily. Ready to trigger.</span>
+      </div>
     </div>
-    <div class="proj-links">
-      <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="proj-link-btn">Google Play Listing ↗</a>
+
+    <!-- Marketing Campaign 2: Video -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-video">🎥 VIDEO</span>
+          <span>TikTok / Reels / YouTube Shorts</span>
+        </div>
+        <span class="mktg-cadence cadence-manual">WEEKLY MANUAL</span>
+      </div>
+      <div class="mktg-hook p-pink">
+        <strong>Campaign:</strong> 35-Second UGC Comparison Script (<code>short_form_video_scripts.md</code>)<br>
+        <strong>Hook:</strong> <em>"Why I deleted MyFitnessPal after 4 years"</em> — visual side-by-side: $80/yr paywall vs. instant free offline scan on CalorieFit.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> 3 short-form scripts fully storyboarded with timestamps and sound tags.</span>
+      </div>
+    </div>
+
+    <!-- Marketing Campaign 3: ASO -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-aso">📱 ASO</span>
+          <span>Google Play Organic Search</span>
+        </div>
+        <span class="mktg-cadence cadence-aso">CONTINUOUS ASO</span>
+      </div>
+      <div class="mktg-hook">
+        <strong>Targeting:</strong> Localized keywords for "Private Calorie Counter", "Compteur de Calories Hors Ligne", "Macro Tracker No Sub" across 7 languages.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Live on Play Store in English, French, Spanish, German, Italian, Portuguese & Arabic.</span>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span style="color:var(--text-sub);">Goal: Hit 1,000 MAU through initial Reddit & Reels push</span>
+      <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="card-link">Play Store Listing ↗</a>
     </div>
   </div>
 
-  <!-- Card 3: Allonssy -->
-  <div class="proj-card">
+  <!-- ======================================================== -->
+  <!-- PROJECT 3: ALLONSSY (Hyperlocal Social & Marketplace) -->
+  <!-- ======================================================== -->
+  <div class="proj-card" data-tags="post video qr">
     <div class="proj-head">
       <div>
-        <div class="proj-title">Allonssy <span>📍</span></div>
-        <div class="proj-sub">Hyperlocal Community Social & Marketplace</div>
+        <div class="proj-title">3. Allonssy <span>📍</span></div>
+        <div class="proj-sub">Hyperlocal Community Social & Marketplace (91130)</div>
       </div>
       <span class="badge badge-pilot">Pilot 91130</span>
     </div>
-    <div class="stat-row">
-      <div class="stat-col">
-        <span class="stat-col-label">Verified Merchants</span>
-        <span class="stat-col-val" style="color:var(--purple);">150+ Pros</span>
+
+    <!-- Stats Snapshot -->
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <span class="stat-label">Merchants</span>
+        <span class="stat-val" style="color:var(--purple);">150+ Pros</span>
       </div>
-      <div class="stat-col">
-        <span class="stat-col-label">Pilot Zone</span>
-        <span class="stat-col-val">91130 (Ris-Orangis)</span>
+      <div class="stat-cell">
+        <span class="stat-label">Build</span>
+        <span class="stat-val" style="color:var(--green);">v1.3.2 Live</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Build Version</span>
-        <span class="stat-col-val" style="color:var(--green);">v1.3.2 Live</span>
+      <div class="stat-cell">
+        <span class="stat-label">Infra Cost</span>
+        <span class="stat-val">€15/mo VPS</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Infra Cost</span>
-        <span class="stat-col-val">€15/mo VPS</span>
+      <div class="stat-cell">
+        <span class="stat-label">Won Subs</span>
+        <span class="stat-val" style="color:var(--amber);">0 (€0)</span>
       </div>
     </div>
-    <div class="proj-bullet">
-      <span class="icon">▸</span>
-      <span><strong>Next Step:</strong> Activate direct ordering for 50 onboarded restaurants and roll out storefront window stickers.</span>
+
+    <!-- Marketing Campaign 1: Post -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-post">📝 POST</span>
+          <span>Facebook Pages & Groups (Essonne 91)</span>
+        </div>
+        <span class="mktg-cadence cadence-auto">DAILY AUTO (08:15 UTC CRON)</span>
+      </div>
+      <div class="mktg-hook p-purple">
+        <strong>Campaign:</strong> Dual-Page Automated Broadcaster (<code>meta_auto_publisher.py</code>)<br>
+        <strong>Page 1:</strong> <em>"Allonssy - Bons Plans 91"</em> (Daily spotlight on 1 restaurant deal or local trade promo).<br>
+        <strong>Page 2:</strong> <em>"Essonne Actu & Débats"</em> (Breaking local municipal news & community discussions).
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Running automated cron on VPS; daily social growth packs dispatched.</span>
+      </div>
+    </div>
+
+    <!-- Marketing Campaign 2: Video -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-video">🎥 VIDEO</span>
+          <span>TikTok & Instagram Reels (9:16 Video)</span>
+        </div>
+        <span class="mktg-cadence cadence-auto">DAILY AUTO (GEN VIDEO)</span>
+      </div>
+      <div class="mktg-hook p-pink">
+        <strong>Campaign:</strong> Daily Automated Video Producer (<code>generate_daily_reel.py</code>)<br>
+        <strong>Outputs:</strong> Generates 2 vertical MP4 reels every morning: <code>reel_bonplan.mp4</code> (Bargain spotlight) & <code>reel_actu.mp4</code> (Grand Paris Sud News).
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Automated pipeline active with Pillow & imageio rendering French editorial cards.</span>
+      </div>
+    </div>
+
+    <!-- Marketing Campaign 3: Street QR -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-qr">🏪 PHYSICAL</span>
+          <span>Storefront Window QR Stickers</span>
+        </div>
+        <span class="mktg-cadence cadence-manual">WEEKLY MANUAL</span>
+      </div>
+      <div class="mktg-hook">
+        <strong>Campaign:</strong> Direct Field Onboarding in Ris-Orangis & Grigny.<br>
+        <strong>Offer:</strong> 0% commission local ordering (vs. 30% UberEats/Deliveroo) with storefront QR window decals.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> 150 merchants pre-seeded in database; field activation in progress for 25 restaurants.</span>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span style="color:var(--text-sub);">Goal: 25 active daily restaurants & 500 local residents</span>
+      <span style="color:var(--accent); font-family:'JetBrains Mono'; font-weight:600;">91130 Pilot</span>
     </div>
   </div>
 
-  <!-- Card 4: eToro Autonomous Agent & Other Assets -->
-  <div class="proj-card">
+  <!-- ======================================================== -->
+  <!-- PROJECT 4: ETORO AUTONOMOUS AGENT (FinTech) -->
+  <!-- ======================================================== -->
+  <div class="proj-card" data-tags="post">
     <div class="proj-head">
       <div>
-        <div class="proj-title">eToro Agent & FinTech <span>📈</span></div>
-        <div class="proj-sub">Quantitative Autonomous Capital Rebalancer</div>
+        <div class="proj-title">4. eToro Autonomous Agent <span>📈</span></div>
+        <div class="proj-sub">Quantitative WealthTech & Systematic Rebalancing</div>
       </div>
       <span class="badge badge-live">Production</span>
     </div>
-    <div class="stat-row">
-      <div class="stat-col">
-        <span class="stat-col-label">Managed Capital</span>
-        <span class="stat-col-val" style="color:var(--accent);">$100,000</span>
+
+    <!-- Stats Snapshot -->
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <span class="stat-label">Monitored Pool</span>
+        <span class="stat-val" style="color:var(--accent);">$100k</span>
       </div>
-      <div class="stat-col">
-        <span class="stat-col-label">Leverage</span>
-        <span class="stat-col-val">1x (Spot Only)</span>
+      <div class="stat-cell">
+        <span class="stat-label">Leverage</span>
+        <span class="stat-val">1x (Spot)</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Execution</span>
-        <span class="stat-col-val" style="color:var(--green);">24/7 Automated</span>
+      <div class="stat-cell">
+        <span class="stat-label">Execution</span>
+        <span class="stat-val" style="color:var(--green);">24/7 Auto</span>
       </div>
-      <div class="stat-col" style="margin-top:6px;">
-        <span class="stat-col-label">Risk Threshold</span>
-        <span class="stat-col-val">Hard Stop Loss</span>
+      <div class="stat-cell">
+        <span class="stat-label">Human Errors</span>
+        <span class="stat-val" style="color:var(--green);">0 Errors</span>
       </div>
     </div>
-    <div class="proj-bullet">
-      <span class="icon">▸</span>
-      <span><strong>Other Assets:</strong> eSuperMarche (Multi-vendor grocery staging), Curio Kids (100 curated media), Streamer (AI Audio).</span>
+
+    <!-- Marketing Campaign: Post -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-post">📝 POST</span>
+          <span>X (Twitter) & LinkedIn Quant Insights</span>
+        </div>
+        <span class="mktg-cadence cadence-manual">WEEKLY MANUAL</span>
+      </div>
+      <div class="mktg-hook">
+        <strong>Campaign:</strong> Algorithmic Track Record & Transparency Reports<br>
+        <strong>Format:</strong> Weekly performance summary, Sharpe ratio, and rule-based drift balancing case study.<br>
+        <strong>Hook:</strong> <em>"How an autonomous 24/7 agent eliminates emotional panic selling and enforces disciplined DCA."</em>
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Live cloud daemon running with strict stop-losses; establishing 90-day audited public track record.</span>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span style="color:var(--text-sub);">Goal: Build verified track record before opening capital syndication</span>
+      <span style="color:var(--green); font-family:'JetBrains Mono'; font-weight:600;">24/7 Cloud</span>
     </div>
   </div>
 
-  <div class="footer-bar">
-    Super Eye Mobile Executive Dashboard • Updated Live from Workspace Repositories
+  <!-- ======================================================== -->
+  <!-- PROJECT 5: STREAMER & CURIO KIDS (AI Audio & Family Media) -->
+  <!-- ======================================================== -->
+  <div class="proj-card" data-tags="video audio">
+    <div class="proj-head">
+      <div>
+        <div class="proj-title">5. Streamer & Curio Kids <span>🎧</span></div>
+        <div class="proj-sub">AI Bilingual Audio Podcasts & Family Safe Media MVP</div>
+      </div>
+      <span class="badge badge-pilot">MVP Active</span>
+    </div>
+
+    <!-- Stats Snapshot -->
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <span class="stat-label">Curio Catalog</span>
+        <span class="stat-val" style="color:var(--accent);">100 Videos</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Test Sessions</span>
+        <span class="stat-val">11 Sessions</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Streamer APK</span>
+        <span class="stat-val" style="color:var(--green);">v1.0.0</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Target Sub</span>
+        <span class="stat-val">$4.99/mo</span>
+      </div>
+    </div>
+
+    <!-- Streamer Campaign: Audio -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-audio">🎙️ AUDIO</span>
+          <span>Spotify & Apple Podcasts RSS Feed</span>
+        </div>
+        <span class="mktg-cadence cadence-auto">DAILY AUTO (AI TTS)</span>
+      </div>
+      <div class="mktg-hook">
+        <strong>Campaign:</strong> Daily Bilingual Fitness & Language Coach (Streamer)<br>
+        <strong>Format:</strong> Automated daily 10-min bilingual workout audio generated via Gemini LLM + TTS engine.
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> Audio production pipeline (<code>audio_producer.py</code>) fully functional; RSS feed deployed.</span>
+      </div>
+    </div>
+
+    <!-- Curio Kids Campaign: Video -->
+    <div class="mktg-box">
+      <div class="mktg-top">
+        <div class="mktg-platform">
+          <span class="fmt-badge fmt-video">🎥 VIDEO</span>
+          <span>Parental Instagram & YouTube Shorts</span>
+        </div>
+        <span class="mktg-cadence cadence-manual">WEEKLY MANUAL</span>
+      </div>
+      <div class="mktg-hook p-pink">
+        <strong>Campaign:</strong> "Safe Screen Time Without Toxic Feeds" (Curio Kids)<br>
+        <strong>Pitch:</strong> Curated 100% ad-free educational entertainment reels with parental PIN lock ($4.99/mo).
+      </div>
+      <div class="mktg-exact-state">
+        <span>📍</span>
+        <span><strong>Exact Status:</strong> 100 videos indexed; testing parental engagement on initial PIN profile.</span>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span style="color:var(--text-sub);">Other Asset: eSuperMarche (Multi-vendor grocery marketplace staging)</span>
+      <span style="color:var(--purple); font-family:'JetBrains Mono'; font-weight:600;">Media Fleet</span>
+    </div>
   </div>
+
+  <div class="footer">
+    Super Eye Mobile Executive Dashboard • Live Marketing & Operations Radar
+  </div>
+
+  <script>
+    function filterVentures(category) {
+      // Update buttons
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Filter cards
+      const cards = document.querySelectorAll('.proj-card');
+      cards.forEach(card => {
+        if (category === 'all') {
+          card.style.display = 'block';
+        } else {
+          const tags = card.getAttribute('data-tags') || '';
+          if (tags.includes(category)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>
