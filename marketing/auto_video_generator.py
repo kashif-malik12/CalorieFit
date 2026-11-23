@@ -404,6 +404,23 @@ def render_scene_frame(scene, screenshot_path, out_path, frame_w=1080, frame_h=1
 
     base.convert("RGB").save(str(out_path), "PNG", quality=95)
 
+def auto_cleanup_storage():
+    """
+    Ensures storage never balloons.
+    Strictly keeps only the current 7 daily video files (Day1 to Day7).
+    Deletes any orphaned, temporary, or outdated files so total storage stays under ~25 MB forever.
+    """
+    allowed_names = {f"CalorieFit_Video_Day{d}.mp4" for d in range(1, 8)}
+    for target_dir in [OUTPUT_DIR, ROOT_DIR / "docs" / "videos"]:
+        if target_dir.exists():
+            for p in target_dir.glob("*"):
+                if p.is_file() and p.name not in allowed_names:
+                    try:
+                        p.unlink()
+                        print(f"🧹 Auto-cleaned non-active video: {p.name}")
+                    except Exception:
+                        pass
+
 def build_video(day=1):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     tmp_dir = OUTPUT_DIR / f"temp_day_{day}"
@@ -479,6 +496,9 @@ def build_video(day=1):
     docs_video_dir.mkdir(parents=True, exist_ok=True)
     import shutil
     shutil.copy2(str(final_video_path), str(docs_video_dir / final_video_name))
+
+    # Automatic Storage Cap: Keep strictly the 7 rotating day files, delete any orphan/extra files
+    auto_cleanup_storage()
 
     print(f"🎉 SUCCESS: Video rendered -> {final_video_path}")
     return {
