@@ -6,32 +6,44 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Super Eye">
-  <meta name="theme-color" content="#090d16">
+  <meta name="theme-color" content="#070b12">
   <title>Super Eye | CEO Executive Ventures & Marketing Radar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #070b12;
       --bg-panel: #0d131f;
       --card-bg: #111827;
       --card-border: #1e293b;
-      --card-hover: #182238;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-sub: #64748b;
-      --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.12);
-      --green: #10b981;
-      --green-glow: rgba(16, 185, 129, 0.12);
-      --amber: #f59e0b;
-      --amber-glow: rgba(245, 158, 11, 0.12);
-      --purple: #a855f7;
-      --purple-glow: rgba(168, 85, 247, 0.12);
-      --pink: #ec4899;
-      --pink-glow: rgba(236, 72, 153, 0.12);
-      --blue: #3b82f6;
+      
+      /* Distinct Project Brand Colors */
+      --color-tradister: #38bdf8;
+      --color-tradister-glow: rgba(56, 189, 248, 0.16);
+      
+      --color-caloriefit: #10b981;
+      --color-caloriefit-glow: rgba(16, 185, 129, 0.16);
+      
+      --color-allonssy: #a855f7;
+      --color-allonssy-glow: rgba(168, 85, 247, 0.16);
+      
+      --color-etoro: #f59e0b;
+      --color-etoro-glow: rgba(245, 158, 11, 0.16);
+      
+      --color-streamer: #ec4899;
+      --color-streamer-glow: rgba(236, 72, 153, 0.16);
+      
+      --color-esuper: #6366f1;
+      --color-esuper-glow: rgba(99, 102, 241, 0.16);
+
+      --status-active: #10b981;
+      --status-ready: #94a3b8;
+      --status-staging: #f59e0b;
+      --status-inactive: #ef4444;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,30 +52,30 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text-main);
-      padding: 20px 24px 60px 24px;
+      padding: 16px 20px 60px 20px;
       line-height: 1.45;
       min-height: 100vh;
       width: 100%;
     }
 
     .main-wrapper {
-      max-width: 1440px;
+      max-width: 1560px;
       margin: 0 auto;
     }
 
-    /* Top Executive Header */
+    /* Executive Top Bar */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
-      padding-bottom: 18px;
+      gap: 14px;
+      padding-bottom: 16px;
       border-bottom: 1px solid var(--card-border);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .header-left h1 {
-      font-size: 1.7rem;
+      font-size: 1.65rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       display: flex;
@@ -71,25 +83,25 @@
       gap: 10px;
     }
     .header-left p {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
     .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-    .status-pill {
+    .live-pulse {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--accent-glow);
+      background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.3);
-      color: var(--accent);
-      padding: 4px 10px;
+      color: #38bdf8;
+      padding: 3px 10px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -97,22 +109,17 @@
     .pulse-dot {
       width: 7px;
       height: 7px;
-      background: var(--green);
+      background: #10b981;
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--green);
-    }
-    .sync-date {
-      font-size: 0.74rem;
-      color: var(--text-sub);
-      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 8px #10b981;
     }
 
-    /* Top KPI Strip */
+    /* Top KPI Row */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 22px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
     @media (max-width: 900px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -124,16 +131,16 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       position: relative;
     }
-    .kpi-won { border-left: 3px solid var(--amber); }
-    .kpi-pipeline { border-left: 3px solid var(--accent); }
-    .kpi-users { border-left: 3px solid var(--green); }
-    .kpi-clicks { border-left: 3px solid var(--purple); }
+    .kpi-won { border-left: 3px solid #f59e0b; }
+    .kpi-pipeline { border-left: 3px solid #38bdf8; }
+    .kpi-users { border-left: 3px solid #10b981; }
+    .kpi-clicks { border-left: 3px solid #a855f7; }
     
     .kpi-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -143,318 +150,344 @@
       align-items: center;
     }
     .kpi-val {
-      font-size: 1.55rem;
+      font-size: 1.45rem;
       font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
-      margin: 4px 0 2px 0;
+      margin: 3px 0 1px 0;
       color: var(--text-main);
     }
     .kpi-note {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-sub);
-      line-height: 1.3;
-    }
-
-    /* Main Navigation Tabs */
-    .tab-nav {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 22px;
-      border-bottom: 1px solid var(--card-border);
-      padding-bottom: 8px;
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s ease;
-    }
-    .tab-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.04);
-    }
-    .tab-btn.active {
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
-    .tab-count {
-      font-size: 0.68rem;
-      font-family: 'JetBrains Mono', monospace;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
-
-    /* Tab Contents */
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
     }
 
     /* =================================================== */
-    /* TAB 1: FRONT PAGE COMPACT CARDS GRID */
+    /* MASTER-DETAIL SPLIT LAYOUT (LEFT TILES + RIGHT CONTENT) */
     /* =================================================== */
-    .cards-grid {
+    .dashboard-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 16px;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+      align-items: start;
     }
-    @media (max-width: 600px) {
-      .cards-grid { grid-template-columns: 1fr; }
+    @media (max-width: 1050px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
     }
-    .compact-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px;
+
+    /* =================================================== */
+    /* LEFT SIDE: INDIVIDUAL PROJECT TILES */
+    /* =================================================== */
+    .left-tiles-panel {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      gap: 10px;
     }
-    .compact-card:hover {
-      border-color: #2b3b55;
-      transform: translateY(-2px);
-    }
-    .card-top {
+    .tiles-header {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      align-items: center;
     }
-    .card-title {
-      font-size: 1.12rem;
+
+    .project-tile {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .project-tile:hover {
+      transform: translateX(3px);
+      border-color: #334155;
+    }
+    .project-tile.active {
+      background: #141d2f;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Color Bars & Themes per Project */
+    .tile-tradister { border-left: 4px solid var(--color-tradister); }
+    .tile-tradister.active { border-color: var(--color-tradister); background: linear-gradient(135deg, rgba(56,189,248,0.1) 0%, #111827 100%); }
+    .tile-tradister .tile-name { color: var(--color-tradister); }
+
+    .tile-caloriefit { border-left: 4px solid var(--color-caloriefit); }
+    .tile-caloriefit.active { border-color: var(--color-caloriefit); background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, #111827 100%); }
+    .tile-caloriefit .tile-name { color: var(--color-caloriefit); }
+
+    .tile-allonssy { border-left: 4px solid var(--color-allonssy); }
+    .tile-allonssy.active { border-color: var(--color-allonssy); background: linear-gradient(135deg, rgba(168,85,247,0.1) 0%, #111827 100%); }
+    .tile-allonssy .tile-name { color: var(--color-allonssy); }
+
+    .tile-etoro { border-left: 4px solid var(--color-etoro); }
+    .tile-etoro.active { border-color: var(--color-etoro); background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, #111827 100%); }
+    .tile-etoro .tile-name { color: var(--color-etoro); }
+
+    .tile-streamer { border-left: 4px solid var(--color-streamer); }
+    .tile-streamer.active { border-color: var(--color-streamer); background: linear-gradient(135deg, rgba(236,72,153,0.1) 0%, #111827 100%); }
+    .tile-streamer .tile-name { color: var(--color-streamer); }
+
+    .tile-esuper { border-left: 4px solid var(--color-esuper); }
+    .tile-esuper.active { border-color: var(--color-esuper); background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, #111827 100%); }
+    .tile-esuper .tile-name { color: var(--color-esuper); }
+
+    .tile-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tile-name {
+      font-size: 0.95rem;
       font-weight: 800;
-      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .card-category {
-      font-size: 0.72rem;
+    .tile-sub {
+      font-size: 0.68rem;
+      color: var(--text-sub);
+    }
+    .tile-kpis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .tile-platforms-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    /* Platform Mini Status Pill */
+    .plat-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.63rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 600;
+    }
+    .p-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+    .dot-active { background: #10b981; box-shadow: 0 0 5px #10b981; }
+    .dot-ready { background: #94a3b8; }
+    .dot-staging { background: #f59e0b; }
+    .dot-inactive { background: #ef4444; }
+
+    /* =================================================== */
+    /* RIGHT SIDE: INTERACTIVE MAIN PANEL */
+    /* =================================================== */
+    .right-content-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Right Navigation Tabs */
+    .right-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .rtab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .rtab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .rtab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    /* Selected Venture Detailed Hero Card */
+    .venture-detail-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .vd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 16px;
+    }
+    .vd-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .vd-sub {
+      font-size: 0.78rem;
       color: var(--text-sub);
       margin-top: 2px;
     }
-    .badge {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-family: 'JetBrains Mono', monospace;
-      white-space: nowrap;
-    }
-    .badge-live { background: var(--green-glow); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-pipeline { background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
-    .badge-pilot { background: var(--purple-glow); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.3); }
-
-    /* Compact Metrics Strip */
-    .metrics-strip {
+    .vd-stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background: rgba(0, 0, 0, 0.25);
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 14px;
+      border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 8px;
-      padding: 8px 10px;
-      gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
-    .metric-item {
+    @media (max-width: 600px) {
+      .vd-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .vd-stat-item {
       display: flex;
       flex-direction: column;
     }
-    .metric-label {
+    .vd-stat-lbl {
       font-size: 0.62rem;
       color: var(--text-sub);
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.04em;
     }
-    .metric-val {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-main);
+    .vd-stat-num {
+      font-size: 1.05rem;
+      font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
       margin-top: 2px;
     }
 
-    /* Compact Marketing Summary Pill */
-    .mktg-summary-row {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin-bottom: 12px;
-      font-size: 0.74rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .mktg-summary-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--text-muted);
+    /* Section Subhead */
+    .subhead {
+      font-size: 0.8rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .mktg-summary-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 2px;
-    }
-    .tag {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .tag-email { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-    .tag-post { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .tag-video { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
-    .tag-aso { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .tag-qr { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-
-    .card-action {
-      font-size: 0.74rem;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      line-height: 1.35;
-    }
-    .card-action strong {
-      color: var(--text-main);
-    }
-
-    .card-bottom {
+      margin: 16px 0 10px 0;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding-top: 10px;
-      border-top: 1px dashed var(--card-border);
-      font-size: 0.74rem;
-    }
-    .card-link {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
+      gap: 6px;
     }
 
-    /* =================================================== */
-    /* TAB 2: SEPARATE CLEAR MARKETING TABLE */
-    /* =================================================== */
-    .table-container {
+    /* Dedicated Marketing Table */
+    .table-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       overflow-x: auto;
-      margin-bottom: 24px;
     }
-    .table-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .table-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .filter-pills {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .filter-pill {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .filter-pill.active {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      border-color: var(--accent);
-    }
-
     .mktg-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       text-align: left;
     }
     .mktg-table th {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.45);
       color: var(--text-muted);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--card-border);
       white-space: nowrap;
     }
     .mktg-table td {
-      padding: 14px;
+      padding: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       vertical-align: top;
-      color: var(--text-main);
-      line-height: 1.4;
+      line-height: 1.35;
     }
     .mktg-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
     }
-    .col-proj { font-weight: 700; white-space: nowrap; }
-    .col-platform { font-weight: 600; color: var(--accent); white-space: nowrap; }
-    .col-cadence { white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
-    
-    .cadence-badge {
-      display: inline-block;
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .sb-active { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .sb-ready { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+    .sb-staging { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .sb-inactive { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Handles & Delivery */
+    .handle-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
       padding: 2px 6px;
       border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.65rem;
+      display: inline-block;
+      border: 1px solid rgba(56, 189, 248, 0.2);
     }
-    .cb-auto { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .cb-manual { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .cb-aso { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .delivery-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .dp-direct { background: #b45309; color: #fef3c7; }
+    .dp-interm { background: #0369a1; color: #e0f2fe; }
 
-    .fmt-pill {
+    .fmt-badge {
       font-size: 0.65rem;
       font-weight: 800;
       padding: 2px 6px;
@@ -462,28 +495,21 @@
       display: inline-block;
       white-space: nowrap;
     }
-    .fp-email { background: #3b82f6; color: #fff; }
-    .fp-post { background: #8b5cf6; color: #fff; }
-    .fp-video { background: #ec4899; color: #fff; }
-    .fp-aso { background: #059669; color: #fff; }
-    .fp-qr { background: #d97706; color: #fff; }
-    .fp-audio { background: #0284c7; color: #fff; }
+    .fb-email { background: #2563eb; color: #fff; }
+    .fb-post { background: #7c3aed; color: #fff; }
+    .fb-video { background: #db2777; color: #fff; }
+    .fb-aso { background: #059669; color: #fff; }
+    .fb-qr { background: #d97706; color: #fff; }
+    .fb-audio { background: #0284c7; color: #fff; }
 
-    .table-hook {
+    .hook-box {
       background: rgba(0, 0, 0, 0.25);
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-radius: 6px;
-      font-size: 0.75rem;
-      margin-top: 4px;
-      border-left: 2px solid var(--accent);
+      font-size: 0.73rem;
+      margin-top: 3px;
+      border-left: 2px solid #38bdf8;
       color: #cbd5e1;
-    }
-    .table-status {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-    }
-    .table-status strong {
-      color: var(--text-main);
     }
 
     .footer {
@@ -504,14 +530,13 @@
     <div class="header">
       <div class="header-left">
         <h1>👁️ Super Eye</h1>
-        <p>Portfolio Overview & Comprehensive Marketing Matrix (Full Page)</p>
+        <p>Executive Ventures Radar: Left Project Tiles & Marketing Operations Matrix</p>
       </div>
       <div class="header-right">
-        <div class="status-pill">
+        <div class="live-pulse">
           <span class="pulse-dot"></span>
           <span>SUPER EYE LIVE</span>
         </div>
-        <div class="sync-date">NOV 2026 • RADAR</div>
       </div>
     </div>
 
@@ -539,464 +564,445 @@
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('overview')">
-        <span>📊 Portfolio Overview</span>
-        <span class="tab-count">5 Ventures</span>
-      </button>
-      <button class="tab-btn" onclick="switchTab('marketing')">
-        <span>🎯 Marketing Matrix (Table)</span>
-        <span class="tab-count">9 Campaigns</span>
-      </button>
-    </div>
+    <!-- =================================================== -->
+    <!-- MASTER-DETAIL SPLIT LAYOUT -->
+    <!-- =================================================== -->
+    <div class="dashboard-layout">
 
-    <!-- ======================================================== -->
-    <!-- TAB 1: FRONT PAGE COMPACT CARDS -->
-    <!-- ======================================================== -->
-    <div id="tab-overview" class="tab-content active">
-      <div class="cards-grid">
+      <!-- =================================================== -->
+      <!-- LEFT SIDE: ONE PROJECT AS ONE TILE (COLOR-CODED) -->
+      <!-- =================================================== -->
+      <div class="left-tiles-panel">
+        <div class="tiles-header">
+          <span>Ventures (Color Coded)</span>
+          <span style="font-size:0.65rem; color:var(--text-sub); font-family:'JetBrains Mono';">SELECT TO INSPECT</span>
+        </div>
 
-        <!-- CARD 1: TRADISTER FINOPS & CLOUD -->
-        <div class="compact-card">
-          <div>
-            <div class="card-top">
-              <div>
-                <div class="card-title">1. Tradister FinOps & Cloud <span>☁️</span></div>
-                <div class="card-category">B2B M365 License Audit & Managed Cloud (Tradister SASU)</div>
-              </div>
-              <span class="badge badge-pipeline">Pipeline Active</span>
-            </div>
-            <div class="metrics-strip">
-              <div class="metric-item">
-                <span class="metric-label">Pipeline Val</span>
-                <span class="metric-val" style="color:var(--accent);">€93,894</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Target Leads</span>
-                <span class="metric-val">62 Qualified</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Won Deals</span>
-                <span class="metric-val" style="color:var(--amber);">0 (€0)</span>
-              </div>
-            </div>
-            <div class="mktg-summary-row">
-              <div class="mktg-summary-head">
-                <span>Active Marketing Channels</span>
-                <span style="color:var(--green); font-family:'JetBrains Mono';">DAILY AUTO</span>
-              </div>
-              <div class="mktg-summary-tags">
-                <span class="tag tag-email">✉️ EMAIL (Resend 20/day)</span>
-                <span class="tag tag-post">📝 POST (LinkedIn / Buffer)</span>
-              </div>
-            </div>
-            <div class="card-action">
-              <strong>Next Milestone:</strong> Deliver 15-min screen-share audits on 11 clicked leads to close 1st retainer contract.
-            </div>
+        <!-- TILE 1: TRADISTER FINOPS -->
+        <div class="project-tile tile-tradister active" onclick="selectProject('tradister')">
+          <div class="tile-head">
+            <span class="tile-name">1. Tradister FinOps <span>☁️</span></span>
+            <span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span>
           </div>
-          <div class="card-bottom">
-            <span style="color:var(--text-sub); font-size:0.7rem;">Outbound: 26 sent • 11 clicks (42.3%)</span>
-            <a href="https://audit.tradister.com" target="_blank" class="card-link">audit.tradister.com ↗</a>
+          <div class="tile-sub">B2B M365 Cloud & License FinOps (Tradister SASU)</div>
+          <div class="tile-kpis">
+            <span>Pipeline: <strong style="color:var(--color-tradister);">€93.9k</strong></span>
+            <span>Leads: <strong>62</strong></span>
+            <span>Won: <strong>€0</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Resend Email</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> LinkedIn Post</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> audit.tradister</span>
           </div>
         </div>
 
-        <!-- CARD 2: CALORIEFIT -->
-        <div class="compact-card">
-          <div>
-            <div class="card-top">
-              <div>
-                <div class="card-title">2. CalorieFit <span>🥗</span></div>
-                <div class="card-category">Local-First Macro & Calorie Tracker (Flutter Mobile)</div>
-              </div>
-              <span class="badge badge-live">Play Store Live</span>
-            </div>
-            <div class="metrics-strip">
-              <div class="metric-item">
-                <span class="metric-label">Store Status</span>
-                <span class="metric-val" style="color:var(--green);">v1.10.1 Live</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Languages</span>
-                <span class="metric-val">7 Locales</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Won Revenue</span>
-                <span class="metric-val" style="color:var(--amber);">$0 (Free)</span>
-              </div>
-            </div>
-            <div class="mktg-summary-row">
-              <div class="mktg-summary-head">
-                <span>Active Marketing Channels</span>
-                <span style="color:var(--accent); font-family:'JetBrains Mono';">WEEKLY + ASO</span>
-              </div>
-              <div class="mktg-summary-tags">
-                <span class="tag tag-post">📝 POST (Reddit Dev)</span>
-                <span class="tag tag-video">🎥 VIDEO (Reels UGC)</span>
-                <span class="tag tag-aso">📱 ASO (Google Play)</span>
-              </div>
-            </div>
-            <div class="card-action">
-              <strong>Next Milestone:</strong> Post launch threads on Reddit & submit Product Hunt to drive organic 1,000 MAU.
-            </div>
+        <!-- TILE 2: CALORIEFIT -->
+        <div class="project-tile tile-caloriefit" onclick="selectProject('caloriefit')">
+          <div class="tile-head">
+            <span class="tile-name">2. CalorieFit <span>🥗</span></span>
+            <span class="status-badge sb-active"><span class="p-dot dot-active"></span> LIVE</span>
           </div>
-          <div class="card-bottom">
-            <span style="color:var(--text-sub); font-size:0.7rem;">Cloud Cost: $0.00/user (Local SQLite)</span>
-            <a href="https://play.google.com/store/apps/details?id=com.caloriefit.app" target="_blank" class="card-link">Google Play Store ↗</a>
+          <div class="tile-sub">Local-First Macro & Calorie Tracker (Flutter Mobile)</div>
+          <div class="tile-kpis">
+            <span>Store: <strong style="color:var(--color-caloriefit);">v1.10.1</strong></span>
+            <span>Locales: <strong>7</strong></span>
+            <span>Won: <strong>$0 Free</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Google Play</span>
+            <span class="plat-mini" style="border-color:rgba(16,185,129,0.4);"><span class="p-dot dot-active"></span> 📸 Instagram</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Reddit Post</span>
+            <span class="plat-mini"><span class="p-dot dot-ready"></span> TikTok UGC</span>
           </div>
         </div>
 
-        <!-- CARD 3: ALLONSSY -->
-        <div class="compact-card">
-          <div>
-            <div class="card-top">
-              <div>
-                <div class="card-title">3. Allonssy <span>📍</span></div>
-                <div class="card-category">Hyperlocal Community Social & Marketplace (91130)</div>
-              </div>
-              <span class="badge badge-pilot">Pilot 91130</span>
-            </div>
-            <div class="metrics-strip">
-              <div class="metric-item">
-                <span class="metric-label">Merchants</span>
-                <span class="metric-val" style="color:var(--purple);">150+ Pros</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Mobile Build</span>
-                <span class="metric-val" style="color:var(--green);">v1.3.2 Live</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Infra Cost</span>
-                <span class="metric-val">€15/mo VPS</span>
-              </div>
-            </div>
-            <div class="mktg-summary-row">
-              <div class="mktg-summary-head">
-                <span>Active Marketing Channels</span>
-                <span style="color:var(--green); font-family:'JetBrains Mono';">DAILY CRON</span>
-              </div>
-              <div class="mktg-summary-tags">
-                <span class="tag tag-post">📝 POST (FB 91 Pages)</span>
-                <span class="tag tag-video">🎥 VIDEO (Daily Reels)</span>
-                <span class="tag tag-qr">🏪 PHYSICAL (Store QR)</span>
-              </div>
-            </div>
-            <div class="card-action">
-              <strong>Next Milestone:</strong> Activate direct ordering for 25 onboarded restaurants and roll out window stickers.
-            </div>
+        <!-- TILE 3: ALLONSSY -->
+        <div class="project-tile tile-allonssy" onclick="selectProject('allonssy')">
+          <div class="tile-head">
+            <span class="tile-name">3. Allonssy <span>📍</span></span>
+            <span class="status-badge sb-active"><span class="p-dot dot-active"></span> PILOT</span>
           </div>
-          <div class="card-bottom">
-            <span style="color:var(--text-sub); font-size:0.7rem;">Target: 25 active daily restaurants</span>
-            <span style="color:var(--purple); font-weight:700;">Ris-Orangis / Grigny</span>
+          <div class="tile-sub">Hyperlocal Community Social & Marketplace (91130)</div>
+          <div class="tile-kpis">
+            <span>Merchants: <strong style="color:var(--color-allonssy);">150+</strong></span>
+            <span>Zone: <strong>91130</strong></span>
+            <span>VPS: <strong>€15/mo</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Facebook 91</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Daily Reels</span>
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Store QR</span>
           </div>
         </div>
 
-        <!-- CARD 4: ETORO AUTONOMOUS AGENT -->
-        <div class="compact-card">
-          <div>
-            <div class="card-top">
-              <div>
-                <div class="card-title">4. eToro Quant Agent <span>📈</span></div>
-                <div class="card-category">Quantitative WealthTech & Systematic Rebalancing</div>
-              </div>
-              <span class="badge badge-live">Production</span>
-            </div>
-            <div class="metrics-strip">
-              <div class="metric-item">
-                <span class="metric-label">Monitored Pool</span>
-                <span class="metric-val" style="color:var(--accent);">$100k</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Leverage</span>
-                <span class="metric-val">1x (Spot)</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Human Errors</span>
-                <span class="metric-val" style="color:var(--green);">0 Errors</span>
-              </div>
-            </div>
-            <div class="mktg-summary-row">
-              <div class="mktg-summary-head">
-                <span>Active Marketing Channels</span>
-                <span style="color:var(--amber); font-family:'JetBrains Mono';">WEEKLY MANUAL</span>
-              </div>
-              <div class="mktg-summary-tags">
-                <span class="tag tag-post">📝 POST (X / LinkedIn Alpha Reports)</span>
-              </div>
-            </div>
-            <div class="card-action">
-              <strong>Next Milestone:</strong> Establish 90-day audited public track record before capital syndication.
-            </div>
+        <!-- TILE 4: ETORO QUANT AGENT -->
+        <div class="project-tile tile-etoro" onclick="selectProject('etoro')">
+          <div class="tile-head">
+            <span class="tile-name">4. eToro Quant Agent <span>📈</span></span>
+            <span class="status-badge sb-active"><span class="p-dot dot-active"></span> 24/7 AUTO</span>
           </div>
-          <div class="card-bottom">
-            <span style="color:var(--text-sub); font-size:0.7rem;">Execution: 24/7 Automated Daemon</span>
-            <span style="color:var(--green); font-weight:700;">Zero Emotion DCA</span>
+          <div class="tile-sub">Quantitative WealthTech & Systematic Rebalancing</div>
+          <div class="tile-kpis">
+            <span>Capital: <strong style="color:var(--color-etoro);">$100k</strong></span>
+            <span>Leverage: <strong>1x Spot</strong></span>
+            <span>Errors: <strong>0</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Trading Daemon</span>
+            <span class="plat-mini"><span class="p-dot dot-ready"></span> X/LinkedIn Alpha</span>
           </div>
         </div>
 
-        <!-- CARD 5: STREAMER & CURIO KIDS -->
-        <div class="compact-card">
-          <div>
-            <div class="card-top">
-              <div>
-                <div class="card-title">5. Streamer & Curio Kids <span>🎧</span></div>
-                <div class="card-category">AI Bilingual Audio Podcasts & Family Safe Media MVP</div>
-              </div>
-              <span class="badge badge-pilot">MVP Active</span>
-            </div>
-            <div class="metrics-strip">
-              <div class="metric-item">
-                <span class="metric-label">Curio Media</span>
-                <span class="metric-val" style="color:var(--accent);">100 Videos</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Streamer APK</span>
-                <span class="metric-val" style="color:var(--green);">v1.0.0</span>
-              </div>
-              <div class="metric-item">
-                <span class="metric-label">Target Sub</span>
-                <span class="metric-val">$4.99/mo</span>
-              </div>
-            </div>
-            <div class="mktg-summary-row">
-              <div class="mktg-summary-head">
-                <span>Active Marketing Channels</span>
-                <span style="color:var(--green); font-family:'JetBrains Mono';">DAILY AUTO</span>
-              </div>
-              <div class="mktg-summary-tags">
-                <span class="tag tag-email" style="background:rgba(2,132,199,0.2); color:#38bdf8; border-color:rgba(2,132,199,0.3);">🎙️ AUDIO (Podcast RSS)</span>
-                <span class="tag tag-video">🎥 VIDEO (Safe Reels)</span>
-              </div>
-            </div>
-            <div class="card-action">
-              <strong>Next Milestone:</strong> Deploy RSS to Spotify / Apple Podcasts & test Curio parental subscription.
-            </div>
+        <!-- TILE 5: STREAMER & CURIO KIDS -->
+        <div class="project-tile tile-streamer" onclick="selectProject('streamer')">
+          <div class="tile-head">
+            <span class="tile-name">5. Streamer & Curio Kids <span>🎧</span></span>
+            <span class="status-badge sb-staging"><span class="p-dot dot-staging"></span> MVP</span>
           </div>
-          <div class="card-bottom">
-            <span style="color:var(--text-sub); font-size:0.7rem;">Also includes: eSuperMarche (Multi-vendor staging)</span>
-            <span style="color:var(--pink); font-weight:700;">AI Content Fleet</span>
+          <div class="tile-sub">AI Bilingual Workout Audio & Safe Family Media</div>
+          <div class="tile-kpis">
+            <span>Videos: <strong style="color:var(--color-streamer);">100 Safe</strong></span>
+            <span>Streamer: <strong>v1.0.0</strong></span>
+            <span>Sub: <strong>$4.99</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> Podcast RSS</span>
+            <span class="plat-mini"><span class="p-dot dot-ready"></span> Parent Reels</span>
+          </div>
+        </div>
+
+        <!-- TILE 6: ESUPERMARCHE -->
+        <div class="project-tile tile-esuper" onclick="selectProject('esuper')">
+          <div class="tile-head">
+            <span class="tile-name">6. eSuperMarche <span>🛒</span></span>
+            <span class="status-badge sb-staging"><span class="p-dot dot-staging"></span> STAGING</span>
+          </div>
+          <div class="tile-sub">Multi-Vendor Grocery Retail Marketplace (WooCommerce)</div>
+          <div class="tile-kpis">
+            <span>Web: <strong>Live Staging</strong></span>
+            <span>Flutter: <strong>FluxStore</strong></span>
+          </div>
+          <div class="tile-platforms-row">
+            <span class="plat-mini"><span class="p-dot dot-active"></span> esupermarche.com</span>
+            <span class="plat-mini"><span class="p-dot dot-staging"></span> Mobile App Store</span>
           </div>
         </div>
 
       </div>
-    </div>
 
-    <!-- ======================================================== -->
-    <!-- TAB 2: SEPARATE CLEAR MARKETING TABLE -->
-    <!-- ======================================================== -->
-    <div id="tab-marketing" class="tab-content">
-      <div class="table-container">
-        
-        <div class="table-controls">
-          <div class="table-title">
-            <span>🎯 Comprehensive Marketing Engine Matrix</span>
-            <span style="font-size:0.7rem; color:var(--text-sub); font-family:'JetBrains Mono';">9 LIVE CAMPAIGNS</span>
+      <!-- =================================================== -->
+      <!-- RIGHT SIDE: ACTIVE SELECTION & FULL MARKETING MATRIX -->
+      <!-- =================================================== -->
+      <div class="right-content-panel">
+
+        <div class="right-tabs">
+          <button class="rtab-btn active" id="btn-inspect" onclick="switchRightView('inspect')">
+            <span>🔍 Inspected Venture Detail</span>
+          </button>
+          <button class="rtab-btn" id="btn-table" onclick="switchRightView('table')">
+            <span>🎯 Unified Marketing Operations Table</span>
+            <span style="font-size:0.68rem; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:999px;">11 Channels</span>
+          </button>
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW A: INSPECTED VENTURE DETAIL -->
+        <!-- =================================================== -->
+        <div id="view-inspect">
+          
+          <div class="venture-detail-card" id="detail-card-container">
+            <!-- Dynamically populated via JS -->
           </div>
-          <div class="filter-pills">
-            <button class="filter-pill active" onclick="filterTable('all')">All</button>
-            <button class="filter-pill" onclick="filterTable('email')">✉️ Email</button>
-            <button class="filter-pill" onclick="filterTable('post')">📝 Post</button>
-            <button class="filter-pill" onclick="filterTable('video')">🎥 Video</button>
-            <button class="filter-pill" onclick="filterTable('auto')">⚡ Automated</button>
-            <button class="filter-pill" onclick="filterTable('manual')">✋ Manual</button>
+
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW B: FULL MARKETING OPERATIONS TABLE -->
+        <!-- =================================================== -->
+        <div id="view-table" style="display:none;">
+          <div class="table-box">
+            <table class="mktg-table">
+              <thead>
+                <tr>
+                  <th>Project</th>
+                  <th>Platform & Channel</th>
+                  <th>Platform Status</th>
+                  <th>Account Handle / Sender</th>
+                  <th>Delivery Method</th>
+                  <th>Format</th>
+                  <th>Cadence</th>
+                  <th>Campaign Hook & Real Status</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <!-- 1. Tradister Email -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
+                  <td>Cold Email Outbound</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">kashif@tradister-cloud.com</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Kashif Ali (CTO)</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Resend SMTP API</span>
+                  </td>
+                  <td><span class="fmt-badge fb-email">✉️ EMAIL</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.63rem; color:var(--text-sub);">09:00 CET</span></td>
+                  <td>
+                    <strong>3-Step Inbound Cadence (20/day)</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      <em>"Audit express M365 (sans mot de passe) & support de proximité chez {{company}}"</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">26 sent • 11 clicked links (42.3% CTR) • 3 pending.</span>
+                  </td>
+                </tr>
+
+                <!-- 2. Tradister LinkedIn -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-tradister);">Tradister FinOps</td>
+                  <td>LinkedIn & Waalaxy</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">linkedin.com/in/kashif-ali</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Twitter: @tradister</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Buffer API + Waalaxy</span>
+                  </td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td>
+                    <strong>Paris/Essonne DSI Cloud Posts</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-tradister);">
+                      <em>"Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms."</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Daily publishing active; Waalaxy invite batches prepared.</span>
+                  </td>
+                </tr>
+
+                <!-- 3. CalorieFit Instagram (ADDED) -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
+                  <td>📸 Instagram (Reels & Feed)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">@caloriefit.app</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">CalorieFit Official</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Instagram Mobile App / Studio</span>
+                  </td>
+                  <td><span class="fmt-badge fb-video">🎥 VIDEO</span> <span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
+                  <td>
+                    <strong>Privacy-First Nutrition Reels & Infographics</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      <em>"Free barcode scanner without paying $80/yr subscription. 100% offline, zero cloud tracking."</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Reel assets & carousel cards staged for publishing.</span>
+                  </td>
+                </tr>
+
+                <!-- 4. CalorieFit Play Store -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
+                  <td>Google Play Search (ASO)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">com.caloriefit.app</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Console: Kashif Malik</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Google Play Console</span>
+                  </td>
+                  <td><span class="fmt-badge fb-aso">📱 ASO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#38bdf8; font-size:0.68rem;">CONTINUOUS ASO</span></td>
+                  <td>
+                    <strong>Multi-Language Keyword Indexing</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      "Private Calorie Counter", "Compteur hors ligne", "Macro Tracker No Sub"
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">v1.10.1 live in 7 languages (FR, EN, ES, DE, IT, PT, AR).</span>
+                  </td>
+                </tr>
+
+                <!-- 5. CalorieFit Reddit -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
+                  <td>Reddit (r/androidapps, r/loseit)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">u/kashif-malik</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Developer account</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Web Intent Launcher</span>
+                  </td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
+                  <td>
+                    <strong>Dev Self-Post (Compliant Markdown)</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      <em>"[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions"</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);"><code>daily_email_dispatcher.py</code> ready. 1-click link opens Reddit composer.</span>
+                  </td>
+                </tr>
+
+                <!-- 6. CalorieFit TikTok -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-caloriefit);">CalorieFit</td>
+                  <td>TikTok & YouTube Shorts</td>
+                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
+                  <td>
+                    <span class="handle-pill">@caloriefit</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Creator App</span>
+                  </td>
+                  <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
+                  <td>
+                    <strong>35s UGC Comparison Reel</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-caloriefit);">
+                      <em>"Why I deleted MyFitnessPal after 4 years"</em> ($80 paywall vs instant free scan)
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">3 video scripts storyboarded in <code>short_form_video_scripts.md</code>.</span>
+                  </td>
+                </tr>
+
+                <!-- 7. Allonssy FB -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
+                  <td>Facebook Pages (Essonne 91)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">Allonssy - Bons Plans 91</span><br>
+                    <span style="font-size:0.65rem; color:var(--text-sub);">Essonne Actu & Débats</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Meta Graph API (v19)</span>
+                  </td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span><br><span style="font-size:0.63rem; color:var(--text-sub);">08:15 UTC</span></td>
+                  <td>
+                    <strong>Dual-Page Automated Community Broadcaster</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      Daily local restaurant deal & Grand Paris Sud municipal discussions.
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Running daily cron on VPS via <code>meta_auto_publisher.py</code>.</span>
+                  </td>
+                </tr>
+
+                <!-- 8. Allonssy Video -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
+                  <td>TikTok & Reels (9:16)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">@allonssy.app</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Pillow & imageio Engine</span>
+                  </td>
+                  <td><span class="fmt-badge fb-video">🎥 VIDEO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td>
+                    <strong>Daily Vertical 9:16 MP4 Reels</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      <code>reel_bonplan.mp4</code> & <code>reel_actu.mp4</code>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Automated video builder rendering editorial cards every morning.</span>
+                  </td>
+                </tr>
+
+                <!-- 9. Allonssy QR -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-allonssy);">Allonssy</td>
+                  <td>Storefronts (Ris-Orangis/Grigny)</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">Allonssy Field Team</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">In-Person Distribution</span>
+                  </td>
+                  <td><span class="fmt-badge fb-qr">🏪 PHYSICAL</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
+                  <td>
+                    <strong>0% Commission Merchant Alternative</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-allonssy);">
+                      Direct ordering decals vs 30% delivery apps.
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">150 merchants pre-seeded in 91130 database.</span>
+                  </td>
+                </tr>
+
+                <!-- 10. eToro Quant -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-etoro);">eToro Quant Agent</td>
+                  <td>X (Twitter) & LinkedIn</td>
+                  <td><span class="status-badge sb-ready"><span class="p-dot dot-ready"></span> READY</span></td>
+                  <td>
+                    <span class="handle-pill">@tradister / Kashif Malik</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-direct">✋ Direct</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">Personal Profile</span>
+                  </td>
+                  <td><span class="fmt-badge fb-post">📝 POST</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#fbbf24; font-size:0.68rem;">WEEKLY MANUAL</span></td>
+                  <td>
+                    <strong>Quant Performance & Alpha Track Record</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-etoro);">
+                      <em>"How an autonomous 24/7 agent eliminates emotional trading with disciplined DCA."</em>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">24/7 daemon running on $100k capital pool; building 90-day track record.</span>
+                  </td>
+                </tr>
+
+                <!-- 11. Streamer Podcast -->
+                <tr>
+                  <td style="font-weight:700; color:var(--color-streamer);">Streamer & Curio</td>
+                  <td>Spotify & Apple Podcasts</td>
+                  <td><span class="status-badge sb-active"><span class="p-dot dot-active"></span> ACTIVE</span></td>
+                  <td>
+                    <span class="handle-pill">Streamer Fitness AI</span>
+                  </td>
+                  <td>
+                    <span class="delivery-pill dp-interm">⚡ Intermediary</span><br>
+                    <span style="font-size:0.68rem; color:var(--text-sub);">via Gemini LLM + TTS</span>
+                  </td>
+                  <td><span class="fmt-badge fb-audio">🎙️ AUDIO</span></td>
+                  <td><span style="font-family:'JetBrains Mono'; font-weight:700; color:#34d399; font-size:0.68rem;">DAILY AUTO</span></td>
+                  <td>
+                    <strong>Daily Bilingual Workout Audio</strong>
+                    <div class="hook-box" style="border-left-color:var(--color-streamer);">
+                      Automated 10-min bilingual French-English fitness motivation episode.
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Pipeline fully functional; RSS generator deployed.</span>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <table class="mktg-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Platform & Channel</th>
-              <th>Format</th>
-              <th>Cadence</th>
-              <th>Campaign Name & Exact Hook / Pitch</th>
-              <th>Exact Current Status & Metrics</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <!-- ROW 1 -->
-            <tr data-type="email auto">
-              <td class="col-proj">Tradister FinOps & Cloud</td>
-              <td class="col-platform">Resend API (Cold Outbound)</td>
-              <td><span class="fmt-pill fp-email">✉️ EMAIL</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-auto">DAILY AUTO</span><br><span style="color:var(--text-sub); font-size:0.65rem;">09:00 CET</span></td>
-              <td>
-                <strong>3-Step Inbound/Outbound Cadence</strong> (20 emails/day)
-                <div class="table-hook">
-                  <strong>Subject:</strong> <em>"Audit express M365 (sans mot de passe) & support de proximité chez {{company}}"</em><br>
-                  <strong>Pitch:</strong> 15-min screen-share test (audit.tradister.com) exposing €3k-€8k/yr in orphan M365 licenses.
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>26 sent • 11 link clicks</strong> (42.3% interest rate), 21 bounced, 3 pending.<br>
-                  <span style="color:var(--accent);">Warmup Phase 2 active. Next: deliver audits.</span>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 2 -->
-            <tr data-type="post auto">
-              <td class="col-proj">Tradister FinOps & Cloud</td>
-              <td class="col-platform">LinkedIn & Waalaxy</td>
-              <td><span class="fmt-pill fp-post">📝 POST</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-auto">DAILY AUTO</span><br><span style="color:var(--text-sub); font-size:0.65rem;">BUFFER API</span></td>
-              <td>
-                <strong>Paris & Essonne DSI/CFO Executive Nurturing</strong>
-                <div class="table-hook">
-                  <strong>Hook:</strong> <em>"Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms."</em><br>
-                  <strong>Asset:</strong> Gemini LLM post generator + Buffer API publisher & targeted connection requests.
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>Waalaxy CSV batches generated</strong> (FR & EN). Daily thought leadership publishing active.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 3 -->
-            <tr data-type="post manual">
-              <td class="col-proj">CalorieFit</td>
-              <td class="col-platform">Reddit (r/androidapps, r/loseit)</td>
-              <td><span class="fmt-pill fp-post">📝 POST</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-manual">WEEKLY MANUAL</span><br><span style="color:var(--text-sub); font-size:0.65rem;">ASSISTED</span></td>
-              <td>
-                <strong>Dev Launch Self-Post (Compliant Markdown)</strong>
-                <div class="table-hook">
-                  <strong>Title:</strong> <em>"[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions"</em><br>
-                  <strong>Pitch:</strong> Highlighting privacy, no sign-up wall, Health Connect sync, and zero cloud lock-in.
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>Dispatcher ready:</strong> <code>daily_email_dispatcher.py</code> sends 1-click submission links to inbox daily. Ready to trigger.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 4 -->
-            <tr data-type="video manual">
-              <td class="col-proj">CalorieFit</td>
-              <td class="col-platform">TikTok / Reels / YouTube Shorts</td>
-              <td><span class="fmt-pill fp-video">🎥 VIDEO</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-manual">WEEKLY MANUAL</span></td>
-              <td>
-                <strong>35-Second UGC Comparison Reel</strong>
-                <div class="table-hook">
-                  <strong>Hook:</strong> <em>"Why I deleted MyFitnessPal after 4 years"</em><br>
-                  <strong>Visual:</strong> Side-by-side comparison: $80/yr paywall popup vs. instant free offline scan on CalorieFit.
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>3 short-form scripts</strong> fully storyboarded with timestamps, audio tags, and text overlays in <code>short_form_video_scripts.md</code>.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 5 -->
-            <tr data-type="aso auto">
-              <td class="col-proj">CalorieFit</td>
-              <td class="col-platform">Google Play Store Search</td>
-              <td><span class="fmt-pill fp-aso">📱 ASO</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-aso">CONTINUOUS ASO</span></td>
-              <td>
-                <strong>Localized Multi-Language Keyword Indexing</strong>
-                <div class="table-hook">
-                  <strong>Keywords:</strong> "Private Calorie Counter", "Compteur de Calories Hors Ligne", "No Subscription Macro Tracker".
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>v1.10.1 live across 7 languages:</strong> English, French, Spanish, German, Italian, Portuguese & Arabic.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 6 -->
-            <tr data-type="post auto">
-              <td class="col-proj">Allonssy</td>
-              <td class="col-platform">Facebook Pages & Groups (91)</td>
-              <td><span class="fmt-pill fp-post">📝 POST</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-auto">DAILY AUTO</span><br><span style="color:var(--text-sub); font-size:0.65rem;">08:15 UTC CRON</span></td>
-              <td>
-                <strong>Dual-Page Automated Social Broadcaster</strong>
-                <div class="table-hook">
-                  <strong>Page 1:</strong> <em>"Allonssy - Bons Plans 91"</em> (Daily spotlight on 1 restaurant bargain/promo).<br>
-                  <strong>Page 2:</strong> <em>"Essonne Actu & Débats"</em> (Local town news & municipal discussions).
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>VPS cron active:</strong> <code>meta_auto_publisher.py</code> publishes daily; social growth packs dispatched.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 7 -->
-            <tr data-type="video auto">
-              <td class="col-proj">Allonssy</td>
-              <td class="col-platform">TikTok & Instagram Reels (9:16)</td>
-              <td><span class="fmt-pill fp-video">🎥 VIDEO</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-auto">DAILY AUTO</span><br><span style="color:var(--text-sub); font-size:0.65rem;">GENERATED</span></td>
-              <td>
-                <strong>Automated Daily 9:16 Video Producer</strong>
-                <div class="table-hook">
-                  <strong>Output 1:</strong> <code>reel_bonplan.mp4</code> (Today's top local marketplace bargain).<br>
-                  <strong>Output 2:</strong> <code>reel_actu.mp4</code> (Breaking Grand Paris Sud / Essonne news).
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>Automated video rendering pipeline</strong> active using Pillow & imageio with French editorial cards.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 8 -->
-            <tr data-type="qr manual">
-              <td class="col-proj">Allonssy</td>
-              <td class="col-platform">Storefronts (Ris-Orangis / Grigny)</td>
-              <td><span class="fmt-pill fp-qr">🏪 PHYSICAL</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-manual">WEEKLY MANUAL</span></td>
-              <td>
-                <strong>Direct Merchant Field Onboarding & Window QR</strong>
-                <div class="table-hook">
-                  <strong>Offer:</strong> 0% commission local ordering (vs. 30% UberEats/Deliveroo) with storefront QR window decals.
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>150 merchants pre-seeded</strong> in database; field activation in progress for 25 restaurants.
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 9 -->
-            <tr data-type="post manual">
-              <td class="col-proj">eToro Quant Agent</td>
-              <td class="col-platform">X (Twitter) & LinkedIn</td>
-              <td><span class="fmt-pill fp-post">📝 POST</span></td>
-              <td class="col-cadence"><span class="cadence-badge cb-manual">WEEKLY MANUAL</span></td>
-              <td>
-                <strong>Quantitative Audit Track Record & Transparency Reports</strong>
-                <div class="table-hook">
-                  <strong>Hook:</strong> <em>"How an autonomous 24/7 agent eliminates emotional trading with disciplined algorithmic DCA."</em>
-                </div>
-              </td>
-              <td>
-                <div class="table-status">
-                  <strong>24/7 daemon running</strong> on $100k capital pool; building 90-day audited public track record.
-                </div>
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
-
       </div>
+
     </div>
 
     <div class="footer">
@@ -1006,39 +1012,413 @@
   </div>
 
   <script>
-    function switchTab(tabId) {
-      // Toggle Tab Buttons
-      const buttons = document.querySelectorAll('.tab-btn');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-
-      // Toggle Tab Content
-      document.getElementById('tab-overview').classList.remove('active');
-      document.getElementById('tab-marketing').classList.remove('active');
-      document.getElementById('tab-' + tabId).classList.add('active');
-    }
-
-    function filterTable(category) {
-      // Toggle Filter Pill Active State
-      const pills = document.querySelectorAll('.filter-pill');
-      pills.forEach(p => p.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-
-      // Filter Table Rows
-      const rows = document.querySelectorAll('.mktg-table tbody tr');
-      rows.forEach(row => {
-        if (category === 'all') {
-          row.style.display = '';
-        } else {
-          const type = row.getAttribute('data-type') || '';
-          if (type.includes(category)) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
+    // Project Detailed Data Store
+    const projectDetails = {
+      tradister: {
+        title: "Tradister FinOps & Cloud",
+        icon: "☁️",
+        color: "var(--color-tradister)",
+        badge: "Pipeline Active",
+        badgeClass: "sb-active",
+        category: "B2B M365 License Audit & Managed Cloud (Tradister SASU)",
+        stats: [
+          { label: "Pipeline Value", val: "€93,894", color: "var(--color-tradister)" },
+          { label: "Target Leads", val: "62 Qualified", color: "#fff" },
+          { label: "Outbound Sent", val: "26 Leads", color: "#34d399" },
+          { label: "Won Deals", val: "0 (€0)", color: "#f59e0b" }
+        ],
+        platforms: [
+          {
+            name: "Cold Email (Resend API)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "kashif@tradister-cloud.com (Kashif Ali, CTO)",
+            delivery: "⚡ Intermediary via Resend SMTP API (GitHub Actions runner)",
+            format: "✉️ EMAIL",
+            cadence: "DAILY AUTO (09:00 CET - 20 emails/day)",
+            hook: "Audit express M365 (sans mot de passe) & support de proximité chez {{company}} (15-min screen-share test).",
+            statusText: "26 sent, 11 link clicks (42.3% interest rate), 3 pending. Warmup Phase 2 active."
+          },
+          {
+            name: "LinkedIn & Waalaxy",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "Kashif Ali (linkedin.com/in/kashif-ali) & @tradister",
+            delivery: "⚡ Intermediary via Buffer API + Waalaxy Chrome Extension",
+            format: "📝 POST",
+            cadence: "DAILY AUTO (Buffer Queue)",
+            hook: "Why 8-15% of Microsoft 365 cloud budget is wasted on ex-employees in French mid-market firms.",
+            statusText: "Automated daily posts publishing; Waalaxy connection invite batches prepared."
+          },
+          {
+            name: "Web Scanner (audit.tradister.com)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "audit.tradister.com",
+            delivery: "✋ Direct Next.js Cloud App",
+            format: "📱 WEB APP",
+            cadence: "24/7 LIVE",
+            hook: "60-Second Read-Only Microsoft 365 Waste & Security Scanner (0 password required).",
+            statusText: "Live on Vercel & Cloudflare SSL."
           }
-        }
+        ],
+        nextAction: "Deliver 15-minute screen-share audits on 11 clicked leads to convert 1st €950/mo retainer.",
+        linkUrl: "https://audit.tradister.com",
+        linkLabel: "audit.tradister.com ↗"
+      },
+
+      caloriefit: {
+        title: "CalorieFit",
+        icon: "🥗",
+        color: "var(--color-caloriefit)",
+        badge: "Play Store Live",
+        badgeClass: "sb-active",
+        category: "Local-First Macro & Calorie Tracker (Flutter Mobile)",
+        stats: [
+          { label: "Store Version", val: "v1.10.1 Live", color: "var(--color-caloriefit)" },
+          { label: "Cloud Cost", val: "$0.00/user", color: "#fff" },
+          { label: "Languages", val: "7 Locales", color: "#38bdf8" },
+          { label: "Won Revenue", val: "$0 (Free)", color: "#f59e0b" }
+        ],
+        platforms: [
+          {
+            name: "Instagram (Reels & Feed)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "@caloriefit.app / @caloriefit",
+            delivery: "✋ Direct via Instagram Mobile App & Creator Studio",
+            format: "🎥 VIDEO / 📝 POST",
+            cadence: "WEEKLY MANUAL",
+            hook: "Free barcode scanner without paying $80/yr subscription. 100% offline, zero cloud tracking.",
+            statusText: "Reel assets & carousel cards staged in marketing/short_form_video_scripts.md."
+          },
+          {
+            name: "Google Play Store (ASO)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "com.caloriefit.app (Kashif Malik)",
+            delivery: "✋ Direct via Google Play Console",
+            format: "📱 ASO",
+            cadence: "CONTINUOUS ASO",
+            hook: "Keywords: Private Calorie Counter, Compteur de calories hors ligne, Macro tracker no sub.",
+            statusText: "Production APK live in EN, FR, ES, DE, IT, PT, AR."
+          },
+          {
+            name: "Reddit (r/androidapps, r/loseit)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "u/kashif-malik",
+            delivery: "✋ Direct via 1-Click Web Intent Launcher (daily_email_dispatcher.py)",
+            format: "📝 POST",
+            cadence: "WEEKLY MANUAL (ASSISTED)",
+            hook: "[DEV] I built a 100% private, offline calorie tracker with free barcode scanning & zero subscriptions.",
+            statusText: "Dispatcher ready: sends 1-click pre-filled submission links to inbox."
+          },
+          {
+            name: "TikTok & YouTube Shorts",
+            status: "READY",
+            statusClass: "sb-ready",
+            handle: "@caloriefit",
+            delivery: "✋ Direct Creator App Upload",
+            format: "🎥 VIDEO",
+            cadence: "WEEKLY MANUAL",
+            hook: "Why I deleted MyFitnessPal after 4 years ($80 paywall vs instant free scan).",
+            statusText: "3 short-form scripts fully storyboarded with timestamps and sound tags."
+          }
+        ],
+        nextAction: "Post launch threads on Reddit & deploy Instagram Reels to trigger organic 1,000 MAU push.",
+        linkUrl: "https://play.google.com/store/apps/details?id=com.caloriefit.app",
+        linkLabel: "Google Play Store ↗"
+      },
+
+      allonssy: {
+        title: "Allonssy",
+        icon: "📍",
+        color: "var(--color-allonssy)",
+        badge: "Pilot 91130",
+        badgeClass: "sb-active",
+        category: "Hyperlocal Community Social & Marketplace (91130)",
+        stats: [
+          { label: "Merchants", val: "150+ Pros", color: "var(--color-allonssy)" },
+          { label: "Build", val: "v1.3.2 Live", color: "#34d399" },
+          { label: "Infra Cost", val: "€15/mo VPS", color: "#fff" },
+          { label: "Won Subs", val: "0 (€0)", color: "#f59e0b" }
+        ],
+        platforms: [
+          {
+            name: "Facebook Pages (Essonne 91)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "Allonssy - Bons Plans 91 (ID: 1515002858354179) & Essonne Actu",
+            delivery: "⚡ Intermediary via Meta Graph API v19 (VPS Cron 08:15 UTC)",
+            format: "📝 POST",
+            cadence: "DAILY AUTO (08:15 UTC)",
+            hook: "Daily spotlight on 1 Ris-Orangis restaurant bargain + Grand Paris Sud municipal debates.",
+            statusText: "meta_auto_publisher.py actively dispatching daily growth packs."
+          },
+          {
+            name: "TikTok & Reels (9:16 Video)",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "@allonssy.app",
+            delivery: "⚡ Intermediary via Pillow + imageio MP4 Engine",
+            format: "🎥 VIDEO",
+            cadence: "DAILY AUTO",
+            hook: "reel_bonplan.mp4 (Bargain spotlight) & reel_actu.mp4 (Breaking 91 news).",
+            statusText: "Automated video pipeline generating 2 vertical MP4 reels every morning on VPS."
+          },
+          {
+            name: "Storefront Window QR",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "Allonssy Field Team",
+            delivery: "✋ Direct Field Distribution",
+            format: "🏪 PHYSICAL/QR",
+            cadence: "WEEKLY MANUAL",
+            hook: "0% commission local ordering (vs 30% UberEats/Deliveroo) with storefront QR stickers.",
+            statusText: "150 merchants pre-seeded in database; activating first 25 restaurants."
+          }
+        ],
+        nextAction: "Activate direct in-app ordering for 25 onboarded restaurants and roll out window stickers.",
+        linkUrl: "https://allonssy.com",
+        linkLabel: "allonssy.com ↗"
+      },
+
+      etoro: {
+        title: "eToro Quant Agent",
+        icon: "📈",
+        color: "var(--color-etoro)",
+        badge: "Production 24/7",
+        badgeClass: "sb-active",
+        category: "Quantitative WealthTech & Systematic Rebalancing",
+        stats: [
+          { label: "Monitored Capital", val: "$100,000", color: "var(--color-etoro)" },
+          { label: "Leverage", val: "1x Spot", color: "#34d399" },
+          { label: "Execution", val: "24/7 Auto", color: "#fff" },
+          { label: "Human Errors", val: "0 Errors", color: "#34d399" }
+        ],
+        platforms: [
+          {
+            name: "Trading Daemon",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "Autonomous Python Engine",
+            delivery: "⚡ Intermediary via Broker API",
+            format: "⚡ ENGINE",
+            cadence: "24/7 REALTIME",
+            hook: "Automated DCA, systematic volatility drift rebalancing, strict stop-loss rules.",
+            statusText: "Cloud daemon active; 0 manual trading errors recorded."
+          },
+          {
+            name: "X (Twitter) & LinkedIn Reports",
+            status: "READY",
+            statusClass: "sb-ready",
+            handle: "@tradister / Kashif Malik",
+            delivery: "✋ Direct Profile Post",
+            format: "📝 POST",
+            cadence: "WEEKLY MANUAL",
+            hook: "How an autonomous 24/7 agent eliminates emotional trading with disciplined DCA.",
+            statusText: "Building 90-day audited public track record before capital syndication."
+          }
+        ],
+        nextAction: "Complete 90-day audited public track record to open syndicate copiers.",
+        linkUrl: "#",
+        linkLabel: "Production Daemon ↗"
+      },
+
+      streamer: {
+        title: "Streamer & Curio Kids",
+        icon: "🎧",
+        color: "var(--color-streamer)",
+        badge: "MVP Active",
+        badgeClass: "sb-staging",
+        category: "AI Bilingual Audio Podcasts & Family Safe Media MVP",
+        stats: [
+          { label: "Curio Media", val: "100 Safe", color: "var(--color-streamer)" },
+          { label: "Streamer APK", val: "v1.0.0", color: "#34d399" },
+          { label: "Target Sub", val: "$4.99/mo", color: "#fff" },
+          { label: "Test Sessions", val: "11 Sessions", color: "#f59e0b" }
+        ],
+        platforms: [
+          {
+            name: "Spotify & Apple Podcasts RSS",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "Streamer Fitness AI",
+            delivery: "⚡ Intermediary via Gemini LLM + TTS Engine",
+            format: "🎙️ AUDIO",
+            cadence: "DAILY AUTO",
+            hook: "Daily 10-minute bilingual French-English fitness motivation and workout coaching.",
+            statusText: "Audio producer script (audio_producer.py) & RSS feed deployed."
+          },
+          {
+            name: "Family Safe Reels (Curio Kids)",
+            status: "READY",
+            statusClass: "sb-ready",
+            handle: "Curio Family Media",
+            delivery: "✋ Direct Parent Video Posts",
+            format: "🎥 VIDEO",
+            cadence: "WEEKLY MANUAL",
+            hook: "Safe Screen Time Without Toxic Feeds (100% ad-free educational entertainment).",
+            statusText: "100 curated educational videos indexed; parental PIN testing in progress."
+          }
+        ],
+        nextAction: "Deploy RSS feed to Spotify / Apple Podcasts and test Curio parental subscription.",
+        linkUrl: "#",
+        linkLabel: "Media Fleet ↗"
+      },
+
+      esuper: {
+        title: "eSuperMarche",
+        icon: "🛒",
+        color: "var(--color-esuper)",
+        badge: "Staging Active",
+        badgeClass: "sb-staging",
+        category: "Multi-Vendor Retail & Grocery Marketplace",
+        stats: [
+          { label: "Web Portal", val: "Live Staging", color: "var(--color-esuper)" },
+          { label: "Mobile App", val: "FluxStore 6.1", color: "#fff" },
+          { label: "Platform", val: "WooCommerce", color: "#38bdf8" },
+          { label: "Catalog", val: "Multi-Vendor", color: "#34d399" }
+        ],
+        platforms: [
+          {
+            name: "Web Marketplace",
+            status: "ACTIVE",
+            statusClass: "sb-active",
+            handle: "esupermarche.com",
+            delivery: "✋ Direct Web Server",
+            format: "📱 WEB STORE",
+            cadence: "24/7 LIVE",
+            hook: "Multi-vendor grocery & specialty store with local fulfillment.",
+            statusText: "Production/staging catalog operational."
+          },
+          {
+            name: "Mobile App Stores",
+            status: "STAGING",
+            statusClass: "sb-staging",
+            handle: "FluxStore Flutter Build",
+            delivery: "✋ Direct App Release",
+            format: "📱 MOBILE APP",
+            cadence: "VERSION RELEASE",
+            hook: "Fast mobile shopping app targeting Android 15 & iOS 15+.",
+            statusText: "APK build configured with release keystores."
+          }
+        ],
+        nextAction: "Finalize merchant catalog import and initiate local delivery vendor testing.",
+        linkUrl: "https://esupermarche.com",
+        linkLabel: "esupermarche.com ↗"
+      }
+    };
+
+    function renderDetail(key) {
+      const p = projectDetails[key];
+      if (!p) return;
+
+      let statsHtml = '';
+      p.stats.forEach(s => {
+        statsHtml += `
+          <div class="vd-stat-item">
+            <span class="vd-stat-lbl">${s.label}</span>
+            <span class="vd-stat-num" style="color:${s.color};">${s.val}</span>
+          </div>
+        `;
       });
+
+      let platformsHtml = '';
+      p.platforms.forEach(pl => {
+        const dotClass = pl.status === 'ACTIVE' ? 'dot-active' : (pl.status === 'READY' ? 'dot-ready' : 'dot-staging');
+        platformsHtml += `
+          <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:12px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
+              <span style="font-weight:700; font-size:0.85rem; color:#fff; display:flex; align-items:center; gap:6px;">
+                ${pl.name}
+              </span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="status-badge ${pl.statusClass}"><span class="p-dot ${dotClass}"></span> ${pl.status}</span>
+                <span style="font-size:0.65rem; color:var(--text-sub); font-family:'JetBrains Mono';">${pl.cadence}</span>
+              </div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; font-size:0.72rem;">
+              <div>
+                <span style="color:var(--text-sub);">Account Handle:</span>
+                <div class="handle-pill" style="margin-top:2px;">${pl.handle}</div>
+              </div>
+              <div>
+                <span style="color:var(--text-sub);">Delivery Method:</span>
+                <div style="margin-top:2px; font-weight:600; color:#fff;">${pl.delivery}</div>
+              </div>
+            </div>
+
+            <div class="hook-box" style="border-left-color:${p.color};">
+              <strong>Campaign Pitch / Hook:</strong> ${pl.hook}
+            </div>
+
+            <div style="font-size:0.7rem; color:var(--text-sub); margin-top:5px;">
+              <strong>Live Status:</strong> ${pl.statusText}
+            </div>
+          </div>
+        `;
+      });
+
+      const html = `
+        <div class="vd-header">
+          <div>
+            <div class="vd-title" style="color:${p.color};">
+              <span>${p.icon}</span> ${p.title}
+            </div>
+            <div class="vd-sub">${p.category}</div>
+          </div>
+          <span class="status-badge ${p.badgeClass}">${p.badge}</span>
+        </div>
+
+        <div class="vd-stats-grid">
+          ${statsHtml}
+        </div>
+
+        <div class="subhead">Marketing Platforms & Channel Execution</div>
+        ${platformsHtml}
+
+        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-top:14px; font-size:0.75rem;">
+          <strong style="color:#fff;">Immediate Next Milestone:</strong> ${p.nextAction}
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+          <a href="${p.linkUrl}" target="_blank" style="color:${p.color}; text-decoration:none; font-weight:700; font-size:0.76rem;">${p.linkLabel}</a>
+        </div>
+      `;
+
+      document.getElementById('detail-card-container').innerHTML = html;
     }
+
+    function selectProject(key) {
+      // Remove active from all tiles
+      document.querySelectorAll('.project-tile').forEach(tile => tile.classList.remove('active'));
+      // Add active to selected tile
+      const target = document.querySelector(`.tile-${key}`);
+      if (target) target.classList.add('active');
+
+      // Make sure we're on the inspect view
+      switchRightView('inspect');
+      renderDetail(key);
+    }
+
+    function switchRightView(viewId) {
+      document.querySelectorAll('.rtab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + viewId).classList.add('active');
+
+      if (viewId === 'inspect') {
+        document.getElementById('view-inspect').style.display = 'block';
+        document.getElementById('view-table').style.display = 'none';
+      } else {
+        document.getElementById('view-inspect').style.display = 'none';
+        document.getElementById('view-table').style.display = 'block';
+      }
+    }
+
+    // Initialize with Tradister FinOps
+    renderDetail('tradister');
   </script>
 
 </body>
