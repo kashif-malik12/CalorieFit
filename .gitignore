@@ -49,3 +49,7 @@ app.*.map.json
 /.claude/
 /.tmp-legal-site/
 /output/
+
+.env
+.env.*
+
