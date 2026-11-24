@@ -36,7 +36,14 @@ SENDER_EMAIL = CONFIG.get("OUTREACH_SENDER_EMAIL") or "kashif@tradister-cloud.co
 SENDER_NAME = "CalorieFit Daily Growth"
 TO_EMAIL = "ali.kashifmalik@gmail.com"
 
-STATE_FILE = Path(r"C:\Users\Kashif Malik\.gemini\antigravity\secrets\daily_post_state.json")
+GLOBAL_STATE_DIR = Path(r"C:\Users\Kashif Malik\.gemini\antigravity\secrets")
+VPS_STATE_DIR = Path("/home/deploy/.config")
+if GLOBAL_STATE_DIR.exists():
+    STATE_FILE = GLOBAL_STATE_DIR / "daily_post_state.json"
+elif VPS_STATE_DIR.exists() and os.access(VPS_STATE_DIR, os.W_OK):
+    STATE_FILE = VPS_STATE_DIR / "daily_post_state.json"
+else:
+    STATE_FILE = ROOT_DIR / ".daily_post_state.json"
 
 PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 WEBSITE_URL = "https://kashif-malik12.github.io/CalorieFit/"
@@ -218,9 +225,12 @@ def load_state():
     return {"last_day_sent": 0}
 
 def save_state(state):
-    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=2)
+    try:
+        STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(STATE_FILE, "w") as f:
+            json.dump(state, f, indent=2)
+    except Exception as e:
+        print(f"Warning: could not save state to {STATE_FILE}: {e}")
 
 def build_reddit_submit_url(target, title, body):
     sub = target.replace("r/", "")
@@ -376,7 +386,12 @@ def run_next(force=False):
         print(f"Post already sent today ({today_str}). Use --force to send again.")
         return
 
-    current_day = (state.get("last_day_sent", 0) % len(SCHEDULE)) + 1
+    if state.get("last_day_sent", 0) > 0:
+        current_day = (state["last_day_sent"] % len(SCHEDULE)) + 1
+    elif os.environ.get("GITHUB_ACTIONS") == "true":
+        current_day = (date.today().toordinal() % len(SCHEDULE)) + 1
+    else:
+        current_day = 1
     
     item = next((s for s in SCHEDULE if s["day"] == current_day), SCHEDULE[0])
 
