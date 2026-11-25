@@ -11,7 +11,10 @@ with verified flair tags, pricing transparency, and zero-spam safety.
 import os
 import sys
 import json
+import time
+import shutil
 import base64
+import subprocess
 import urllib.parse
 from datetime import date
 import requests
@@ -28,15 +31,40 @@ try:
 except ImportError:
     from auto_video_generator import build_video
 
-TRADISTER_ENV = r"E:\Gdrive\1Business\1a Tradister IT SASU\tradister-finops-cloud\.env"
-CONFIG = dotenv_values(TRADISTER_ENV) if os.path.exists(TRADISTER_ENV) else {}
+CALORIE_ENV = ROOT_DIR / ".env"
+TRADISTER_ENV = Path("/home/deploy/bin/tradister_outreach/.env")
 
-RESEND_API_KEY = CONFIG.get("RESEND_API_KEY") or os.environ.get("RESEND_API_KEY")
-SENDER_EMAIL = CONFIG.get("OUTREACH_SENDER_EMAIL") or "kashif@tradister-cloud.com"
+CONFIG = {}
+if TRADISTER_ENV.exists():
+    CONFIG.update(dotenv_values(TRADISTER_ENV))
+if CALORIE_ENV.exists():
+    CONFIG.update(dotenv_values(CALORIE_ENV))
+
+def get_cfg(key, default=None):
+    return os.environ.get(key) or CONFIG.get(key) or default
+
+RESEND_API_KEY = get_cfg("RESEND_API_KEY")
+SENDER_EMAIL = get_cfg("OUTREACH_SENDER_EMAIL", "kashif@tradister-cloud.com")
 SENDER_NAME = "CalorieFit Daily Growth"
 TO_EMAIL = "ali.kashifmalik@gmail.com"
 
-STATE_FILE = Path(r"C:\Users\Kashif Malik\.gemini\antigravity\secrets\daily_post_state.json")
+BUFFER_API_URL = "https://api.buffer.com"
+BUFFER_ACCESS_TOKEN = get_cfg("BUFFER_ACCESS_TOKEN")
+BUFFER_CHANNELS = [
+    ("Instagram", "instagram", get_cfg("BUFFER_INSTAGRAM_CHANNEL_ID")),
+    ("TikTok", "tiktok", get_cfg("BUFFER_TIKTOK_CHANNEL_ID")),
+    ("Twitter / X", "twitter", get_cfg("BUFFER_TWITTER_CHANNEL_ID")),
+]
+
+PAGES_SYNC_DIR = Path("/home/deploy/.cache/caloriefit_pages_sync")
+GITHUB_PUSH_REMOTE = "git@github-push:kashif-malik12/CalorieFit.git"
+PUBLIC_BASE_URL = "https://kashif-malik12.github.io/CalorieFit"
+
+LOCAL_STATE_DIR = Path(r"/home/deploy/.config")
+if LOCAL_STATE_DIR.exists() and os.access(LOCAL_STATE_DIR, os.W_OK):
+    STATE_FILE = LOCAL_STATE_DIR / "daily_post_state.json"
+else:
+    STATE_FILE = ROOT_DIR / ".daily_post_state.json"
 
 PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.caloriefit.app"
 WEBSITE_URL = "https://kashif-malik12.github.io/CalorieFit/"
@@ -218,9 +246,12 @@ def load_state():
     return {"last_day_sent": 0}
 
 def save_state(state):
-    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=2)
+    try:
+        STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(STATE_FILE, "w") as f:
+            json.dump(state, f, indent=2)
+    except Exception as e:
+        print(f"Warning: could not save state to {STATE_FILE}: {e}")
 
 def build_reddit_submit_url(target, title, body):
     sub = target.replace("r/", "")
@@ -230,24 +261,255 @@ def build_reddit_submit_url(target, title, body):
     })
     return f"https://reddit.com/r/{sub}/submit?{params}"
 
-def send_post_email(item):
+def sync_video_to_github_pages(video_name, max_wait_seconds=120):
+    """Pushes generated video + creator.html to GitHub Pages and waits for live 200 OK."""
+    public_url = f"{PUBLIC_BASE_URL}/videos/{video_name}"
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return public_url
+
+    local_video = ROOT_DIR / "docs" / "videos" / video_name
+    local_creator = ROOT_DIR / "docs" / "creator.html"
+    if not local_video.exists():
+        print(f"Warning: {local_video} missing, skipping GitHub Pages sync.")
+        return public_url
+
+    try:
+        if not (PAGES_SYNC_DIR / ".git").exists():
+            PAGES_SYNC_DIR.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run(
+                ["git", "clone", "--depth", "1", "--branch", "main", GITHUB_PUSH_REMOTE, str(PAGES_SYNC_DIR)],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        else:
+            subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "fetch", "origin", "main"], check=True, capture_output=True, text=True)
+            subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "reset", "--hard", "origin/main"], check=True, capture_output=True, text=True)
+
+        sync_videos_dir = PAGES_SYNC_DIR / "docs" / "videos"
+        sync_videos_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(local_video), str(sync_videos_dir / video_name))
+        if local_creator.exists():
+            shutil.copy2(str(local_creator), str(PAGES_SYNC_DIR / "docs" / "creator.html"))
+
+        subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "config", "user.name", "CalorieFit Autopilot"], check=True)
+        subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "config", "user.email", "ali.kashifmalik@gmail.com"], check=True)
+        subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "add", "docs/videos/", "docs/creator.html"], check=True)
+        diff_res = subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "diff", "--cached", "--quiet"])
+        if diff_res.returncode != 0:
+            subprocess.run(
+                ["git", "-C", str(PAGES_SYNC_DIR), "commit", "-m", f"Auto-deploy daily marketing video asset ({video_name})"],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            subprocess.run(["git", "-C", str(PAGES_SYNC_DIR), "push", "origin", "main"], check=True, capture_output=True, text=True)
+            print(f"🚀 Pushed {video_name} to GitHub Pages.")
+        else:
+            print(f"ℹ️ {video_name} already up to date on GitHub Pages.")
+    except Exception as e:
+        print(f"Warning: GitHub Pages sync error: {e}")
+
+    # Wait for GitHub Pages CDN to serve the video before calling Buffer
+    deadline = time.time() + max_wait_seconds
+    while time.time() < deadline:
+        try:
+            head = requests.head(public_url, timeout=10, allow_redirects=True)
+            if head.status_code == 200:
+                print(f"🌐 Verified live video URL: {public_url}")
+                return public_url
+        except Exception:
+            pass
+        time.sleep(5)
+
+    print(f"Warning: timed out waiting for {public_url} (proceeding anyway).")
+    return public_url
+
+def build_tweet_text(video_info):
+    """Builds a <= 280 char tweet with title, Play Store link, and hashtags."""
+    hashtags = "#CalorieFit #CICO #FitnessApp #Android"
+    header = f"{video_info['title']} — 100% Free, Zero Ads, Offline Calorie & Fasting Tracker on Android:"
+    tweet = f"{header}\n{PLAY_STORE_URL}\n{hashtags}"
+    if len(tweet) <= 280:
+        return tweet
+    max_header = 280 - len(f"\n{PLAY_STORE_URL}\n{hashtags}") - 1
+    return f"{header[:max_header].rstrip()}…\n{PLAY_STORE_URL}\n{hashtags}"
+
+def post_to_buffer(video_info, video_public_url):
+    """Queues today's video post to Instagram, TikTok, and Twitter/X via Buffer GraphQL."""
+    if not BUFFER_ACCESS_TOKEN:
+        print("BUFFER_ACCESS_TOKEN not configured; skipping Buffer auto-queue.")
+        return []
+
+    mutation = """
+    mutation CreatePost($input: CreatePostInput!) {
+      createPost(input: $input) {
+        ... on PostActionSuccess {
+          post {
+            id
+            status
+            dueAt
+          }
+        }
+        ... on NotFoundError { message }
+        ... on UnauthorizedError { message }
+        ... on UnexpectedError { message }
+        ... on RestProxyError { message }
+        ... on LimitReachedError { message }
+        ... on InvalidInputError { message }
+      }
+    }
+    """
+    headers = {
+        "Authorization": f"Bearer {BUFFER_ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+    }
+
+    results = []
+    for label, service, channel_id in BUFFER_CHANNELS:
+        if not channel_id:
+            continue
+
+        post_input = {
+            "channelId": channel_id,
+            "schedulingType": "automatic",
+            "mode": "addToQueue",
+            "assets": [
+                {
+                    "video": {
+                        "url": video_public_url,
+                        "metadata": {"title": video_info["title"]},
+                    }
+                }
+            ],
+        }
+
+        if service == "instagram":
+            post_input["text"] = f"{video_info['caption']} #reels #instagramreels"
+            post_input["metadata"] = {"instagram": {"type": "reel", "shouldShareToFeed": True}}
+        elif service == "tiktok":
+            post_input["text"] = video_info["caption"]
+            post_input["metadata"] = {"tiktok": {"title": video_info["title"]}}
+        elif service == "twitter":
+            post_input["text"] = build_tweet_text(video_info)
+        else:
+            post_input["text"] = video_info["caption"]
+
+        try:
+            res = requests.post(
+                BUFFER_API_URL,
+                headers=headers,
+                json={"query": mutation, "variables": {"input": post_input}},
+                timeout=30,
+            )
+            data = res.json()
+            if data.get("errors"):
+                err = "; ".join(e.get("message", str(e)) for e in data["errors"])
+                print(f"❌ Buffer GraphQL error ({label}): {err}")
+                results.append({"platform": label, "success": False, "error": err})
+                continue
+
+            payload = (data.get("data") or {}).get("createPost") or {}
+            if payload.get("post"):
+                post = payload["post"]
+                print(f"✅ Buffer queued {label}: id={post['id']} status={post.get('status')} dueAt={post.get('dueAt')}")
+                results.append({
+                    "platform": label,
+                    "success": True,
+                    "post_id": post["id"],
+                    "status": post.get("status"),
+                    "due_at": post.get("dueAt"),
+                })
+            else:
+                err = payload.get("message") or str(payload)
+                print(f"❌ Buffer rejected {label}: {err}")
+                results.append({"platform": label, "success": False, "error": err})
+        except Exception as e:
+            print(f"❌ Buffer exception ({label}): {e}")
+            results.append({"platform": label, "success": False, "error": str(e)})
+
+    return results
+
+def render_buffer_status_html(buffer_results):
+    """Renders a rich Buffer schedule card for the email."""
+    if not buffer_results:
+        return (
+            '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;'
+            'margin-bottom:22px;font-size:13px;color:#991b1b;">'
+            '⚠️ <strong>Buffer Auto-Queue:</strong> Not configured or no channels ran — post manually.'
+            '</div>'
+        )
+
+    platform_icons = {"Instagram": "📸", "TikTok": "🎵", "Twitter": "🐦", "X": "🐦"}
+    rows = []
+    all_ok = all(r.get("success") for r in buffer_results)
+    for r in buffer_results:
+        icon = platform_icons.get(r["platform"], "📲")
+        if r.get("success"):
+            due_raw = r.get("due_at") or ""
+            try:
+                from datetime import datetime as _dt
+                due_dt = _dt.strptime(due_raw[:19], "%Y-%m-%dT%H:%M:%S")
+                due_str = due_dt.strftime("%b %-d · %H:%M UTC")
+            except Exception:
+                due_str = due_raw or "Next queue slot"
+            rows.append(
+                f'<tr>'
+                f'<td style="padding:8px 12px;border-bottom:1px solid #d1fae5;">{icon} <strong>{r["platform"]}</strong></td>'
+                f'<td style="padding:8px 12px;border-bottom:1px solid #d1fae5;color:#065f46;">✅ Scheduled</td>'
+                f'<td style="padding:8px 12px;border-bottom:1px solid #d1fae5;font-family:monospace;font-size:12px;">{due_str}</td>'
+                f'</tr>'
+            )
+        else:
+            rows.append(
+                f'<tr>'
+                f'<td style="padding:8px 12px;border-bottom:1px solid #fecaca;">{icon} <strong>{r["platform"]}</strong></td>'
+                f'<td colspan="2" style="padding:8px 12px;border-bottom:1px solid #fecaca;color:#991b1b;">❌ {r.get("error","Failed")}</td>'
+                f'</tr>'
+            )
+
+    header_bg = "#ecfdf5" if all_ok else "#fffbeb"
+    header_border = "#6ee7b7" if all_ok else "#fcd34d"
+    headline = "🤖 Buffer Auto-Posted — Nothing To Do!" if all_ok else "⚠️ Buffer Partial — Check Below"
+    sub = "Your video has been queued to all channels automatically." if all_ok else "Some channels failed — manual upload may be needed."
+
+    return (
+        f'<div style="background:{header_bg};border:1px solid {header_border};border-radius:12px;'
+        f'padding:18px 20px;margin-bottom:22px;">'
+        f'<div style="font-size:16px;font-weight:700;color:#065f46;margin-bottom:4px;">{headline}</div>'
+        f'<div style="font-size:13px;color:#374151;margin-bottom:14px;">{sub}</div>'
+        f'<table style="width:100%;border-collapse:collapse;background:#ffffff;border-radius:8px;overflow:hidden;'
+        f'border:1px solid #a7f3d0;font-size:13px;">'
+        f'<thead><tr style="background:#d1fae5;">'
+        f'<th style="padding:8px 12px;text-align:left;color:#065f46;">Platform</th>'
+        f'<th style="padding:8px 12px;text-align:left;color:#065f46;">Status</th>'
+        f'<th style="padding:8px 12px;text-align:left;color:#065f46;">Scheduled For</th>'
+        f'</tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody>'
+        f'</table>'
+        f'</div>'
+    )
+
+def send_post_email(item, video_info=None, buffer_results=None):
     if not RESEND_API_KEY:
         print("Missing RESEND_API_KEY")
         return False
 
-    print(f"🎬 Auto-generating video for Day {item['day']}...")
-    try:
-        video_info = build_video(day=item['day'])
-    except Exception as e:
-        print(f"Video generation error: {e}")
-        video_info = {
-            "name": f"CalorieFit_Video_Day{item['day']}.mp4",
-            "path": f"E:\\Dev Projects\\CalorieFit\\output\\videos\\CalorieFit_Video_Day{item['day']}.mp4",
-            "title": "CalorieFit Promo",
-            "caption": "Tired of $80/year diet app paywalls 🤦‍♂️ Built an offline-first tracker with zero ads, free barcode scanning & fasting timers. Link in bio! #myfitnesspal #calorietracker #cico #fitnessjourney #loseweight #indiedev"
-        }
+    if video_info is None:
+        print(f"🎬 Auto-generating video for Day {item['day']}...")
+        try:
+            video_info = build_video(day=item['day'])
+        except Exception as e:
+            print(f"Video generation error: {e}")
+            video_info = {
+                "name": f"CalorieFit_Video_Day{item['day']}.mp4",
+                "path": str(ROOT_DIR / "docs" / "videos" / f"CalorieFit_Video_Day{item['day']}.mp4"),
+                "title": "CalorieFit Promo",
+                "caption": "Tired of $80/year diet app paywalls 🤦‍♂️ Built an offline-first tracker with zero ads, free barcode scanning & fasting timers. Link in bio! #myfitnesspal #calorietracker #cico #fitnessjourney #loseweight #indiedev"
+            }
 
     submit_url = build_reddit_submit_url(item["target"], item["title"], item["body"])
+    buffer_banner_html = render_buffer_status_html(buffer_results or [])
 
     html_content = f"""
     <!DOCTYPE html>
@@ -275,56 +537,69 @@ def send_post_email(item):
     </head>
     <body>
       <div class="card">
-        <span class="badge">🚀 CalorieFit Growth Engine • Day {item['day']} of {len(SCHEDULE)}</span>
-        <h2>Your Daily Growth Dispatch</h2>
-        <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Two quick 1-minute actions to grow CalorieFit today:</p>
+        <!-- HEADER -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="badge">🚀 CalorieFit Growth Engine</span>
+          <span class="badge" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;">Day {item['day']} of {len(SCHEDULE)}</span>
+        </div>
+        <h2 style="margin-top:10px;margin-bottom:4px;">{video_info['title']}</h2>
+        <p style="color:#64748b;font-size:13px;margin-top:0;margin-bottom:20px;">
+          Your daily CalorieFit growth dispatch — Buffer has queued your social posts automatically.
+          Your only manual action today is the Reddit post below. 👇
+        </p>
 
-        <!-- PART 1: VIDEO -->
+        <!-- BUFFER STATUS CARD -->
+        {buffer_banner_html}
+
+        <!-- PART 1: VIDEO BACKUP (manual fallback) -->
         <div class="section-box">
-          <span class="badge badge-video">🎬 Action 1: Upload Video to Instagram Reels, TikTok & Shorts</span>
-          <h3>{video_info['title']}</h3>
-          <p style="font-size: 13px; color: #475569;">Your 1080p video is ready to download instantly:</p>
-          
-          <div style="text-align: center; margin: 16px 0;">
-            <a href="https://kashif-malik12.github.io/CalorieFit/creator.html" class="btn" style="background: #0284c7; color: #ffffff !important; font-size: 16px; padding: 15px 24px; margin-bottom: 10px; display: block; border-radius: 10px;" target="_blank">
-              🌐 Open Video & Download Page (Mobile Hub)
+          <span class="badge badge-video">🎬 Video: Buffer Is Handling It — Backup Links Below</span>
+          <p style="font-size:13px;color:#475569;margin-top:10px;margin-bottom:12px;">
+            Buffer will auto-publish to Instagram, TikTok &amp; Twitter at the times shown above.
+            If you ever need to post manually or grab the file for YouTube Shorts:
+          </p>
+
+          <div style="text-align:center;margin:12px 0;">
+            <a href="https://kashif-malik12.github.io/CalorieFit/creator.html" class="btn"
+               style="background:#0284c7;color:#ffffff !important;font-size:15px;padding:13px 22px;
+                      margin-bottom:10px;display:block;border-radius:10px;" target="_blank">
+              🌐 Open Creator Hub (Download &amp; Preview)
             </a>
-            <a href="https://kashif-malik12.github.io/CalorieFit/videos/{video_info['name']}" class="btn" style="background: #10B981; color: #042F2E !important; font-size: 15px; padding: 14px 24px; display: block; border-radius: 10px;" target="_blank">
-              📥 Direct 1-Tap Download Video (MP4)
+            <a href="https://kashif-malik12.github.io/CalorieFit/videos/{video_info['name']}" class="btn"
+               style="background:#10B981;color:#042F2E !important;font-size:14px;padding:12px 22px;
+                      display:block;border-radius:10px;" target="_blank">
+              📥 Direct MP4 Download
             </a>
           </div>
 
-          <div style="background: #fdf2f8; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 12px; color: #831843;">
-            📱 <strong>Upload Targets:</strong> <strong>Instagram Reels</strong> • <strong>TikTok</strong> • <strong>YouTube Shorts</strong><br>
-            <em>(Post this single video across all 3 platforms in under 90 seconds!)</em>
-          </div>
-
-          <p style="font-size: 13px; font-weight: bold; color: #0f172a; margin-top: 12px; margin-bottom: 4px;">Copy-Paste Caption & Hashtags:</p>
+          <p style="font-size:13px;font-weight:bold;color:#0f172a;margin-top:14px;margin-bottom:4px;">
+            📋 Caption &amp; Hashtags (copy-paste for YouTube Shorts or manual posts):
+          </p>
           <div class="caption-code">{video_info['caption']} #reels #instagramreels #explorepage</div>
         </div>
 
-        <!-- PART 2: REDDIT -->
+        <!-- PART 2: REDDIT (manual action required) -->
         <div class="section-box">
-          <span class="badge badge-reddit">🔥 Action 2: Publish Today's Reddit Post</span>
-          <h3>Subreddit: {item['target']}</h3>
-          <p style="color: #64748b; font-size: 13px;">{item['description']}</p>
-          
+          <span class="badge badge-reddit">🔥 Action Required: Post to Reddit Today</span>
+          <h3 style="margin-top:10px;">Subreddit: {item['target']}</h3>
+          <p style="color:#64748b;font-size:13px;margin-bottom:12px;">{item['description']}</p>
+
           <div class="warning-box">
-            ⚠️ <strong>Submission Checklist:</strong><br>
-            • Mode: <strong>Post (Text tab)</strong> — not Link/Image.<br>
-            • Required Flair: <span class="flair-pill">{item['flair_needed']}</span>
+            ⚠️ <strong>Checklist before posting:</strong><br>
+            • Use <strong>Post tab (Text)</strong> — not Link or Image.<br>
+            • Add flair: <span class="flair-pill">{item['flair_needed']}</span>
           </div>
 
-          <div style="text-align: center;">
-            <a href="{submit_url}" class="btn" target="_blank">👉 Open Pre-Filled Reddit Submission</a>
+          <div style="text-align:center;margin:16px 0;">
+            <a href="{submit_url}" class="btn" target="_blank">👉 Open Pre-Filled Reddit Post</a>
           </div>
 
-          <p style="font-size: 13px; color: #334155; margin-bottom: 6px;"><strong>Title:</strong> {item['title']}</p>
+          <p style="font-size:13px;color:#334155;margin-bottom:6px;"><strong>Title:</strong> {item['title']}</p>
           <div class="preview">{item['body']}</div>
         </div>
 
         <div class="footer">
-          CalorieFit Daily Autopilot Growth System • 1 Video + 1 Post Per Day
+          CalorieFit Daily Autopilot Growth System &nbsp;•&nbsp; 🤖 Buffer auto-posts video &nbsp;•&nbsp; ✍️ You post Reddit
         </div>
       </div>
     </body>
@@ -347,7 +622,7 @@ def send_post_email(item):
     payload = {
         "from": f"{SENDER_NAME} <{SENDER_EMAIL}>",
         "to": [TO_EMAIL],
-        "subject": f"🔥 CalorieFit Growth Day {item['day']}: 🎬 Video Attached + 🤖 {item['target']} Post!",
+        "subject": f"🤖 CalorieFit Day {item['day']} | Buffer Posted ✅ + Reddit Action Needed 👉 {item['target']}",
         "html": html_content
     }
     if attachments:
@@ -376,16 +651,36 @@ def run_next(force=False):
         print(f"Post already sent today ({today_str}). Use --force to send again.")
         return
 
-    current_day = (state.get("last_day_sent", 0) % len(SCHEDULE)) + 1
+    if state.get("last_day_sent", 0) > 0:
+        current_day = (state["last_day_sent"] % len(SCHEDULE)) + 1
+    elif os.environ.get("GITHUB_ACTIONS") == "true":
+        current_day = (date.today().toordinal() % len(SCHEDULE)) + 1
+    else:
+        current_day = 1
     
     item = next((s for s in SCHEDULE if s["day"] == current_day), SCHEDULE[0])
 
-    success = send_post_email(item)
-    if success:
+    print(f"🎬 Auto-generating video for Day {item['day']}...")
+    try:
+        video_info = build_video(day=item["day"])
+    except Exception as e:
+        print(f"Video generation error: {e}")
+        video_info = {
+            "name": f"CalorieFit_Video_Day{item['day']}.mp4",
+            "path": str(ROOT_DIR / "docs" / "videos" / f"CalorieFit_Video_Day{item['day']}.mp4"),
+            "title": "CalorieFit Promo",
+            "caption": "Tired of $80/year diet app paywalls 🤦‍♂️ Built an offline-first tracker with zero ads, free barcode scanning & fasting timers. Link in bio! #myfitnesspal #calorietracker #cico #fitnessjourney #loseweight #indiedev",
+        }
+
+    video_public_url = sync_video_to_github_pages(video_info["name"])
+    buffer_results = post_to_buffer(video_info, video_public_url)
+
+    success = send_post_email(item, video_info=video_info, buffer_results=buffer_results)
+    if success or any(r.get("success") for r in buffer_results):
         state["last_day_sent"] = current_day
         state["last_sent_date"] = today_str
         save_state(state)
-        print(f"Successfully sent Day {current_day} email ({item['target']}).")
+        print(f"Successfully processed Day {current_day} ({item['target']}).")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and ("--next" in sys.argv or "--force" in sys.argv):
