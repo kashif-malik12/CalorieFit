@@ -8,13 +8,30 @@ Includes 7 rotating high-conversion video themes for daily posting.
 """
 
 import os
+import re
 import sys
 import glob
+import shutil
 import subprocess
 import asyncio
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import edge_tts
+
+try:
+    import imageio_ffmpeg
+except ImportError:
+    imageio_ffmpeg = None
+
+
+def get_ffmpeg_bin():
+    """Returns system ffmpeg path or falls back to imageio-ffmpeg bundled binary."""
+    sys_ffmpeg = shutil.which("ffmpeg")
+    if sys_ffmpeg:
+        return sys_ffmpeg
+    if imageio_ffmpeg is not None:
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    raise FileNotFoundError("ffmpeg not found in PATH and imageio-ffmpeg is not installed")
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT_DIR / "output" / "videos"
@@ -278,14 +295,25 @@ VIDEO_THEMES = {
 }
 
 def get_audio_duration(audio_path):
-    cmd = [
-        "ffprobe", "-v", "error",
-        "-show_entries", "format=duration",
-        "-of", "default=noprint_wrappers=1:nokey=1",
-        str(audio_path)
-    ]
-    res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-    return float(res.stdout.strip())
+    ffprobe_bin = shutil.which("ffprobe")
+    if ffprobe_bin:
+        cmd = [
+            ffprobe_bin, "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            str(audio_path)
+        ]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        return float(res.stdout.strip())
+
+    # Fallback: parse Duration from ffmpeg -i stderr when ffprobe is unavailable
+    ffmpeg_bin = get_ffmpeg_bin()
+    res = subprocess.run([ffmpeg_bin, "-i", str(audio_path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False)
+    m = re.search(r"Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)", res.stderr or "")
+    if not m:
+        raise RuntimeError(f"Could not determine audio duration for {audio_path}: {res.stderr}")
+    hours, mins, secs = int(m.group(1)), int(m.group(2)), float(m.group(3))
+    return hours * 3600 + mins * 60 + secs
 
 async def generate_tts(text, output_path):
     communicate = edge_tts.Communicate(text, VOICE_NAME, rate="+5%")
@@ -448,8 +476,9 @@ def build_video(day=1):
         render_scene_frame(scene, shot_path, frame_path)
 
         clip_path = tmp_dir / f"clip_{i}.mp4"
+        ffmpeg_bin = get_ffmpeg_bin()
         cmd = [
-            "ffmpeg", "-y",
+            ffmpeg_bin, "-y",
             "-loop", "1", "-i", str(frame_path),
             "-i", str(audio_path),
             "-vf", "zoompan=z='min(zoom+0.0005,1.04)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=30",
@@ -472,7 +501,7 @@ def build_video(day=1):
     final_video_path = OUTPUT_DIR / final_video_name
 
     concat_cmd = [
-        "ffmpeg", "-y",
+        get_ffmpeg_bin(), "-y",
         "-f", "concat", "-safe", "0",
         "-i", str(concat_list_path),
         "-c", "copy",

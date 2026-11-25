@@ -2,3 +2,4 @@ pillow
 edge-tts
 requests
 python-dotenv
+imageio-ffmpeg

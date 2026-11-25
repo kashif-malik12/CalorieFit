@@ -1,9 +1,6 @@
 name: CalorieFit Daily Autopilot Growth Engine
 
 on:
-  schedule:
-    # Runs daily at 09:00 UTC (10:00 AM Central European Time)
-    - cron: '0 9 * * *'
   workflow_dispatch:
 
 permissions:
